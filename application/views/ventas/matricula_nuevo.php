@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" />   
 </head>
 <body>
-<div class="contenido2">
+<div class="contenido">
     <div class="contenidotabla">
         <h1><?php echo $titulo;?></h1>
         <?php echo $form_open;?>

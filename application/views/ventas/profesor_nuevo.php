@@ -7,11 +7,6 @@
     <title><?php echo titulo;?></title>
     <link href="<?php echo css;?>estructura.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />
-<!--    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> -->
-<!--    <script type="text/javascript" src="< ?php echo js;?>jquery.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>jquery-ui.min.js"></script>        -->
-<!--    <script type="text/javascript" src="< ?php echo js;?>jquery.simplemodal.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>ventas/cliente.js"></script>	    -->
 </head>
 <body>
 <div class="contenido">

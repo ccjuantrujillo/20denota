@@ -123,13 +123,17 @@ function eliminar(codigo){
     }
 }
 
-function selecciona_familia(codigo){
-    url    = base_url+"index.php/ventas/profesor/obtener/"+codigo;
-    $.getJSON(url,function(data){
-        nomper  = data.PERSC_ApellidoPaterno+' '+data.PERSC_ApellidoMaterno+' '+data.PERSC_Nombre;
-        curso   = data.PROD_Nombre;
-        $("#profesor").val(codigo);
-        $("#nombres").val(nomper);
-        $("#cursos").val(curso);
-    });
+function selecciona_profesor(codigo){
+    url    = base_url+"index.php/ventas/profesor/obtener/";
+    objRes = new Object();
+    objRes.profesor = codigo;
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        $.each(data, function(item,value){
+            nomper = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
+            $("#profesor").val(value.PROP_Codigo);
+            $("#nombres").val(nomper);
+            $("#cursos").val(value.PROD_Codigo);            
+        });
+    },"json");
 }

@@ -30,7 +30,7 @@
                 $estado = $flgestado==1?"Activo":"Inactivo";
                 $clase = ($item%2)==0?"list_a":"list_b";
                ?>
-            <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>" onclick="selecciona_familia(<?php echo $value->codigo;?>);">
+            <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>" onclick="selecciona_profesor(<?php echo $value->codigo;?>);">
                 <td><?php echo ++$j;?></td>
                 <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                 <td align="center"><?php echo $value->fechareg;?></td>

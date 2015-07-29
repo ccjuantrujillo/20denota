@@ -34,7 +34,7 @@ class Actividad_model extends CI_Model{
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado[0];
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;
     }
 

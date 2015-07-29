@@ -66,15 +66,10 @@ class Matricula extends CI_Controller {
     }
 
     public function editar($accion,$codigo=""){
-        $filter           = new stdClass();
-        $filter->codigo   = $this->session->userdata('codper');
-        $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter); 
-		$ciclo = $this->input->get_post('ciclo'); 
-		$tipoestudio = $this->input->get_post('tipoestudio'); 
-		$local = $this->input->get_post('local'); 
-		$aula  = $this->input->get_post('aula'); 
+        $ciclo = $this->input->get_post('ciclo'); 
+        $tipoestudio = $this->input->get_post('tipoestudio'); 
+        $local = $this->input->get_post('local'); 
+        $aula  = $this->input->get_post('aula'); 
         $lista = new stdClass();
         if($accion == "e"){
             $filter             = new stdClass();
@@ -107,7 +102,6 @@ class Matricula extends CI_Controller {
         } 
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = $accion=="e"?"Editar Matricula":"Nueva Matricula"; 
-        $data['menu']       = $menu;
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close'] = form_close();         
         $data['lista']	    = $lista;  

@@ -22,13 +22,12 @@ class Profesor_model extends CI_Model{
     }
 
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-        $where = array("c.CICLOP_Codigo"=>$this->compania);
-        if(isset($filter->profesor) && $filter->profesor!='')    $where = array_merge($where,array("c.PROP_Codigo"=>$filter->profesor));
         $this->db->select('*,DATE_FORMAT(c.PROC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
         $this->db->join($this->table_det2.' as e','e.PROD_Codigo=c.PROD_Codigo','inner');
-        $this->db->where($where);
+        if(isset($filter->profesor) && $filter->profesor!='')  $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
+        if(isset($filter->curso) && $filter->curso!='')        $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
         if(isset($filter_not->profesor) && $filter_not->profesor!=''){
             if(is_array($filter_not->profesor) && count($filter_not->profesor)>0){
                 $this->db->where_not_in('c.PROP_Codigo',$filter_not->profesor);

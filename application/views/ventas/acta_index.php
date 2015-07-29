@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" />    
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>   
+    <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>ventas/orden.js"></script>	
+    <script type="text/javascript" src="<?php echo js;?>ventas/acta.js"></script>	
 </head>
 <body>
 <div class="contenido" > 
@@ -50,7 +51,7 @@
             <?php endforeach;?>
         </ul>
         <div class="titulotabla">
-            <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva matricula" id="nuevo"/>            
+            <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva acta" id="nuevo"/>            
             <h1><?php echo $titulo;?></h1>
         </div>
         <div class="listartabla">
@@ -62,22 +63,22 @@
                     <td width="43">Numero</td>
                     <td width="193">Elaborado por</td>
                     <td width="86">Titulo</td>
+                    <td width="62">Ver</td>
                     <td width="62">Editar</td>
                     <td width="77">Eliminar</td>
                   </tr>
                   <?php
                   if(count($lista)>0){
                     foreach($lista as $item => $value){
-                        $flgestado = $value->estado;
-                        $estado = $flgestado==1?"Activo":"Inactivo";
                         $clase = ($item%2)==0?"list_a":"list_b";
                        ?>
                       <tr class="<?php echo $clase;?>">
                         <td><?php echo ++$j;?></td>
-			<td align="center"><?php echo $value->ciclo;?></td>
-                        <td align="left"><?php echo $value->tipoestudio;?></td>
+			<td align="center"><?php echo $value->fecha;?></td>
+                        <td align="left"><?php echo $value->numero;?></td>
                         <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
-                        <td align="center"><?php echo $value->fechareg;?></td>
+                        <td align="center"><?php echo $value->titulo;?></td>
+                        <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                         <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                       </tr>  
@@ -86,7 +87,7 @@
                   }
                   else{
                       ?>
-                    <tr class="list_a"><td colspan='6'>::NO EXISTEN REGISTROS::</td></tr>
+                    <tr class="list_a"><td colspan='8'>::NO EXISTEN REGISTROS::</td></tr>
                       <?php
                   }
                   ?>

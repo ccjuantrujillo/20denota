@@ -14,7 +14,7 @@
     <script type="text/javascript" src="< ?php echo js;?>ventas/cliente.js"></script>	    -->
 </head>
 <body>
-<div class="contenido2">
+<div class="contenido">
     <div class="contenidotabla" >
         <h1><?php echo $titulo;?> </h1>
         <?php echo $form_open;?>

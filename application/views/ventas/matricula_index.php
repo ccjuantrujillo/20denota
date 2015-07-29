@@ -10,7 +10,7 @@
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>   
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>ventas/orden.js"></script>	
+    <script type="text/javascript" src="<?php echo js;?>ventas/matricula.js"></script>	
 </head>
 <body>
 <div class="contenido" > 

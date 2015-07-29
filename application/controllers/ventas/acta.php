@@ -5,9 +5,11 @@ class Acta extends CI_Controller {
     public function __construct(){
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
-        $this->load->model(ventas.'matricula_model');
+        $this->load->model(ventas.'acta_model');
+        $this->load->model(ventas.'actadetalle_model');
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'actividad_model');
+        $this->load->model(ventas.'profesor_model');
         $this->load->model(maestros.'persona_model');        
         $this->load->model(seguridad.'permiso_model');          
         $this->load->model(almacen.'curso_model');  
@@ -30,24 +32,23 @@ class Acta extends CI_Controller {
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
         $menu  = $this->permiso_model->listar($filter);            
         $filter     = new stdClass();
-        $filter->order_by = array("c.CICLOP_Codigo"=>"desc","e.PERSC_ApellidoPaterno"=>"asc","e.PERSC_ApellidoMaterno"=>"asc");
+        $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
         $filter_not = new stdClass(); 
-        $registros = count($this->matricula_model->listar($filter,$filter_not));
-        $matricula   = $this->matricula_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $registros = count($this->acta_model->listar($filter,$filter_not));
+        $matricula   = $this->acta_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
         if(count($matricula)>0){
             foreach($matricula as $indice => $value){
                 $lista[$indice]           = new stdClass();
-                $lista[$indice]->codigo   = $value->ORDENP_Codigo;
+                $lista[$indice]->codigo   = $value->ACTAP_Codigo;
                 $lista[$indice]->nombres  = $value->PERSC_Nombre;
                 $lista[$indice]->paterno  = $value->PERSC_ApellidoPaterno;
                 $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
-                $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
-		$lista[$indice]->ciclo    = $value->COMPC_Nombre;
-                $lista[$indice]->estado   = $value->ORDENC_FlagEstado;
                 $lista[$indice]->fechareg = $value->fechareg;
-                $lista[$indice]->fecha    = $value->ORDENC_Fecot;
+                $lista[$indice]->fecha    = date_sql($value->ACTAC_Fecha);
+                $lista[$indice]->numero   = $value->ACTAC_Numero;
+                $lista[$indice]->titulo   = $value->ACTAC_Titulo;
             }
         }
         $configuracion = $this->configuracion;
@@ -67,121 +68,123 @@ class Acta extends CI_Controller {
     }
 
     public function editar($accion,$codigo=""){
-        $filter           = new stdClass();
-        $filter->codigo   = $this->session->userdata('codper');
-        $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter); 
-		$ciclo = $this->input->get_post('ciclo'); 
-		$tipoestudio = $this->input->get_post('tipoestudio'); 
-		$local = $this->input->get_post('local'); 
-		$aula  = $this->input->get_post('aula'); 
-        $lista = new stdClass();
+        $curso   = $this->input->get_post('curso'); 
+        $titulo  = $this->input->get_post('titulo'); 
+        $hinicio = $this->input->get_post('hinicio'); 
+        $hfin    = $this->input->get_post('hfin'); 
+        $agenda  = $this->input->get_post('agenda'); 
+        $fecha   = $this->input->get_post('fecha'); 
+        $numero  = $this->input->get_post('numero');
+        $lista   = new stdClass();
         if($accion == "e"){
             $filter             = new stdClass();
-            $filter->orden      = $codigo;
-            $orden              = $this->matricula_model->obtener($filter);
-            $lista->paterno     = $orden->PERSC_ApellidoPaterno;  
-            $lista->materno     = $orden->PERSC_ApellidoMaterno;  
-            $lista->nombres     = $orden->PERSC_Nombre;  
-            $lista->tipoestudio = $tipoestudio!=""?$tipoestudio:$orden->TIPP_Codigo; 
-            $lista->fecha       = date_sql($orden->ORDENC_Fecot);  
-            $lista->alumno      = $orden->CLIP_Codigo; 
-            $lista->matricula   = $orden->ORDENP_Codigo;
-            $lista->estado      = $orden->ORDENC_FlagEstado;
-            $lista->ciclo       = $ciclo!=""?$ciclo:$orden->CICLOP_Codigo;
-			$lista->local       = $local!=""?$local:$orden->LOCP_Codigo;
-            $lista->aula        = $aula!=""?$aula:$orden->AULAP_Codigo;
+            $filter->acta       = $codigo;
+            $acta               = $this->acta_model->obtener($filter);
+            $lista->profesor    = $acta->PROP_Codigo;  
+            $lista->numero      = $numero!=""?$numero:$acta->ACTAC_Numero;  
+            $lista->fecha       = $fecha!=""?$fecha:date_sql($acta->ACTAC_Fecha);  
+            $lista->acta        = $acta->ACTAP_Codigo;
+            $lista->titulo      = $titulo!=""?$titulo:$acta->ACTAC_Titulo;
+            $lista->agenda      = $agenda!=""?$agenda:$acta->ACTAC_Agenda;
+            $lista->detalle     = $acta->ACTAC_Detalle;
+            $lista->hinicio     = $hinicio!=""?$hinicio:substr($acta->ACTAC_Hinicio,0,5);
+            $lista->hfin        = $hfin!=""?$hfin:substr($acta->ACTAC_Hfin,0,5);
+            $lista->curso       = $curso!=""?$curso:$acta->PROD_Codigo;
+            $filter             = new stdClass();
+            $filter->acta       = $codigo;
+            $lista->actadetalle = $this->actadetalle_model->listar($filter);            
         }
         elseif($accion == "n"){ 
-            $lista->paterno     = "";  
-            $lista->materno     = ""; 
-            $lista->nombres     = "";  
-            $lista->tipoestudio = $tipoestudio; 
+            $lista->profesor    = "";  
             $lista->fecha       = date("d/m/Y",time());
-            $lista->alumno      = ""; 
-            $lista->matricula   = "";
-            $lista->estado      = "1";
-            $lista->ciclo       = $ciclo;
-			$lista->local       = $local;
-            $lista->aula        = $aula;
+            $lista->numero      = $numero; 
+            $lista->acta        = "";
+            $lista->titulo      = $titulo;
+            $lista->agenda      = $agenda;
+            $lista->detalle     = "";
+            $lista->hinicio     = $hinicio;
+            $lista->hfin        = $hfin;
+            $lista->curso       = $curso;
+            $lista->actadetalle = array();
         } 
-        $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $data['titulo']     = $accion=="e"?"Editar Matricula":"Nueva Matricula"; 
-        $data['menu']       = $menu;
-        $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close'] = form_close();         
-        $data['lista']	    = $lista;  
-        $data['accion']	    = $accion;  
-		$filter = new stdClass();
-		$filter->ciclo = $lista->ciclo;
-		$filter2 = new stdClass();
-		$filter2->local = $lista->local;		
-        $data['selcurso']   = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0',$filter),$lista->tipoestudio,"id='curso' class='comboMedio'");         
-        $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio'");         
-        $data['selaula']    = form_dropdown('aula',$this->aula_model->seleccionar('0',$filter2),$lista->aula,"id='aula' class='comboMedio'");         
-        $data['sellocal']   = form_dropdown('local',$this->local_model->seleccionar('0'),$lista->local,"id='local' class='comboMedio'"); 
-        $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
-		$this->load->view("ventas/matricula_nuevo",$data);
+        $arrEstado            = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
+        $data['titulo']       = $accion=="e"?"Editar Acta":"Nueva Acta"; 
+        $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
+        $data['form_close']   = form_close();         
+        $data['lista']	      = $lista;   
+        $data['accion']	      = $accion;               
+        $data['selcurso']     = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio'"); 
+        $filter = new stdClass();
+        $filter->curso = $lista->curso;
+        $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
+        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande'"); 
+        $data['selasistente'] = form_dropdown('asistente',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='combo1' multiple='1' size='3' class='comboMultipleMedio'"); 
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $this->load->view("ventas/acta_nuevo",$data);
     }
 
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "CICLOP_Codigo"       => $this->input->post('ciclo'),
-						"CLIP_Codigo"        => $this->input->post('alumno'),
-                        "AULAP_Codigo"       => $this->input->post('aula'),
-                        "TIPP_Codigo"        => $this->input->post('tipoestudio'),
-                        "ORDENC_Fecot"       => date_sql_ret($this->input->post('fecha')),
-                        "ORDENC_FlagEstado"  => $this->input->post('estado'),
-                        "ORDENC_FechaModificacion" => date("Y-m-d",time())
+                        "ACTAC_Numero"       => $this->input->post('numero'),
+			"ACTAC_Fecha"        => date_sql_ret($this->input->post('fecha')),
+                        "PROP_Codigo"        => $this->input->post('profesor'),
+                        "ACTAC_Titulo"       => $this->input->post('titulo'),
+                        "ACTAC_Hinicio"      => $this->input->post('hinicio'),
+                        "ACTAC_Hfin"         => $this->input->post('hfin'),
+                        "ACTAC_Agenda"       => $this->input->post('agenda'),
+                        "ACTAC_FechaModificacion" => date("Y-m-d H:i:s",time())
                        );
         $resultado = false;
-        $filter = new stdClass();
-        $filter->cliente  = $this->input->post('alumno');
-        $filter->producto = $this->input->post('curso');
-        $ordenes = $this->matricula_model->listar($filter);  
         if($accion == "n"){
-            if(count($ordenes)==0){
-                $resultado = true;
-                $this->matricula_model->insertar($data);                      
-            }
+            $resultado = true;
+            unset($data["ACTAC_FechaModificacion"]);
+            $codigo = $this->acta_model->insertar($data);                      
         }
         elseif($accion == "e"){ 
-            if(count($ordenes)==0){
-                $resultado = true;
-                $this->matricula_model->modificar($codigo,$data);                                
+            $resultado = true;
+            $this->acta_model->modificar($codigo,$data);                                
+        }  
+        /*Grabar detalle*/
+        $acuerdo     = $this->input->get_post('acuerdo');
+        $responsable = $this->input->get_post('responsable');
+        $fcompromiso = $this->input->get_post('fcompromiso');
+        if(count($acuerdo)>0 && is_array($acuerdo)){
+            foreach($acuerdo as $item=>$value){
+                $data = array(
+                            "PROP_Codigo"              => $responsable[$item],
+                            "ACTAP_Codigo"             => $codigo,
+                            "ACTADETC_Observacion"     => $acuerdo[$item],
+                            "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
+                        );
+                $this->actadetalle_model->insertar($data); 
             }
-            else{
-                $numero = $ordenes[0]->ORDENP_Codigo;
-                if($numero==$this->input->post('matricula')){
-                    $resultado = true;
-                    $this->matricula_model->modificar($codigo,$data);                
-                }  
-            }
-        }                                     
+        }
         echo json_encode($resultado);
     }
 	
     public function eliminar(){
         $codigo = $this->input->post('codigo');
-        $filter = new stdClass();
-        $filter->orden = $codigo;
-        $actividades = $this->actividad_model->listar($filter);
         $resultado = false;
-        if(count($actividades)==0){
-            $this->matricula_model->eliminar($codigo);
-            $resultado = true;
-        }
+        $this->actadetalle_model->eliminar($codigo);
+        $this->acta_model->eliminar($codigo);
+        $resultado = true;
         echo json_encode($resultado);
     }
+    
+    public function eliminardetalle(){
+        $codigo = $this->input->post('codigo');
+        $resultado = false;
+        $this->actadetalle_model->eliminar($codigo);
+        $resultado = true;
+        echo json_encode($resultado);
+    }    
 
     public function ver($codigo){
         $filter           = new stdClass();
         $filter->orden    = $codigo;
-        $ordenes          = $this->matricula_model->obtener($filter);
+        $ordenes          = $this->acta_model->obtener($filter);
         $codproducto      = $ordenes->PROD_Codigo;
         $codcliente       = $ordenes->CLIP_Codigo;
         $filter           = new stdClass();

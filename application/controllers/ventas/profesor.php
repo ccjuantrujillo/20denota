@@ -58,16 +58,11 @@ class Profesor extends Persona
     }
 
     public function editar($accion,$codigo=""){
-         $filter           = new stdClass();
-         $filter->codigo   = 1;
-         $filter->rol      = 4;
-         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-         $menu_padre = $this->permiso_model->listar($filter);
          $lista = new stdClass();
          if($accion == "e"){
              $filter            = new stdClass();
-             $filter->profesor   = $codigo;
-             $profesores          = $this->profesor_model->obtener($filter);
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
              $lista->numerodoc  = $profesores->PERSC_NumeroDocIdentidad;
              $lista->sexo       = $profesores->PERSC_Sexo;
              $lista->direccion  = $profesores->PERSC_Direccion;
@@ -108,7 +103,6 @@ class Profesor extends Persona
          $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
          $data['titulo']     = $accion=="e"?"Editar Profesor":"Crear Profesor";
-         $data['menu']       = $menu_padre;
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
@@ -193,10 +187,10 @@ class Profesor extends Persona
         $this->load->view("ventas/profesor_buscar",$data);
     }
 
-    public function obtener($codigo){
-        $filter    = new stdClass();
-        $filter->profesor = $codigo;
-        $profesores  = $this->profesor_model->obtener($filter);
+    public function obtener($codigo=""){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $profesores  = $this->profesor_model->listar($filter);
         $resultado = json_encode($profesores);
         echo $resultado;
     }
