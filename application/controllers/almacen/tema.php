@@ -101,7 +101,7 @@ class Tema extends CI_Controller {
         $filter->order_by    = array("p.PROD_Nombre"=>"asc");
         $data['selproducto'] = form_dropdown('producto',$this->curso_model->seleccionar('0',$filter),$lista->producto,"id='producto' class='comboGrande''");
         $filter              = new stdClass();
-        $filter->producto    = $lista->producto;
+        $filter->curso    = $lista->producto;
         $filter->order_by    = array("c.PRODATRIB_Descripcion"=>"asc");
         $data['selatributo'] = form_dropdown('atributo',$this->semana_model->seleccionar('0',$filter),$lista->atributo,"id='atributo' class='comboGrande'");
         $data['oculto']      = form_hidden(array('accion'=>$accion,'codigo'=>$codigo));

@@ -134,7 +134,7 @@ class Matricula extends CI_Controller {
         $resultado = false;
         $filter = new stdClass();
         $filter->cliente  = $this->input->post('alumno');
-        $filter->producto = $this->input->post('curso');
+        $filter->curso = $this->input->post('curso');
         $ordenes = $this->matricula_model->listar($filter);  
         if($accion == "n"){
             if(count($ordenes)==0){
@@ -181,7 +181,7 @@ class Matricula extends CI_Controller {
         $filter->cliente  = $codcliente; 
         $clientes         = $this->alumno_model->obtener($filter);
         $filter           = new stdClass();
-        $filter->producto = $codproducto; 
+        $filter->curso = $codproducto; 
         $productos        = $this->curso_model->obtener($filter);        
         $this->load->library("fpdf/pdf");
         $CI = & get_instance();

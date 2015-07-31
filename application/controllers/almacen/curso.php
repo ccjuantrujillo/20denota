@@ -70,10 +70,10 @@ class Curso extends CI_Controller {
         $lista = new stdClass();
         if($accion == "e"){
             $filter                = new stdClass();
-            $filter->producto      = $codigo;
+            $filter->curso      = $codigo;
             $productos             = $this->curso_model->obtener($filter);
             $filter                = new stdClass();
-            $filter->producto      = $codigo;
+            $filter->curso      = $codigo;
             $productoatributo      = $this->semana_model->listar($filter);
             $lista->producto       = $codigo;
             $lista->tipo           = $productos->TIPPROD_Codigo;
@@ -179,7 +179,7 @@ class Curso extends CI_Controller {
     public function eliminar(){
         $codigo = $this->input->post('codigo');
         $filter = new stdClass();
-        $filter->producto = $codigo;
+        $filter->curso = $codigo;
         //$videos = $this->semana_model->listar($filter);
         $resultado = false;
         //if(count($videos)==0){

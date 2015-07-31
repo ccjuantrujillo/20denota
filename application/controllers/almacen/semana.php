@@ -71,7 +71,7 @@ class Semana extends CI_Controller {
             $filter->semana = $codigo;
             $preguntas                = $this->tema_model->listar($filter);
             $filter                   = new stdClass();
-            $filter->producto         = $productoatributo->PROD_Codigo;
+            $filter->curso         = $productoatributo->PROD_Codigo;
             $productos                = $this->curso_model->obtener($filter);
             $lista->nombre            = $productoatributo->PRODATRIB_Nombre;
             $lista->descripcion       = $productoatributo->PRODATRIB_Descripcion;

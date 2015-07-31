@@ -55,17 +55,18 @@
             <h1><?php echo $titulo;?></h1>
         </div>
         <div class="listartabla">
-           <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
-                <table  border="1"  cellspacing="0" cellpadding="0">
+           <div class="mensajetabla" style="width:900px;">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
+                <table  border="1"  cellspacing="0" cellpadding="0" style="width:900px;">
                   <tr class="list1">
-                    <td width="43">No</td>
-                    <td width="193">Fecha</td>
-                    <td width="43">Numero</td>
-                    <td width="193">Elaborado por</td>
-                    <td width="86">Titulo</td>
-                    <td width="62">Ver</td>
-                    <td width="62">Editar</td>
-                    <td width="77">Eliminar</td>
+                    <td width="30">No</td>
+                    <td width="60">Fecha</td>
+                    <td width="50">Numero</td>
+                    <td width="80">Plana</td>
+                    <td width="180">Elaborado por</td>
+                    <td width="180">Titulo</td>
+                    <td width="50">Ver</td>
+                    <td width="50">Editar</td>
+                    <td width="50">Eliminar</td>
                   </tr>
                   <?php
                   if(count($lista)>0){
@@ -76,8 +77,9 @@
                         <td><?php echo ++$j;?></td>
 			<td align="center"><?php echo $value->fecha;?></td>
                         <td align="left"><?php echo $value->numero;?></td>
+                        <td align="left"><?php echo $value->curso;?></td>
                         <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
-                        <td align="center"><?php echo $value->titulo;?></td>
+                        <td align="left"><?php echo $value->titulo;?></td>
                         <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                         <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
@@ -92,7 +94,7 @@
                   }
                   ?>
                 </table>
-            <div class="mensajetabla"><?php echo $paginacion;?></div>
+            <div class="mensajetabla" style="width:900px;"><?php echo $paginacion;?></div>
         </div>
     </div>
     <div class="footer"><h4><?php echo pie;?></h4></div>

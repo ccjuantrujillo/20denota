@@ -26,7 +26,7 @@ class Aula_model extends CI_Model{
         $this->db->from($this->table." as a",$number_items,$offset);
         $this->db->join($this->table_det.' as l','l.LOCP_Codigo=a.LOCP_Codigo','inner');
         if(isset($filter->aula) && $filter->aula!='')    $this->db->where(array("a.AULAP_Codigo"=>$filter->aula));
-	if(isset($filter->local) && $filter->local!='')  $this->db->where(array("a.LOCP_Codigo"=>$filter->local));
+	if(isset($filter->local) && !is_null($filter->local))  $this->db->where(array("a.LOCP_Codigo"=>$filter->local));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);

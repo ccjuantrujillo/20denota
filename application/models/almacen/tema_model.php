@@ -25,7 +25,7 @@ class Tema_model extends CI_Model{
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $where = array('c.CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->producto) && $filter->producto!='') $where = array_merge($where,array("d.PROD_Codigo"=>$filter->producto));
+        if(isset($filter->curso) && $filter->curso!='') $where = array_merge($where,array("d.PROD_Codigo"=>$filter->curso));
         if(isset($filter->productoatributo) && $filter->productoatributo!='') $where = array_merge($where,array("c.PRODATRIB_Codigo"=>$filter->productoatributo));
         if(isset($filter->productoatributodetalle) && $filter->productoatributodetalle!='') $where = array_merge($where,array("c.PRODATRIBDET_Codigo"=>$filter->productoatributodetalle));
         $this->db->select('*');

@@ -161,7 +161,7 @@ class Asignacion extends CI_Controller {
         $filter->cliente  = $codcliente; 
         $clientes         = $this->alumno_model->obtener($filter);
         $filter           = new stdClass();
-        $filter->producto = $codproducto; 
+        $filter->curso = $codproducto; 
         $productos        = $this->curso_model->obtener($filter);        
         $this->load->library("fpdf/pdf");
         $CI = & get_instance();
