@@ -6,6 +6,7 @@ class Asignacion extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'asignacion_model');
+        $this->load->model(ventas.'asignaciondetalle_model');
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'actividad_model');
         $this->load->model(maestros.'persona_model');        
@@ -88,6 +89,9 @@ class Asignacion extends CI_Controller {
             $lista->ciclo       = $ciclo!=""?$ciclo:$asignacion->CICLOP_Codigo;
 	    $lista->local       = $local!=""?$local:$asignacion->LOCP_Codigo;
             $lista->aula        = $aula!=""?$aula:$asignacion->AULAP_Codigo;
+            $filter             = new stdClass();
+            $filter->asignacion = $codigo;
+            $lista->asignaciondetalle = $this->asignaciondetalle_model->listar($filter);             
         }
         elseif($accion == "n"){ 
             $lista->paterno     = "";  

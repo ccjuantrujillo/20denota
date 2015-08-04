@@ -1,16 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Persona_model extends CI_Model{
-    var $entidad;
     var $table;
     public function __construct()
     {
         parent::__construct();
-        $this->compania = $this->session->userdata('compania');
         $this->table   = "persona";
     }
     
-
     public function seleccionar($default="")
     {
         $nombre_defecto = $default==""?":: Seleccione ::":$default;
@@ -26,10 +23,9 @@ class Persona_model extends CI_Model{
 	
     public function listar($filter,$filter_not='',$number_items='',$offset='')
     {
-        $where  = array('CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->fechanac) && $filter->fechanac!='')    $where = array_merge($where,array("substring(replace(PERSC_FechaNacimiento,'-',''),5,4)"=>substr($filter->fechanac,2,2).substr($filter->fechanac,0,2)));
         $this->db->select('*');
         $this->db->from($this->table,$number_items,$offset);
+        if(isset($filter->fechanac) && $filter->fechanac!='')            $this->db->where(array("substring(replace(PERSC_FechaNacimiento,'-',''),5,4)"=>substr($filter->fechanac,2,2).substr($filter->fechanac,0,2)));
         $this->db->where($where);
         if(isset($filter->order_by) && is_array($filter->order_by)){
             foreach($filter->order_by as $indice=>$value){

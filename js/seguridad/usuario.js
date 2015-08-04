@@ -23,7 +23,7 @@ $(".nav li").hover(function(){
     
     $("#grabar").click(function(){
         url = base_url+"index.php/seguridad/usuario/grabar";
-        dataString  = $('#frm1').serialize();
+        dataString  = $('#form1').serialize();
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
             location.href = base_url+"index.php/seguridad/usuario/listar";

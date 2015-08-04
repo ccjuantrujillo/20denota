@@ -5,7 +5,6 @@ class Rol_model extends CI_Model
     var $table;  
     public function __construct(){
         parent::__construct();
-        $this->compania = $this->session->userdata('compania');
         $this->table   = "rol";
     }
     
@@ -20,11 +19,9 @@ class Rol_model extends CI_Model
     }
     
     public function listar($filter='',$filter_not='',$number_items='',$offset=''){
-        $where = array('CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->rol) && $filter->rol!='')   $where = array_merge($where,array("ROL_Codigo"=>$filter->rol));
         $this->db->select('*');
         $this->db->from($this->table);
-        $this->db->where($where);		
+        if(isset($filter->rol) && $filter->rol!='')            $this->db->where(array("ROL_Codigo"=>$filter->rol));		
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -49,7 +46,6 @@ class Rol_model extends CI_Model
     }
     
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania; 
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();        
     }

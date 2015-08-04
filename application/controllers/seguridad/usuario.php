@@ -7,6 +7,7 @@ class Usuario extends Persona{
         parent::__construct();
         $this->load->model(seguridad.'usuario_model');          
         $this->load->model(seguridad.'rol_model');   
+        $this->load->model(maestros.'persona_model');     
         $this->configuracion = $this->config->item('conf_pagina');
     }
 
@@ -72,6 +73,7 @@ class Usuario extends Persona{
             $lista->paterno     = $usuario->PERSC_ApellidoPaterno;
             $lista->materno     = $usuario->PERSC_ApellidoMaterno;
             $lista->numero      = $usuario->PERSC_NumeroDocIdentidad;
+            $lista->estado      = $usuario->USUA_FlagEstado;
         }    
         elseif($accion == "n"){
             $lista->login     = "";
@@ -82,11 +84,14 @@ class Usuario extends Persona{
             $lista->paterno   = ""; 
             $lista->materno   = ""; 
             $lista->numero    = ""; 
+            $lista->estado    = 1;
         }
+        $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = "EDITAR USUARIO";        
         $data['form_open']  = form_open('',array("name"=>"form1","id"=>"form1"));
         $data['form_close'] = form_close();
         $data['lista']	    = $lista;
+        $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
         $filter             = new stdClass();
         $filter->order_by   = array("p.PROD_Nombre"=>"asc");
         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar('0'),$lista->rol,"id='rol' class='comboMedio'");        
@@ -95,19 +100,30 @@ class Usuario extends Persona{
     }
 
     public function grabar(){
-        $accion = $this->input->get_post('accion');
-        $codigo = $this->input->get_post('codigo');
+        $accion  = $this->input->get_post('accion');
+        $codigo  = $this->input->get_post('codigo');
+        $persona = $this->input->get_post('persona');
+        /*Grabo en la tabla persona*/
+        $data = array(
+                    "PERSC_ApellidoPaterno" => $this->input->post('paterno'),
+                    "PERSC_ApellidoMaterno" => $this->input->post('materno'),
+                    "PERSC_Nombre"          => $this->input->post('nombres')
+                );
+        if($persona!="")
+            $this->persona_model->modificar($persona,$data);  
+        else 
+            $persona = $this->persona_model->insertar($data);   
+        /*Grabo en la tabla usuario*/
         $data   = array(
-                        "PERSP_Codigo" => $this->input->post('persona'),
+                        "PERSP_Codigo" => $persona,
                         "ROL_Codigo"   => $this->input->post('rol'),
                         "USUA_usuario" => $this->input->post('login')
                        );
-        if($accion == "n"){
+        if($accion == "n")
             $this->usuario_model->insertar($data);            
-        }
-        elseif($accion == "e"){
+        elseif($accion == "e")
             $this->usuario_model->modificar($codigo,$data);            
-        }
+        echo json_encode(true);
     }
 
     public function eliminar(){

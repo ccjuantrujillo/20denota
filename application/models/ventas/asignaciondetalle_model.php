@@ -1,10 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Persona_model extends CI_Model
+class Asignaciondetalle_model extends CI_Model
 {
+    var $compania;
     var $table;  
     public function __construct(){
         parent::__construct();
-        $this->table   = "persona";
+        $this->compania = $this->session->userdata('compania');
+        $this->table      = "asignaciondetalle";
+        $this->table_det  = "asignacion";
+        $this->table_prof = "profesor";
+        $this->table_per  = "persona";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -19,24 +24,17 @@ class Persona_model extends CI_Model
     }
     
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-        $this->db->select('*');
-        $this->db->from($this->table." as p",$number_items,$offset);
-        if(isset($filter->persona) && $filter->persona!='')            $this->db->where(array("p.PERSP_Codigo"=>$filter->persona));
-        $this->db->where($where);    
-        if(isset($filter_not->persona) && $filter_not->persona!=''){
-            if(is_array($filter_not->persona) && count($filter_not->persona)>0){
-                $this->db->where_not_in('p.PERSP_Codigo',$filter_not->persona);
-            }
-            else{
-                $this->db->where('p.PERSP_Codigo !=',$filter_not->persona);
-            }            
-        }            
+        $this->db->select('*,DATE_FORMAT(c.ASIGDETC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
+        $this->db->from($this->table." as c",$number_items,$offset);
+        $this->db->join($this->table_det.' as d','d.ASIGP_Codigo=c.ASIGP_Codigo','inner');
+        if(isset($filter->asignacion) && $filter->asignacion!='')   $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
+        if(isset($filter->aula) && $filter->aula!='')               $this->db->where(array("c.AULAP_Codigo"=>$filter->aula));  
+        if(isset($filter->tipoestudio) && $filter->tipoestudio!='') $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));            
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
             }
-        }           
-        $this->db->limit($number_items, $offset);         
+        }                 
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows > 0){
@@ -60,12 +58,12 @@ class Persona_model extends CI_Model
     }
 
     public function modificar($codigo,$data){
-        $this->db->where("PERSP_Codigo",$codigo);
+        $this->db->where("ASIGDETP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }
 
     public function eliminar($codigo){
-        $this->db->delete($this->table,array('PERSP_Codigo' => $codigo));        
+        $this->db->delete($this->table,array('ASIGDETP_Codigo' => $codigo));        
     }
 }
 ?>

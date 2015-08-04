@@ -108,6 +108,7 @@ blockquote, q {
 /*-------------- Editar item-------------------*/
 .contenidotabla{float: auto;background-color: #fff;margin:0px auto 0px auto;width:100%;}
 .contenidotabla h1{height:30px;padding:6px 0px 6px 6px;text-align: center;font-size: 25px;font-family:"Times New Roman","Times","serif";border-bottom:1px solid #CCCCCC;}
+.contenidotabla h2{height:30px;padding:6px 0px 6px 6px;text-align: center;font-size: 25px;font-family:"Times New Roman","Times","serif";}
 .contenidotabla table{width:100%;background-color:#fff;border-spacing:2px;;border-collapse: separate;}
 /*.contenidotabla table td{text-align: right;padding: 5px;}*/
 .contenidotabla table td.formss{text-align:left;}

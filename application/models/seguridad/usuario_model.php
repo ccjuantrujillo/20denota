@@ -1,12 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Usuario_model extends CI_Model{
-    var $entidad;
     var $table;
     public function __construct()
     {
         parent::__construct();
-        $this->compania  = $this->session->userdata('compania');
         $this->table     = "usuario";
         $this->table_cab = "persona";
     }
@@ -39,12 +37,10 @@ class Usuario_model extends CI_Model{
     }
 
     public function listar($filter='',$filter_not='',$number_items='',$offset=''){
-        $where = array("c.CICLOP_Codigo"=>$this->compania);
-        if(isset($filter->usuario) && $filter->usuario!='')    $where = array_merge($where,array("c.USUA_Codigo"=>$filter->usuario));
         $this->db->select('*');
         $this->db->from($this->table." as c");
         $this->db->join($this->table_cab.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
-        $this->db->where($where);    
+        if(isset($filter->usuario) && $filter->usuario!='')            $this->db->where(array("c.USUA_Codigo"=>$filter->usuario));  
         if(isset($filter_not->persona) && $filter_not->persona!=''){
             if(is_array($filter_not->persona) && count($filter_not->persona)>0){
                 $this->db->where_not_in('c.PERSP_Codigo',$filter_not->persona);
@@ -77,7 +73,6 @@ class Usuario_model extends CI_Model{
     }
 
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania; 
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();    
     }
@@ -88,7 +83,7 @@ class Usuario_model extends CI_Model{
     }
 
     public function eliminar($codigo){
-        $this->db->delete($this->table,array('UNDMED_Codigo' => $codigo));     
+        $this->db->delete($this->table,array('USUA_Codigo' => $codigo));     
     }
 }
 ?>

@@ -20,16 +20,16 @@
             <?php echo $form_open;?>
                 <table class="fuente8" width="100%" cellspacing="0" cellpadding="6" border="0" bgcolor="#fff">
                     <tr>
-                      <td width="50%">Nombres</td>
-                      <td class="formss"><input type="text" class="cajaMedia" name="nombres" id="nombres" value="<?php echo $lista->nombres;?>"></td>
-                    </tr>
-                    <tr>
                       <td width="50%">Apellido Paterno</td>
                       <td class="formss"><input type="text" class="cajaMedia" name="paterno" id="paterno" value="<?php echo $lista->paterno;?>"></td>
                     </tr>
                     <tr>
                       <td width="50%">Apellido Materno</td>
                       <td class="formss"><input type="text" class="cajaMedia" name="materno" id="materno" value="<?php echo $lista->materno;?>"></td>
+                    </tr>                    
+                    <tr>
+                      <td width="50%">Nombres</td>
+                      <td class="formss"><input type="text" class="cajaMedia" name="nombres" id="nombres" value="<?php echo $lista->nombres;?>"></td>
                     </tr>
                     <tr>
                       <td width="50%">Usuario</td>
@@ -43,6 +43,10 @@
                       <td width="50%">Rol</td>
                       <td class="formss"><?php echo $selrol;?></td>
                     </tr>
+                    <tr>
+                      <td width="50%">Estado</td>
+                      <td class="formss"><?php echo $selestado;?></td>
+                    </tr>                    
                     <tr>
                         <td colspan="2">
                           <div class="frmboton">
