@@ -20,6 +20,7 @@ class Curso extends CI_Controller {
         $this->load->model(maestros.'moneda_model');
         $this->load->model(maestros.'persona_model');
         $this->load->model(seguridad.'permiso_model');  
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
     }
@@ -30,9 +31,9 @@ class Curso extends CI_Controller {
     
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4; 
+        $filter->rol      = $this->session->userdata('rolusu');	
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu = $this->permiso_model->listar($filter); 
+        $menu       = get_menu($filter);
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
         $filter->order_by    = array("p.PROD_Nombre"=>"asc");
@@ -44,7 +45,7 @@ class Curso extends CI_Controller {
             foreach($productos as $indice=>$valor){
                 $filter       = new stdClass();
                 $filter->tipo = $valor->TIPPROD_Codigo;
-                $tipo       = $this->tipoproducto_model->obtener($filter);           
+                $tipo       = $this->tipoproducto_model->obtener($filter);  
                 $lista[$indice]             = new stdClass();
                 $lista[$indice]->codigo     = $valor->PROD_Codigo;
                 $lista[$indice]->nombre     = $valor->PROD_Nombre;

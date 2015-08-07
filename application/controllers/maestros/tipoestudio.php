@@ -9,21 +9,22 @@ class Tipoestudio extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('maestros/tipo_estudio_model');
+        $this->load->model('maestros/tipoestudio_model');
         $this->load->model('seguridad/permiso_model');
+        $this->load->helper('menu');
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);  
+        $menu       = get_menu($filter);  
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->persona = "0";
 //        $filter->order_by    = array("p.PERSC_ApellidoPaterno"=>"asc","p.PERSC_ApellidoMaterno"=>"asc","p.PERSC_Nombre"=>"asc");
-        $registros = count($this->tipo_estudio_model->listar($filter,$filter_not));
-        $personas  = $this->tipo_estudio_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $registros = count($this->tipoestudio_model->listar($filter,$filter_not));
+        $personas  = $this->tipoestudio_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
         if(count($personas)>0){
@@ -53,7 +54,7 @@ class Tipoestudio extends CI_Controller
          if($accion == "e"){
              $filter              = new stdClass();
              $filter->tipoestudio = $codigo;
-             $tiposeestudio       = $this->tipo_estudio_model->obtener($filter);
+             $tiposeestudio       = $this->tipoestudio_model->obtener($filter);
              $lista->codigo       = $tiposeestudio->TIPP_Codigo;
              $lista->nombre       = $tiposeestudio->TIPC_Nombre;
              $lista->descripcion  = $tiposeestudio->TIPC_Descripcion;
@@ -79,10 +80,10 @@ class Tipoestudio extends CI_Controller
                         "TIPC_Descripcion"  => strtoupper($this->input->post('descripcion'))
                        );
         if($accion == "n"){
-            $this->codigo = $this->tipo_estudio_model->insertar($data);
+            $this->codigo = $this->tipoestudio_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->tipo_estudio_model->modificar($codigo,$data);
+            $this->tipoestudio_model->modificar($codigo,$data);
 
         }
     }
@@ -90,7 +91,7 @@ class Tipoestudio extends CI_Controller
     public function eliminar()
     {
         $codigo  = $this->input->post('codigo');
-        $this->tipo_estudio_model->eliminar($codigo);
+        $this->tipoestudio_model->eliminar($codigo);
     }
     
     public function ver($codigo)
@@ -141,5 +142,13 @@ class Tipoestudio extends CI_Controller
         $data['paginacion'] = $this->pagination->create_links();
         $this->load->view('maestros/aula_index',$data);
     }
+    
+    public function obtener($codigo=""){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $tipoestudios  = $this->tipoestudio_model->listar($filter);
+        $resultado = json_encode($tipoestudios);
+        echo $resultado;
+    }    
 }
 ?>

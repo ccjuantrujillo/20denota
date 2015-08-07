@@ -93,17 +93,7 @@ jQuery(document).ready(function(){
     $("body").on("click","#cancelar",function(){
         url = base_url+"index.php/almacen/curso/listar";
         location.href = url;
-    });
-    
-   $("#cerrar").click(function(){
-       url = base_url+"index.php/inicio/index";
-       location.href = url;
-   });   
-    
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });          
+    });        
 });
 
 function ver_familia(){

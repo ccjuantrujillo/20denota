@@ -9,9 +9,9 @@ class Usuario_model extends CI_Model{
         $this->table_cab = "persona";
     }
 
-    public function ingresar($user,$clave,$compania)
+    public function ingresar($user,$clave)
     {
-        $where = array("u.USUA_usuario"=>$user,"u.USUA_Password"=>$clave,"u.CICLOP_Codigo"=>$compania);
+        $where = array("u.USUA_usuario"=>$user,"u.USUA_Password"=>$clave);
         $this->db->select('*');
         $this->db->from($this->table." as u");
         $this->db->join($this->table_cab.' as p','p.PERSP_Codigo=u.PERSP_Codigo','inner');  

@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
     <link href="<?php echo css;?>estructura.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>      
+    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>maestros/persona.js"></script>    
 </head>
 <body>

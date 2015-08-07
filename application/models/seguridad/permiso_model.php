@@ -1,19 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Permiso_model extends CI_Model{
-    var $compania;
     var $table;
     public function __construct()
     {
         parent::__construct();
-        $this->compania = $this->session->userdata('compania');
         $this->table    = "permiso";
         $this->tableref = "menu";
     }
     
     public function listar($filter,$filter_not='',$number_items='',$offset='')
     {
-        $where  = array('CICLOP_Codigo'=>$this->compania,"PERM_FlagEstado"=>1,"MENU_FlagEstado"=>1);
+        $where  = array("PERM_FlagEstado"=>1,"MENU_FlagEstado"=>1);
         if(isset($filter->menu) && $filter->menu!='')       $where = array_merge($where,array("m.MENU_Codigo"=>$filter->menu));
         if(isset($filter->codigo) && $filter->codigo!='')   $where = array_merge($where,array("m.MENU_Codigo_Padre"=>$filter->codigo));
         if(isset($filter->rol) && $filter->rol!='')         $where = array_merge($where,array("p.ROL_Codigo"=>$filter->rol));

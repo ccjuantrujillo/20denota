@@ -11,9 +11,10 @@
 </head>
 <body>
 <div class="contenido"> 
+<?php echo $form_open;?>    
     <div class="contenidotabla" >        
-        <h2><?php echo $titulo;?></h2>               
-        <div id="container">
+        <h2><?php echo $titulo;?></h2>   
+        <div id="container">            
             <!--Pestaña 1 activa por defecto-->
             <input id="tab-1" type="radio" name="tab-group" checked="checked" />
             <label for="tab-1">Datos Principales</label>
@@ -25,7 +26,7 @@
             <label for="tab-3">Pestaña 3</label>
             <!--Contenido a mostrar/ocultar-->
             <div id="content">
-                <!--Contenido de la Pestaña 1-->
+                <!--Contenido de la Pestaña 1-->      
                 <div id="content-1">
                     <table width="100%" style="background-color: #f4f7ff">
                         <tr>
@@ -48,21 +49,21 @@
                         </tr>
                         <tr>
                           <td width="20%" bgcolor="#d5e2f2">F.Nacimiento:</td>
-                          <td width="20%" class="formss"><input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10"></td>
+                          <td width="20%" class="formss"><input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10" readonly="readonly"></td>
                           <td width="20%" bgcolor="#d5e2f2">Sexo:</td>
                           <td width="20%" class="formss"><?php echo $selsexo;?></td>
                         </tr> 
                         <tr>
                           <td bgcolor="#d5e2f2">Tipo Documento:</td>
-                          <td class="formss"><input name="numero" id="numero" type="text" maxlength="8" value="<?php echo $lista->numerodoc;?>" class="cajaMinima" onkeydown="return numbersonly(this,event,'.');"/></td>
+                          <td class="formss"><?php echo $seltipodoc;?></td>
                           <td bgcolor="#d5e2f2">D.N.I.:</td>
-                          <td class="formss"><input name="numero" id="numero" type="text" maxlength="8" value="<?php echo $lista->numerodoc;?>" class="cajaMinima" onkeydown="return numbersonly(this,event,'.');"/></td>                          
+                          <td class="formss"><input name="numero" id="numero" type="text" maxlength="8" value="<?php echo $lista->numerodoc;?>" class="cajaMinima"/></td>                          
                         </tr>
                         <tr>
                           <td bgcolor="#d5e2f2">Telefono:</td>
                           <td class="formss"><input name="telefono" id="telefono" type="text" value="<?php echo $lista->telefono;?>" class="cajaMedia"/></td>
                           <td bgcolor="#d5e2f2">Celular:</td>
-                          <td class="formss"><input name="telefono" id="telefono" type="text" value="<?php echo $lista->telefono;?>" class="cajaMedia"/></td>                          
+                          <td class="formss"><input name="movil" id="movil" type="text" value="<?php echo $lista->movil;?>" class="cajaMedia"/></td>                          
                           <td bgcolor="#d5e2f2">&nbsp;</td>
                         </tr>   
                         <tr>
@@ -83,8 +84,8 @@
                           <td bgcolor="#d5e2f2">&nbsp;</td>
                         </tr>
                         <tr>
-                          <td bgcolor="#d5e2f2">¿Es coordinador de plana?</td>
-                          <td class="formss" colspan="3"><?php echo $selrol;?></td>
+                          <td bgcolor="#d5e2f2">Cargo</td>
+                          <td class="formss" colspan="3"><?php echo $selcoord;?></td>
                           <td bgcolor="#d5e2f2">&nbsp;</td>                          
                         </tr>   
                     </table>
@@ -98,15 +99,13 @@
         </div>
         <div class="frmboton">
             <div class="frmboton_matricula">
-                <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>                        
-                <input class="botones" id="imprimir" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                                    
+                <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>                                                     
                 <input class="botones" id="grabar" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
             </div>
         </div>         
-        <?php echo $form_open;?>
         <?php echo $oculto;?>
-        <?php echo $form_close;?>
     </div>
+<?php echo $form_close;?>    
 </div>
 </body>
 </html>

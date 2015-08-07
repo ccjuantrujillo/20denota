@@ -7,6 +7,7 @@ class Alumno extends Persona
         parent::__construct();
         $this->load->model(ventas.'matricula_model');
         $this->load->model(ventas.'alumno_model');
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
     }
 
@@ -16,9 +17,9 @@ class Alumno extends Persona
 
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4;
+        $filter->rol      = $this->session->userdata('rolusu');
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu       = $this->permiso_model->listar($filter);
+        $menu       = get_menu($filter);  
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->cliente = "0";

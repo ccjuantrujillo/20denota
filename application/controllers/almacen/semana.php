@@ -11,6 +11,7 @@ class Semana extends CI_Controller {
         $this->load->model(almacen.'tema_model');
         $this->load->model(almacen.'unidadmedida_model');
         $this->load->model(seguridad.'permiso_model');  
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
     }
@@ -21,9 +22,9 @@ class Semana extends CI_Controller {
     
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4; 
+        $filter->rol      = $this->session->userdata('rolusu');	
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu_padre = $this->permiso_model->listar($filter);      
+        $menu       = get_menu($filter);     
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
         $filter->order_by    = array("d.PROD_Nombre"=>"asc","c.PRODATRIB_Nombre"=>"asc");
@@ -54,7 +55,7 @@ class Semana extends CI_Controller {
         $this->pagination->initialize($configuracion);        
         /*Datos para la vista*/ 
         $data['lista']      = $lista;
-        $data['menu']       = $menu_padre;       
+        $data['menu']       = $menu;       
         $data['registros']  = $registros;
         $data['j']          = $j;
         $data['paginacion'] = $this->pagination->create_links();        

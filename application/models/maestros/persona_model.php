@@ -5,6 +5,9 @@ class Persona_model extends CI_Model
     public function __construct(){
         parent::__construct();
         $this->table   = "persona";
+        $this->table_profe = "profesor";
+        $this->table_alum  = "alumno";
+        $this->table_usus  = "usuario";        
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -45,6 +48,41 @@ class Persona_model extends CI_Model
         return $resultado; 
     }
 
+   public function listar_profesor($filter,$filter_not='',$number_items='',$offset='')
+    {
+        $this->db->select('c.*,d.*');
+        $this->db->from($this->table.' as c',$number_items,$offset);
+        $this->db->join($this->table_profe.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
+        if(isset($filter->fechanac) && $filter->fechanac!='')            $this->db->where(array("substring(replace(PERSC_FechaNacimiento,'-',''),5,4)"=>substr($filter->fechanac,2,2).substr($filter->fechanac,0,2)));
+        if(isset($filter->order_by) && is_array($filter->order_by)){
+            foreach($filter->order_by as $indice=>$value){
+                $this->db->order_by($indice,$value);
+            }
+        }  
+        $query = $this->db->get();
+        $resultado = array();
+        if($query->num_rows>1)   $resultado = $query->result();
+        if($query->num_rows==1)  $resultado = $query->row();
+        return $resultado;
+    }       
+    
+   public function listar_usuario($filter,$filter_not='',$number_items='',$offset='')
+    {
+        $this->db->select('c.*,d.*');
+        $this->db->from($this->table.' as c',$number_items,$offset);
+        $this->db->join($this->table_usus.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
+        if(isset($filter->fechanac) && $filter->fechanac!='')            $this->db->where(array("substring(replace(PERSC_FechaNacimiento,'-',''),5,4)"=>substr($filter->fechanac,2,2).substr($filter->fechanac,0,2)));
+        if(isset($filter->order_by) && is_array($filter->order_by)){
+            foreach($filter->order_by as $indice=>$value){
+                $this->db->order_by($indice,$value);
+            }
+        }  
+        $query = $this->db->get();
+        $resultado = array();
+        if($query->num_rows>0)   $resultado = $query->result();
+        return $resultado;
+    }      
+    
     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
         if(count($listado)>1)

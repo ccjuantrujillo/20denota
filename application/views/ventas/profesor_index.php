@@ -7,10 +7,10 @@
     <title><?php echo titulo;?></title>
     <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />     
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" /> 
-    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>
+    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>ventas/profesor.js"></script>
 </head>
 <body>
@@ -21,36 +21,7 @@
         <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
     </div>
     <div class="zonebody patbotom">
-        <ul id="nav">
-            <?php foreach($menu as $item => $value):;?>
-                <?php if($value->MENU_Codigo_Padre == 1):;?>
-                    <li>
-                        <a href="#"><?php echo $value->MENU_Descripcion;?></a>
-                        <ul>
-                            <?php foreach($menu as $item2 => $value2):;?>
-                                <?php if($value2->MENU_Codigo_Padre == $value->MENU_Codigo):;?>
-                                <li>
-                                    
-                                    <a href="<?php echo ($value2->MENU_Url!="#"?base_url().$value2->MENU_Url:"#");?>"><?php echo $value2->MENU_Descripcion;?></a>
-                                    <?php
-                                    $submenu = "";
-                                    foreach ($menu as $item3 => $value3){
-                                        if($value3->MENU_Codigo_Padre == $value2->MENU_Codigo){
-                                            $submenu.="<li><a href='".base_url().$value3->MENU_Url."'>".$value3->MENU_Descripcion."</a></li>";
-                                        }
-                                    }
-                                    ?>
-                                    <?php if($submenu!=""):;?>
-                                    <ul><?php echo $submenu;?></ul>
-                                    <?php endif;?>
-                                </li>
-                                <?php endif;?>
-                            <?php endforeach;?>
-                        </ul>
-                    </li>
-                <?php endif;?>
-            <?php endforeach;?>
-        </ul>
+        <ul id="nav"><?php echo $menu;?></ul>
         <div class="titulotabla">
             <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo profesor" id="nuevo"/>
             <h1>Listado de profesores</h1>
@@ -62,6 +33,7 @@
                     <td width="43">No</td>
                     <td width="193">Apellidos y Nombres</td>
                     <td width="20">Curso</td>
+                    <td width="20">Cargo</td>
                     <td width="86">Fecha registro</td>
                     <td width="63">Estado</td>
                     <td width="62">Editar</td>
@@ -78,6 +50,7 @@
                         <td><?php echo ++$j;?></td>
                         <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                         <td align="center"><?php echo $value->curso;?></td>
+                        <td align="center"><?php echo ($value->coordinador==1)?"Coordinador":"Profesor";?></td>
                         <td align="center"><?php echo $value->fechareg;?></td>
                         <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>

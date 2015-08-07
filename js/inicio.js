@@ -10,16 +10,16 @@ jQuery(document).ready(function(){
         $("#frmInicio").submit();
     });
     
-    $("#cerrar").click(function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });    
-    
-    $("#logo").click(function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    }); 
-    
+//    $("#cerrar").click(function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });    
+//    
+//    $("#logo").click(function(){
+//        url = base_url+"index.php/inicio/principal";
+//        location.href = url;
+//    }); 
+//    
     $("#contrasena_mensaje").click(function(){
         dataString = "";
         url = base_url+"index.php/inicio/contrasena_mensaje";

@@ -1,4 +1,5 @@
-<?php
+<?php header("Content-type: text/html; charset=utf-8"); 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Rol extends Controller{
 	public function __construct(){
             parent::Controller();

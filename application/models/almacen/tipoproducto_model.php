@@ -1,10 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Tipoproducto_model extends CI_Model{
-    var $compania;
     var $table; 
     public function __construct(){
         parent::__construct();
-        $this->compania = $this->session->userdata('compania');
         $this->table   = "tipoproducto";
     }
 
@@ -19,11 +17,9 @@ class Tipoproducto_model extends CI_Model{
     }
     
     public function listar($filter="",$filter_not="",$number_items='',$offset=''){
-        $where = array('t.CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->tipo) && $filter->tipo!='')         $where = array_merge($where,array("t.TIPPROD_Codigo"=>$filter->tipo));
         $this->db->select('*');
         $this->db->from($this->table." as t");
-        $this->db->where($where);		
+        if(isset($filter->tipo) && $filter->tipo!='')         $this->db->where(array("t.TIPPROD_Codigo"=>$filter->tipo));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -43,7 +39,7 @@ class Tipoproducto_model extends CI_Model{
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado[0];
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;
     }    
     

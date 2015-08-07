@@ -1,4 +1,5 @@
-<?php
+<?php header("Content-type: text/html; charset=utf-8"); 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Ciclo extends CI_Controller
 {
     public $configuracion;
@@ -9,13 +10,14 @@ class Ciclo extends CI_Controller
         parent::__construct();
         $this->load->model('maestros/ciclo_model');
         $this->load->model('seguridad/permiso_model');
+        $this->load->helper('menu');
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);  
+        $menu       = get_menu($filter);  
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->persona = "0";

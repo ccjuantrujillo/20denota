@@ -1,10 +1,10 @@
 jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });   
+//    $('ul li:has(ul)').hover(function(e) {
+//         $(this).find('ul').css({display: "block"});
+//     },
+//     function(e) {
+//         $(this).find('ul').css({display: "none"});
+//     });   
 
     $("#nuevo").click(function(){
         dataString = "";
@@ -46,13 +46,13 @@ jQuery(document).ready(function(){
         location.href = url;
     });
 
-  $("body").on('focus',"#fnacimiento",function(){
-       $(this).datepicker({
-        dateFormat: "dd/mm/yy",
-        changeYear: true,
-        yearRange: "1945:2025"
-       });
-  });
+    $("body").on('focus',"#fnacimiento",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });   
 });
 
 function editar(codigo){

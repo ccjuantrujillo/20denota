@@ -1,11 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Tema_model extends CI_Model{
-    var $compania;
     var $table;
     
     public function __construct(){
         parent::__construct();
-        $this->compania   = $this->session->userdata('compania');
         $this->table      = "tema";
         $this->table_cab1 = "semana";
         $this->table_cab2 = "curso";
@@ -24,15 +22,13 @@ class Tema_model extends CI_Model{
     }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $where = array('c.CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->curso) && $filter->curso!='') $where = array_merge($where,array("d.PROD_Codigo"=>$filter->curso));
-        if(isset($filter->productoatributo) && $filter->productoatributo!='') $where = array_merge($where,array("c.PRODATRIB_Codigo"=>$filter->productoatributo));
-        if(isset($filter->productoatributodetalle) && $filter->productoatributodetalle!='') $where = array_merge($where,array("c.PRODATRIBDET_Codigo"=>$filter->productoatributodetalle));
         $this->db->select('*');
         $this->db->from($this->table.' as c');
         $this->db->join($this->table_cab1.' as d','d.PRODATRIB_Codigo=c.PRODATRIB_Codigo','inner');        
-        $this->db->join($this->table_cab2.' as e','e.PROD_Codigo=d.PROD_Codigo','inner');  
-        $this->db->where($where);		
+        $this->db->join($this->table_cab2.' as e','e.PROD_Codigo=d.PROD_Codigo','inner'); 
+        if(isset($filter->curso) && $filter->curso!='')                                     $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->productoatributo) && $filter->productoatributo!='')               $this->db->where(array("c.PRODATRIB_Codigo"=>$filter->productoatributo));
+        if(isset($filter->productoatributodetalle) && $filter->productoatributodetalle!='') $this->db->where(array("c.PRODATRIBDET_Codigo"=>$filter->productoatributodetalle));	
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -52,12 +48,11 @@ class Tema_model extends CI_Model{
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado[0];
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;
     }
 
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania; 
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();
     }    

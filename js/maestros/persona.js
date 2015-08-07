@@ -19,10 +19,10 @@ jQuery(document).ready(function(){
         location.href = url;
     });
     
-    $("#cerrar").click(function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });          
+//    $("#cerrar").click(function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });          
     
     $("#grabar").click(function(){
         url = base_url+"index.php/maestros/persona/grabar";
@@ -33,10 +33,10 @@ jQuery(document).ready(function(){
         });
     }); 
     
-    $("#logo").click(function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });          
+//    $("#logo").click(function(){
+//        url = base_url+"index.php/inicio/principal";
+//        location.href = url;
+//    });          
 });
 
 function editar(codigo){

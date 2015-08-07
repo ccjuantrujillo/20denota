@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="<?php echo css;?>estilos.css" type="text/css">
     <link rel="stylesheet" href="<?php echo css;?>nav.css" type="text/css">
     <link rel="stylesheet" href="<?php echo css;?>theme.css" type="text/css">
-    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
+    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
     <!--script type="text/javascript" src="<?php echo js;?>ventas/ot.js"></script-->
 <script>
 

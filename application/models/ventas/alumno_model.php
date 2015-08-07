@@ -1,14 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Alumno_model extends CI_Model{
-    var $compania;
     var $table;
-
     public function __construct(){
         parent::__construct();
-        $this->compania  = $this->session->userdata('compania');
         $this->table_det = "persona";
         $this->table     = "alumno";
-        
     }
 
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -22,12 +18,10 @@ class Alumno_model extends CI_Model{
     }
 
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-        $where = array("c.CICLOP_Codigo"=>$this->compania);
-        if(isset($filter->cliente) && $filter->cliente!='')    $where = array_merge($where,array("c.CLIP_Codigo"=>$filter->cliente));
         $this->db->select('*,DATE_FORMAT(c.CLIC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
-        $this->db->where($where);
+        if(isset($filter->cliente) && $filter->cliente!='')    $this->db->where(array("c.CLIP_Codigo"=>$filter->cliente));
         if(isset($filter_not->cliente) && $filter_not->cliente!=''){
             if(is_array($filter_not->cliente) && count($filter_not->cliente)>0){
                 $this->db->where_not_in('c.CLIP_Codigo',$filter_not->cliente);
@@ -61,7 +55,6 @@ class Alumno_model extends CI_Model{
     }
 
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania;
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();
     }

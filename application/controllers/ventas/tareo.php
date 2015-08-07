@@ -18,6 +18,7 @@ class Tareo extends CI_Controller {
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
         $this->load->model(maestros.'local_model'); 
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
     }
@@ -31,7 +32,7 @@ class Tareo extends CI_Controller {
          $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);            
+        $menu       = get_menu($filter);              
         $filter     = new stdClass();
         $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
         $filter_not = new stdClass(); 
@@ -79,7 +80,7 @@ class Tareo extends CI_Controller {
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);            
+        $menu       = get_menu($filter);           
         $filter        = new stdClass();
         $filter->aula  = $aula;
         $filter->fecha = $fecha;

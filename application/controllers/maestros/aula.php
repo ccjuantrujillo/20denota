@@ -1,4 +1,5 @@
-<?php
+<?php header("Content-type: text/html; charset=utf-8"); 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Aula extends CI_Controller
 {
     public $configuracion;
@@ -10,6 +11,7 @@ class Aula extends CI_Controller
         $this->load->model('maestros/aula_model');
         $this->load->model('maestros/local_model');
         $this->load->model('seguridad/permiso_model');
+        $this->load->helper('menu');
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
     
@@ -19,9 +21,9 @@ class Aula extends CI_Controller
     
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4;
+        $filter->rol      = $this->session->userdata('rolusu');
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu       = $this->permiso_model->listar($filter);
+        $menu       = get_menu($filter);    
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->persona = "0";
@@ -148,5 +150,13 @@ class Aula extends CI_Controller
         $data['paginacion'] = $this->pagination->create_links();
         $this->load->view('maestros/aula_index',$data);
     }
+    
+    public function obtener($codigo=""){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->aula_model->listar($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;
+    }      
 }
 ?>

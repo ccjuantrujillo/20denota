@@ -8,6 +8,7 @@ class Usuario extends Persona{
         $this->load->model(seguridad.'usuario_model');          
         $this->load->model(seguridad.'rol_model');   
         $this->load->model(maestros.'persona_model');     
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
     }
 
@@ -17,9 +18,9 @@ class Usuario extends Persona{
     
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4;
+        $filter->rol      = $this->session->userdata('rolusu');
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu       = $this->permiso_model->listar($filter);       
+        $menu       = get_menu($filter);      
         $filter     = new stdClass();
         $filter_not  = new stdClass();
         $filter->order_by    = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
@@ -74,6 +75,7 @@ class Usuario extends Persona{
             $lista->materno     = $usuario->PERSC_ApellidoMaterno;
             $lista->numero      = $usuario->PERSC_NumeroDocIdentidad;
             $lista->estado      = $usuario->USUA_FlagEstado;
+            $lista->usuario     = $usuario->USUA_Codigo;
         }    
         elseif($accion == "n"){
             $lista->login     = "";
@@ -85,50 +87,52 @@ class Usuario extends Persona{
             $lista->materno   = ""; 
             $lista->numero    = ""; 
             $lista->estado    = 1;
+            $lista->usuario   = "";
         }
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = "EDITAR USUARIO";        
         $data['form_open']  = form_open('',array("name"=>"form1","id"=>"form1"));
         $data['form_close'] = form_close();
         $data['lista']	    = $lista;
+        $data['accion']	    = $accion;  
+        $data['onload']     = "onload=\"$('#paterno').focus();\"";   
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
         $filter             = new stdClass();
         $filter->order_by   = array("p.PROD_Nombre"=>"asc");
         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar('0'),$lista->rol,"id='rol' class='comboMedio'");        
-        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo'=>$codigo,'persona'=>$lista->persona));
+        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo_padre'=>$codigo,'codigo'=>$lista->persona));
         $this->load->view('seguridad/usuario_nuevo',$data);
     }
 
     public function grabar(){
-        $accion  = $this->input->get_post('accion');
-        $codigo  = $this->input->get_post('codigo');
-        $persona = $this->input->get_post('persona');
-        /*Grabo en la tabla persona*/
-        $data = array(
-                    "PERSC_ApellidoPaterno" => $this->input->post('paterno'),
-                    "PERSC_ApellidoMaterno" => $this->input->post('materno'),
-                    "PERSC_Nombre"          => $this->input->post('nombres')
-                );
-        if($persona!="")
-            $this->persona_model->modificar($persona,$data);  
-        else 
-            $persona = $this->persona_model->insertar($data);   
-        /*Grabo en la tabla usuario*/
+        parent::grabar();
+        $accion = $this->input->get_post('accion');
+        $codigo_padre  = $this->input->get_post('codigo_padre');
+        $clave  = trim($this->input->post('clave'));
         $data   = array(
-                        "PERSP_Codigo" => $persona,
-                        "ROL_Codigo"   => $this->input->post('rol'),
-                        "USUA_usuario" => $this->input->post('login')
+                        "PERSP_Codigo"    => $this->codigo,
+                        "ROL_Codigo"      => $this->input->post('rol'),
+                        "USUA_usuario"    => $this->input->post('login'),
+                        "USUA_FlagEstado" => $this->input->post('estado'),
+                        "USUA_Password"   => $clave!=""?md5($clave):""
                        );
         if($accion == "n")
             $this->usuario_model->insertar($data);            
         elseif($accion == "e")
-            $this->usuario_model->modificar($codigo,$data);            
+            $this->usuario_model->modificar($codigo_padre,$data);            
         echo json_encode(true);
     }
 
     public function eliminar(){
         $codigo = $this->input->post('codigo');
+        $filter = new stdClass();
+        $filter->usuario = $codigo;
+        $usuarios = $this->usuario_model->obtener($filter);
+        $filter = new stdClass();
+        $filter->rol = $usuarios->ROL_Codigo;
+        $resultado   = true;
         $this->usuario_model->eliminar($codigo);
+        echo json_encode($resultado);
     }
 
     public function ver(){

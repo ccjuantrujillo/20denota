@@ -16,44 +16,40 @@
     <div class="contenidotabla">
         <h1><?php echo $titulo;?></h1>
         <?php echo $form_open;?>        
-            <table>
+            <table style="background-color: #f4f7ff">
                 <tr>
-                  <td width="50%">Curso</td>
+                  <td width="50%" bgcolor="#d5e2f2">Curso</td>
                   <td class="formss"><?php echo $selproducto;?> </td>
                 </tr>            
                 <tr>
-                  <td>Nombre del video</td>
+                  <td bgcolor="#d5e2f2">Nombre del video</td>
                   <td class="formss"><input type="text" class="cajaGrande" name="nombre" id="nombre" value="<?php echo $lista->nombre;?>"></td>
                 </tr>
                 <tr>
-                  <td>Descripcion</td>
+                  <td bgcolor="#d5e2f2">Descripcion</td>
                   <td class="formss"><textarea name="descripcion" id="descripcion" cols="1" rows="3" style="width:250px" class="textareaGrande"><?php echo $lista->descripcion;?></textarea></td>
                 </tr>  
                 <tr>
-                  <td>Preguntas necesarias</td>
+                  <td bgcolor="#d5e2f2">Preguntas necesarias</td>
                   <td class="formss">
                       <input type="text" class="cajaMinima" name="preguntas" id="preguntas" value="<?php echo $lista->preguntasnec;?>" onkeydown="return numbersonly(this,event,'.');" maxlength="2">
-                      <span>Preguntas cargadas</span>
+                      <span >Preguntas cargadas</span>
                       <input type="text" class="cajaMinima" name="cargadas" id="cargadas" value="<?php echo $lista->preguntas;?>" readonly="readonly" maxlength="2" style="width:60px; background-color: #E6E6E6">
                   </td>
                 </tr> 
                 <tr>
-                  <td>Video VIMEO<br>(Copiar aqui el enlace)</td>
+                  <td bgcolor="#d5e2f2">Video VIMEO<br>(Copiar aqui el enlace)</td>
                   <td class="formss"><textarea name="vimeo" id="vimeo" cols="1" rows="3" style="width:250px" class="textareaGrande"><?php echo $lista->vimeo;?></textarea></td>
                 </tr>             
-                <tr>
-                    <td class="formss" colspan="2">
-                        <div class="frmboton">
-                            <div class="frmboton_login">
-                                <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
-                                <input class="botones" id="grabar" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
             </table>
         <?php echo $oculto?>     
         <?php echo $form_close;?>        
+    </div>
+     <div class="frmboton">
+        <div class="frmboton_login">
+            <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
+            <input id="grabar" class="botones" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
+        </div>
     </div>
 </div>    
 </body>

@@ -17,6 +17,7 @@ class Acta extends CI_Controller {
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
         $this->load->model(maestros.'local_model'); 
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
     }
@@ -30,7 +31,7 @@ class Acta extends CI_Controller {
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);            
+        $menu       = get_menu($filter);                
         $filter     = new stdClass();
         $filter->order_by = array("p.ACTAC_Numero"=>"desc");
         $filter_not = new stdClass(); 
@@ -71,7 +72,7 @@ class Acta extends CI_Controller {
         $this->load->view("ventas/acta_index",$data);
     }
 
-    public function editar($accion,$codigo=""){
+    public function editar($accion,$codigo="",$codigodetalle=""){
         $curso   = $this->input->get_post('curso'); 
         $titulo  = $this->input->get_post('titulo'); 
         $hinicio = $this->input->get_post('hinicio'); 
@@ -111,25 +112,28 @@ class Acta extends CI_Controller {
             $lista->curso       = $curso;
             $lista->actadetalle = array();
         } 
-        $arrEstado            = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $data['titulo']       = $accion=="e"?"Editar Acta":"Nueva Acta"; 
-        $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close']   = form_close();         
-        $data['lista']	      = $lista;   
-        $data['accion']	      = $accion;               
-        $data['selcurso']     = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio'"); 
+        $arrEstado             = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
+        $data['titulo']        = $accion=="e"?"Editar Acta":"Nueva Acta"; 
+        $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
+        $data['form_close']    = form_close();         
+        $data['lista']	       = $lista;   
+        $data['accion']	       = $accion;               
+        $data['codigodetalle'] = $codigodetalle;   
+        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio'"); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
+        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande'"); 
         $data['selasistente'] = form_dropdown('asistente',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='combo1' multiple='1' size='3' class='comboMultipleMedio'"); 
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
         $this->load->view("ventas/acta_nuevo",$data);
     }
 
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
+        $codigodetalle = $this->input->get_post('codigodetalle');
         $data   = array(
                         "ACTAC_Numero"       => $this->input->post('numero'),
 			"ACTAC_Fecha"        => date_sql_ret($this->input->post('fecha')),
@@ -137,16 +141,14 @@ class Acta extends CI_Controller {
                         "ACTAC_Titulo"       => $this->input->post('titulo'),
                         "ACTAC_Hinicio"      => $this->input->post('hinicio'),
                         "ACTAC_Hfin"         => $this->input->post('hfin'),
-                        "ACTAC_Agenda"       => $this->input->post('agenda'),
-                        "ACTAC_FechaModificacion" => date("Y-m-d H:i:s",time())
+                        "ACTAC_Agenda"       => $this->input->post('agenda')
                        );
         $resultado = false;
         if($accion == "n"){
             $resultado = true;
-            unset($data["ACTAC_FechaModificacion"]);
             $codigo = $this->acta_model->insertar($data);                      
         }
-        elseif($accion == "e"){ 
+        elseif($accion == "e"){
             $resultado = true;
             $this->acta_model->modificar($codigo,$data);                                
         }  
@@ -155,15 +157,27 @@ class Acta extends CI_Controller {
         $responsable = $this->input->get_post('responsable');
         $fcompromiso = $this->input->get_post('fcompromiso');
         if(count($acuerdo)>0 && is_array($acuerdo)){
-            foreach($acuerdo as $item=>$value){
-                $data = array(
-                            "PROP_Codigo"              => $responsable[$item],
-                            "ACTAP_Codigo"             => $codigo,
-                            "ACTADETC_Observacion"     => $acuerdo[$item],
-                            "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
-                        );
-                $this->actadetalle_model->insertar($data); 
+            if($codigodetalle!=""){
+                foreach($acuerdo as $item=>$value){
+                    $data = array(
+                                "PROP_Codigo"              => $responsable[$item],
+                                "ACTADETC_Observacion"     => $acuerdo[$item],
+                                "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
+                            );
+                    $this->actadetalle_model->modificar($codigodetalle,$data); 
+                } 
             }
+            else{
+                foreach($acuerdo as $item=>$value){
+                    $data = array(
+                                "PROP_Codigo"              => $responsable[$item],
+                                "ACTAP_Codigo"             => $codigo,
+                                "ACTADETC_Observacion"     => $acuerdo[$item],
+                                "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
+                            );
+                    $this->actadetalle_model->insertar($data); 
+                }        
+            }            
         }
         echo json_encode($resultado);
     }
@@ -171,7 +185,9 @@ class Acta extends CI_Controller {
     public function eliminar(){
         $codigo = $this->input->post('codigo');
         $resultado = false;
-        $this->actadetalle_model->eliminar($codigo);
+        $filter = new stdClass();
+        $filter->acta = $codigo;
+        $this->actadetalle_model->eliminar($filter);
         $this->acta_model->eliminar($codigo);
         $resultado = true;
         echo json_encode($resultado);
@@ -179,8 +195,10 @@ class Acta extends CI_Controller {
     
     public function eliminardetalle(){
         $codigo = $this->input->post('codigo');
+        $filter = new stdClass();
+        $filter->actadetalle = $codigo;
         $resultado = false;
-        $this->actadetalle_model->eliminar($codigo);
+        $this->actadetalle_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
     }    

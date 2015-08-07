@@ -1,4 +1,5 @@
-<?php
+<?php header("Content-type: text/html; charset=utf-8"); 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Local extends CI_Controller
 {
     public $configuracion;
@@ -9,13 +10,14 @@ class Local extends CI_Controller
         parent::__construct();
         $this->load->model('maestros/local_model');
         $this->load->model('seguridad/permiso_model');
+        $this->load->helper('menu');
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu  = $this->permiso_model->listar($filter);  
+        $menu       = get_menu($filter);  
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->persona = "0";
@@ -97,13 +99,12 @@ class Local extends CI_Controller
          $this->load->view("maestros/local_nuevo",$data);
      }
 
-     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
-        $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
-        if(count($listado)>1)
-            $resultado = "Existe mas de un resultado";
-        else
-            $resultado = (object)$listado[0];
-        return $resultado;
+    public function obtener($codigo=""){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $locales  = $this->local_model->listar($filter);
+        $resultado = json_encode($locales);
+        echo $resultado;
     }
 
     public function eliminar()

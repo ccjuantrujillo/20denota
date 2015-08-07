@@ -9,6 +9,8 @@ class Profesor extends Persona
         $this->load->model(ventas.'profesor_model');
         $this->load->model(seguridad.'rol_model');
         $this->load->model(almacen.'curso_model');
+        $this->load->model(maestros.'tipodocumento_model');
+        $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
     }
 
@@ -18,9 +20,9 @@ class Profesor extends Persona
 
     public function listar($j=0){
         $filter           = new stdClass();
-        $filter->rol      = 4;
+        $filter->rol      = $this->session->userdata('rolusu');
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu       = $this->permiso_model->listar($filter);
+        $menu       = get_menu($filter); 
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->profesor = "0";
@@ -42,6 +44,7 @@ class Profesor extends Persona
                 $lista[$indice]->estado   = $value->PROC_FlagEstado;
                 $lista[$indice]->curso    = $value->PROD_Nombre;
                 $lista[$indice]->fechareg = $value->fechareg;
+                $lista[$indice]->coordinador = $value->PROC_FlagCoordinador;
             }
         }
         $configuracion = $this->configuracion;
@@ -78,7 +81,8 @@ class Profesor extends Persona
              $lista->codigo     = $profesores->PERSP_Codigo;
              $lista->estado     = $profesores->PROC_FlagEstado;
              $lista->curso      = $profesores->PROD_Codigo;
-             $lista->rol        = $profesores->ROL_Codigo;
+             $lista->tipodoc    = $profesores->TIPDOCP_Codigo; 
+             $lista->coordinador = $profesores->PROC_FlagCoordinador; 
          }
          elseif($accion == "n"){
              $lista->numerodoc  = "";
@@ -98,18 +102,21 @@ class Profesor extends Persona
              $lista->codigo     = "";
              $lista->estado     = 1;
              $lista->curso      = 1;
-             $lista->rol        = 1;
+             $lista->tipodoc    = 1;  
+             $lista->coordinador= 2;  
          }
          $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
+         $arrCoord           = array("0"=>"::Seleccione::","1"=>"Coordinador","2"=>"Profesor");
          $data['titulo']     = $accion=="e"?"Editar Profesor":"Crear Profesor";
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
          $data['selsexo']    = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
          $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-         $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar(),$lista->curso,"id='curso' class='comboMedio'");
-         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar(),$lista->rol,"id='rol' class='comboMedio'");
+         $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
+         $data['selcoord']   = form_dropdown('coordinador',$arrCoord,$lista->coordinador,"id='coordinador' class='comboMedio'");
+         $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); ;
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
          $this->load->view("ventas/profesor_nuevo",$data);
      }
@@ -122,11 +129,11 @@ class Profesor extends Persona
                         "PERSP_Codigo"           => $this->codigo,
                         "PROC_FechaModificacion" => date('Y-m-d H:i:s',time()),
                         "PROC_FlagEstado"        => $this->input->post('estado'),
-                        "ROL_Codigo"             => $this->input->post('rol'),
-                        "PROD_Codigo"            => $this->input->post('curso')
+                        "PROD_Codigo"            => $this->input->post('curso'),
+                        "PROC_FlagCoordinador"   => $this->input->post('coordinador')
                        );
         if($accion == "n"){
-            $this->profesor_model->insertar($data);
+            $persona = $this->profesor_model->insertar($data);
         }
         elseif($accion == "e"){
             $this->profesor_model->modificar($codigo_padre,$data);
@@ -158,11 +165,11 @@ class Profesor extends Persona
         $filter_not->profesor = "0";
         $filter->order_by    = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
         $registros = count($this->profesor_model->listar($filter,$filter_not));
-        $clientes  = $this->profesor_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
-        $item      = 1;
-        $lista     = array();
-        if(count($clientes)>0){
-            foreach($clientes as $indice => $value){
+        $profesores = $this->profesor_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $item       = 1;
+        $lista      = array();
+        if(count($profesores)>0){
+            foreach($profesores as $indice => $value){
                 $lista[$indice]             = new stdClass();
                 $lista[$indice]->numero   = $value->PERSC_NumeroDocIdentidad;
                 $lista[$indice]->nombres  = $value->PERSC_Nombre;
@@ -171,6 +178,7 @@ class Profesor extends Persona
                 $lista[$indice]->telefono = $value->PERSC_Telefono;
                 $lista[$indice]->movil    = $value->PERSC_Movil;
                 $lista[$indice]->codigo   = $value->PROP_Codigo;
+                $lista[$indice]->profesor = $value->PROP_Codigo;
                 $lista[$indice]->estado   = $value->PROC_FlagEstado;
                 $lista[$indice]->fechareg = $value->fechareg;
             }

@@ -5,7 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
-    <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />     
+    <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />  
+    <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />      
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" /> 
 </head>
 <body>
@@ -14,7 +15,7 @@
         <h1><?php echo $titulo;?></h1>
         <?php echo $form_open;?>
         <div id="cabecera">
-            <table>
+            <table style="background-color: #f4f7ff">
               <tr>
                 <td width="20%">Nro.Asignacion:</td>
                 <td class="formss" width="30%"><input name="asignacion" id="asignacion" type="text" value="<?php echo $lista->asignacion;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"/></td>
@@ -26,15 +27,9 @@
               <tr>
                 <td width="20%">Ciclo:</td>
                 <td class="formss" width="30%"><?php echo $selciclo;?></td>
-                <td width="20%">Tipo de estudio:</td>
-                <td class="formss" width="30%"><?php echo $selcurso;?></td>                
-              </tr>
-              <tr>
-                <td width="20%">Local:</td>
-                <td class="formss" width="30%"><?php echo $sellocal;?></td>              
-                <td>Aula:</td>
-                <td class="formss" width="30%"><?php echo $selaula;?></td> 
-              </tr>                     
+                <td>Estado:</td>
+                <td class="formss"><?php echo $selestado;?></td>                
+              </tr>                  
               <tr>
                 <td>Codigo de profesor:</td>
                 <td class="formss">
@@ -48,9 +43,10 @@
               </tr>
               <tr>
                 <td>Apellidos y Nombres:</td>
-                <td class="formss" align="left"><input name="nombres" id="nombres" type="text" value="<?php echo $lista->paterno.' '.$lista->materno.' '.$lista->nombres;?>" class="cajaGrande" readonly="readonly" style="background-color: #E6E6E6"/></td>
-                <td>Estado:</td>
-                <td class="formss"><?php echo $selestado;?></td> 
+                <td class="formss" align="left" colspan="3">
+                    <input name="nombres" id="nombres" type="text" value="<?php echo $lista->paterno.' '.$lista->materno.' '.$lista->nombres;?>" class="cajaGrande" readonly="readonly" style="background-color: #E6E6E6"/>&nbsp;&nbsp;
+                    <a href="#" <?php echo ($codigodetalle==""?"id='agregar'":"");?> >Agregar</a>
+                </td>
               </tr>                             
             </table>
         </div>
@@ -59,33 +55,73 @@
                 <tr>
                     <th width="3%" align="center">No</th>
                     <th width="5%" align="center">Dia</th>
+                    <th align="center">Tipo estudio</th> 
                     <th align="center">Local</th>
                     <th align="center">Aula</th> 
-                    <th align="center">Nivel</th> 
-                    <th align="center">De</th> 
+                    <th align="center">Desde</th> 
                     <th align="center">Hasta</th> 
                     <th align="center">Acciones</th>
                 </tr>
                 <?php
                 if(count($lista->asignaciondetalle)>0){
                     foreach($lista->asignaciondetalle as $item => $value){
+                        if($codigodetalle==$value->ASIGDETP_Codigo){
+                            $optSemana = "";
+                            $optTipoestudio = "";
+                            $optLocal  = "";
+                            $optAula   = "";
+                            foreach ($semana as $item2 => $value2){
+                                $optSemana.= "<option value='".$item2."' ".($item2==$value->ASIGDETC_Dia?"selected='selected'":"").">".$value2."</option>";
+                            } 
+                            foreach ($tipoestudio as $item3 => $value3){
+                                $optTipoestudio.= "<option value='".$item3."' ".($item3==$value->TIPP_Codigo?"selected='selected'":"").">".$value3."</option>";
+                            }  
+                            foreach ($local as $item4 => $value4){
+                                $optLocal.= "<option value='".$item4."' ".($item4==$value->LOCP_Codigo?"selected='selected'":"").">".$value4."</option>";
+                            } 
+                            foreach ($aula as $item5 => $value5){
+                                $optAula.= "<option value='".$item5."' ".($item5==$value->AULAP_Codigo?"selected='selected'":"").">".$value5."</option>";
+                            }                            
+                            ?>
+                            <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
+                                <td width="3%" align="center"><?php echo $item+1;?></td>
+                                <td align="center"><select class='comboMinimo' name="dia[<?php echo $item;?>]" id="dia[<?php echo $item;?>]"><option value='0'>::Seleccione::</option><?php echo $optSemana;?></select></td>
+                                <td align="center"><select class='comboMinimo' name="tipoestudio[<?php echo $item;?>]" id="tipoestudio[<?php echo $item;?>]"><?php echo $optTipoestudio;?></select></td>
+                                <td align="center"><select class='comboMedio' name="local[<?php echo $item;?>]" id="local[<?php echo $item;?>]" onchange="selectAula(<?php echo $item;?>)"><?php echo $optLocal;?></select></td> 
+                                <td align="center"><select class='comboMinimo' name="aula[<?php echo $item;?>]" id="aula[<?php echo $item;?>]"><?php echo $optAula;?></select></td> 
+                                <td align="center"><input type='time' maxlength='5' class='cajaReducida' name="desde[<?php echo $item;?>]" id="desde[<?php echo $item;?>]" value="<?php echo substr($value->ASIGDETC_Desde,0,5);?>"></td> 
+                                <td align="center"><input type='time' maxlength='5' class='cajaReducida' name="hasta[<?php echo $item;?>]" id="hasta[<?php echo $item;?>]" value="<?php echo substr($value->ASIGDETC_Hasta,0,5);?>"></td> 
+                                <td align="center">
+                                    <a href="#" class="editardetalle">Editar</a>&nbsp;
+                                    <a href="#" class="eliminardetalle">Eliminar</a>
+                                </td>
+                            </tr> 
+                            <?php
+                        }
+                        else{
+                            ?>
+                            <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
+                                <td width="3%" align="center"><?php echo $item+1;?></td>
+                                <td align="center"><?php echo $semana[$value->ASIGDETC_Dia];?></td>
+                                <td align="center"><?php echo $value->TIPC_Nombre;?></td>
+                                <td align="center"><?php echo $value->LOCC_Nombre;?></td> 
+                                <td align="center"><?php echo $value->AULAC_Nombre;?></td> 
+                                <td align="center"><?php echo substr($value->ASIGDETC_Desde,0,5);?></td> 
+                                <td align="center"><?php echo substr($value->ASIGDETC_Hasta,0,5);?></td> 
+                                <td align="center">
+                                    <a href="#" class="editardetalle">Editar</a>&nbsp;
+                                    <a href="#" class="eliminardetalle">Eliminar</a>
+                                </td>
+                            </tr>                
+                            <?php
+                        }
                     ?>
-                    <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
-                        <td width="3%" align="center"><?php echo $item+1;?></td>
-                        <td align="left"><?php echo $value->ASIGDETC_Dia;?></td>
-                        <td align="center"><?php echo $value->PERSC_ApellidoPaterno;?></td>
-                        <td align="center"><?php echo date_sql($value->ACTADETC_FechaCompromiso);?></td> 
-                        <td align="center">
-                            <a href="#" class="editar">Editar</a>&nbsp;
-                            <a href="#" class="eliminar">Eliminar</a>
-                        </td>
-                    </tr>
                     <?php                                
                     }
                 }
                 else{
                     ?>
-                    <tr><td colspan="7" align="center">:::NO EXISTEN REGISTROS:::</td></tr>
+                    <tr><td colspan="8" align="center">:::NO EXISTEN REGISTROS:::</td></tr>
                     <?php
                 }
                 ?>
@@ -93,8 +129,8 @@
         </div>
         <div class="frmboton">
             <div class="frmboton_matricula">
-                <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>                        
-                <input class="botones" id="imprimir" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                                    
+                <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>       
+                <input class="botones" id="imprimir" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                  
                 <input class="botones" id="grabar" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
             </div>
         </div>        

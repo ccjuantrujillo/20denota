@@ -35,15 +35,15 @@ jQuery(document).ready(function(){
         location.href = url;
     });  
     
-    $("body").on("click","#cerrar",function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });   
-    
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });         
+//    $("body").on("click","#cerrar",function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });   
+//    
+//    $("body").on("click","#logo",function(){
+//        url = base_url+"index.php/inicio/principal";
+//        location.href = url;
+//    });         
 });
 
 function editar(codigo){

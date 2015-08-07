@@ -27,13 +27,11 @@ class Asignacion_model extends CI_Model
     }
     
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-        $this->db->select('*,DATE_FORMAT(c.ASIGC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
+        $this->db->select('*,DATE_FORMAT(c.ASIGC_Fecha,"%d/%m/%Y") AS fecha',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_prof.' as d','d.PROP_Codigo=c.PROP_Codigo','inner');
         $this->db->join($this->table_per.' as e','e.PERSP_Codigo=d.PERSP_Codigo','inner');
 	$this->db->join($this->table_curso.' as i','i.PROD_Codigo=d.PROD_Codigo','inner');
-        $this->db->join($this->table_tipoestudio.' as f','f.TIPP_Codigo=c.TIPP_Codigo','inner');
-        $this->db->join($this->table_aula.' as g','g.AULAP_Codigo=c.AULAP_Codigo','inner');
         $this->db->join($this->table_ciclo.' as h','h.CICLOP_Codigo=c.CICLOP_Codigo','inner');
         if(isset($filter->ciclo) && $filter->ciclo!='')            $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->asignacion) && $filter->asignacion!='')  $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));

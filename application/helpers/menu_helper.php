@@ -1,21 +1,49 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-//function date_add($givendate,$day=0,$mth=0,$yr=0)
-/* conocer la hora exacta de un determinado timezone */
-function get_date($timezone = 'America/New_York', $full_date_time = false)
+include_once(APPPATH.'models/seguridad/permiso_model.php');
+include_once(APPPATH.'models/seguridad/menu_model.php');
+function get_menu($filter)
 {
-      date_default_timezone_set($timezone);
-      $date = ($full_date_time) ? date('D,F j, Y, h:i:s A') : date('Y-m-d');
-      date_default_timezone_set('UTC');
-      return $date;
-}
-
-function date_sql($fecha){
-    $array = explode("-",$fecha);
-    return $array[2]."/".$array[1]."/".$array[0];
-}
-
-function date_sql_ret($fecha){
-    $array = explode("/",$fecha);
-    return $array[2]."-".$array[1]."-".$array[0];
+    $permisos = new Permiso_model();
+    $menu = $permisos->listar($filter);
+    $filamenu = "";
+    if(count($menu)>0){
+        foreach($menu as $indice=>$value){
+            if($value->MENU_Codigo_Padre == 1){
+                $filamenu.="<li>";
+                $filamenu.= "<a href='#'>".$value->MENU_Descripcion."</a>";
+                $filamenu.="<ul>";
+                foreach($menu as $indice2=>$value2){
+                    if($value2->MENU_Codigo_Padre == $value->MENU_Codigo){
+                      $filamenu.="<li>";
+                      $filamenu.="<a href='".($value2->MENU_Url!="#"?base_url().$value2->MENU_Url:"#")."'>".$value2->MENU_Descripcion."</a>";
+                      $submenu = "";
+                      foreach ($menu as $item3 => $value3){
+                          if($value3->MENU_Codigo_Padre == $value2->MENU_Codigo){
+                              $submenu.="<li><a href='".base_url().$value3->MENU_Url."'>".$value3->MENU_Descripcion."</a></li>";
+                          }
+                      }
+                      if($submenu!=""){
+                          $filamenu.= "<ul>".$submenu."</ul>";
+                      }
+                      $filamenu.="</li>";
+                    }
+                }
+                $filamenu.="</ul>";
+                $filamenu.="</li>";
+            }
+        }
+    }
+    else{
+        $permisos = new Menu_model();
+        $filter   = new stdClass();
+        $filter->codigo = 1;
+        $menu     = $permisos->listar($filter);
+        foreach($menu as $indice=>$value){
+            $filamenu.="<li>";
+            $filamenu.= "<a href='#'>".$value->MENU_Descripcion."</a>";
+            $filamenu.="</li>";
+        }
+    }
+    return $filamenu;
 }
 ?>

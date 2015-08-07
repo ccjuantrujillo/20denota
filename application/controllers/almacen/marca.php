@@ -1,4 +1,5 @@
-<?php
+<?php header("Content-type: text/html; charset=utf-8"); 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Marca extends controller
 {
     public function __construct()

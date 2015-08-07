@@ -30,6 +30,24 @@ jQuery(document).ready(function(){
        $("#clave").val(curso+ascii);
     });    
     
+    $("body").on('click',"#agregar",function(){
+        n      = $("#tabla_detalle tr").length;
+        fila   = "<tr>";
+        fila  += "<td align='center'>"+n+"</td>";
+        fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select class='comboMinimo' name='tipoestudio["+n+"]' id='tipoestudio["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+")'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
+        fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
+        fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
+        fila  += "</tr>";
+        $("#tabla_detalle").append(fila);
+        selectDia(n);
+        selectTipoEstudio(n);
+        selectLocal(n);
+    });       
+    
     $("body").on('click',"#ver_profesor",function(){
         url = base_url+"index.php/ventas/profesor/buscar";
         window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
@@ -66,10 +84,33 @@ jQuery(document).ready(function(){
         location.href = url;
     });
     
-    $("body").on("click","#cerrar",function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });          
+    $("body").on("click",".eliminar",function(){
+       if(confirm('Esta seguro desea eliminar este registro?')){
+            coddetalle = $(this).parent().parent().attr("id");
+            dataString = "codigo="+coddetalle;
+            url = base_url+"index.php/ventas/asignacion/eliminar";
+            $.post(url,dataString,function(data){
+                if(data=="true"){
+                    //alert('Operacion realizada con exito');  
+                    url = base_url+"index.php/ventas/asignacion/listar";
+                    location.href = url;
+                }
+                else if(data=="false"){
+                    alert("No se puede eliminar el registro");
+                }
+            });           
+       }        
+    });             
+    
+   $("body").on("click",".editar",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "codigo="+codigo;    
+        url = base_url+"index.php/ventas/asignacion/editar/e/"+codigo;
+        $.post(url,dataString,function(data){
+            $('#basic-modal-content').modal();
+            $('#mensaje').html(data);
+        });  
+    });     
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/asignacion/grabar";
@@ -91,37 +132,53 @@ jQuery(document).ready(function(){
         }
     }); 
     
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
+   $("body").on("click",".eliminardetalle",function(){
+        if(confirm('Esta seguro desea eliminar este registro?')){
+            coddetalle = $(this).parent().parent().attr("id");
+            dataString = "codigodetalle="+coddetalle;
+            url = base_url+"index.php/ventas/asignacion/eliminardetalle";
+            $.post(url,dataString,function(data){
+                if(data=="true"){
+//                    alert('Operacion realizada con exito');  
+                    accion      = $("#accion").val();
+                    codigo      = $("#codigo").val();
+                    dataString  = $('#frmPersona').serialize();
+                    url = base_url+"index.php/ventas/asignacion/editar/"+accion+"/"+codigo;
+                    $.post(url,dataString,function(data2){
+                        $('#mensaje').html(data2);
+                    });  
+                }
+                else if(data=="false"){
+                    alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
+                }                
+            });
+        }
     });   
+    
+    $("body").on("click",".editardetalle",function(){  
+        codigodetalle = $(this).parent().parent().attr("id");
+        if(typeof(codigodetalle)!="undefined"){
+            codigo = $("#codigo").val();
+            dataString = "";    
+            url = base_url+"index.php/ventas/asignacion/editar/e/"+codigo+"/"+codigodetalle;
+            $.post(url,dataString,function(data){
+                $('#basic-modal-content').modal();
+                $('#mensaje').html(data);
+            }); 
+        }
+        else{
+            alert("Para editar este registro primero debe grabarse");
+        }
+     });   
+    
+    $("body").on('focus',"#fecha",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });     
 });
-
-function editar(codigo){
-    dataString = "codigo="+codigo;    
-    url = base_url+"index.php/ventas/asignacion/editar/e/"+codigo;
-    $.post(url,dataString,function(data){
-        $('#basic-modal-content').modal();
-        $('#mensaje').html(data);
-    });        
-}
-
-function eliminar(codigo){
-    if(confirm('Esta seguro desea eliminar este registro?')){
-        dataString = "codigo="+codigo;
-        url = base_url+"index.php/ventas/asignacion/eliminar";
-        $.post(url,dataString,function(data){
-            if(data=="true"){
-                alert('Operacion realizada con exito');  
-                url = base_url+"index.php/ventas/asignacion/listar";
-                location.href = url;
-            }
-            else if(data=="false"){
-                alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
-            }
-        });
-    }
-}
 
 function selecciona_profesor(codigo){
     url    = base_url+"index.php/ventas/profesor/obtener/";
@@ -134,6 +191,74 @@ function selecciona_profesor(codigo){
             $("#profesor").val(value.PROP_Codigo);
             $("#nombres").val(nomper);
             $("#cursos").val(value.PROD_Codigo);            
+        });
+    },"json");
+}
+
+function selectDia(n){
+    a      = "dia["+n+"]";
+    select = document.getElementById(a);
+    dias   = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+    $.each(dias, function(item,value){
+        opt       = document.createElement('option');
+        opt.value = item;
+        opt.appendChild(document.createTextNode(value));
+        select.appendChild(opt);
+    });
+}
+
+function selectTipoEstudio(n){
+    a      = "tipoestudio["+n+"]";
+    url    = base_url+"index.php/maestros/tipoestudio/obtener";
+    selecttipo = document.getElementById(a);
+    objRes = new Object();
+    objRes.ciclo = $("#ciclo").val();
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        $.each(data, function(item,value){
+            opt       = document.createElement('option');
+            opt.value = value.TIPP_Codigo;
+            opt.appendChild(document.createTextNode(value.TIPC_Nombre));
+            selecttipo.appendChild(opt);
+        });
+    },"json");
+}
+
+function selectLocal(n){
+    a      = "local["+n+"]";
+    url    = base_url+"index.php/maestros/local/obtener";
+    selectloc = document.getElementById(a);
+    objRes = new Object();
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        $.each(data, function(item,value){
+            opt       = document.createElement('option');
+            opt.value = value.LOCP_Codigo;
+            opt.appendChild(document.createTextNode(value.LOCC_Nombre));
+            selectloc.appendChild(opt);
+        });
+    },"json");
+}
+
+function selectAula(n){
+    a      = "aula["+n+"]";
+    b      = "local["+n+"]";
+    url    = base_url+"index.php/maestros/aula/obtener";
+    selectaula = document.getElementById(a);
+    selectaula.options.length=0;
+    objRes = new Object();
+    objRes.local = document.getElementById(b).value;
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        opt       = document.createElement('option');
+        opt.value = 0;
+        opt.appendChild(document.createTextNode("::Seleccione::"));
+        selectaula.appendChild(opt);
+        $.each(data, function(item,value){
+            opt       = document.createElement('option');
+            opt.value = value.AULAP_Codigo;
+            opt.appendChild(document.createTextNode(value.AULAC_Nombre));
+            selectaula.appendChild(opt);
         });
     },"json");
 }

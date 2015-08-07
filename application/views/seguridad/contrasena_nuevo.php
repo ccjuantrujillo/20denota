@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <link rel="stylesheet" href="<?php echo css;?>estilos.css" type="text/css">      
-    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
-    <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>           
+    <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>         
+    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>seguridad/contrasena.js"></script>			
 </head>
 <body>

@@ -1,6 +1,5 @@
 <?php header("Content-type: text/html; charset=utf-8"); 
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 class Inicio extends CI_Controller {
     var $entidad;
     public function __construct(){
@@ -10,6 +9,7 @@ class Inicio extends CI_Controller {
         $this->load->model(seguridad.'permiso_model');  
         $this->load->model(seguridad.'menu_model');
         $this->load->model(maestros.'ciclo_model');
+        $this->load->helper('menu');
     }
 
     public function index(){
@@ -21,24 +21,22 @@ class Inicio extends CI_Controller {
     
     public function ingresar(){
         $this->form_validation->set_rules('txtUsuario','Nombre Usuario','required|max_length[20]');
-        $this->form_validation->set_rules('txtClave','Clave de Usuario','required|max_length[15]');
-        $this->form_validation->set_rules('compania','Compania','required');  
+        $this->form_validation->set_rules('txtClave','Clave de Usuario','required|max_length[15]'); 
         if($this->form_validation->run() == FALSE){
             redirect('inicio/index');
         }
         else{
             $txtUsuario = $this->input->post('txtUsuario');
             $txtClave   = $this->input->post('txtClave');
-            $compania   = $this->input->post('compania');
-            $usuarios   = $this->usuario_model->ingresar(trim($txtUsuario),md5(trim($txtClave)),$compania);
+            $usuarios   = $this->usuario_model->ingresar(trim($txtUsuario),md5(trim($txtClave)));
             if(count((array)$usuarios)>0){
                 $data = array(
                             'nomper'   => $usuarios->PERSC_Nombre." ".$usuarios->PERSC_ApellidoPaterno,
                             'login'    => $usuarios->USUA_usuario,
-                            'compania' => $usuarios->CICLOP_Codigo,
                             'codusu'   => $usuarios->USUA_Codigo,
                             'rolusu'   => $usuarios->ROL_Codigo,
-							'codper'   => $usuarios->PERSP_Codigo
+                            'codper'   => $usuarios->PERSP_Codigo,
+                            'estado'   => $usuarios->USUA_FlagEstado
                              );
                 $this->session->set_userdata($data);
                 redirect("inicio/principal");                
@@ -63,41 +61,16 @@ class Inicio extends CI_Controller {
         $fecha_red = $dia.$mes.$ano;
         $nombreusuario = $this->session->userdata('nomper');
         $codusu        = $this->session->userdata('codusu');
-        $compania      = $this->session->userdata('compania');
         $rolusu        = $this->session->userdata('rolusu');
-        //Menu
-        $filamenu = "<ul class='glossymenu' id='menu'>";
         $filter           = new stdClass();
-        //$filter->codigo   = 1; 
         $filter->rol      = $rolusu; 
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu_padre = $this->permiso_model->listar($filter);
-        foreach($menu_padre as $indice=>$value){
-            $filamenu.="<li class='glossymenutitle'><a target=_blank href=".base_url().$value->MENU_Url.">" .$value->MENU_Descripcion. "</a>";
-            $filamenu.="<ul>";
-            $filter = new stdClass();
-            $filter->codigo   = $value->MENU_Codigo;
-            $filter->rol      = $rolusu; 
-            $filter->order_by = array("p.MENU_Codigo"=>"asc");
-            $menu_hijo = $this->permiso_model->listar($filter);
-            if(count($menu_hijo)>0){
-                foreach($menu_hijo as $indice2=>$value2){
-                    $filamenu.="<li><a target=_blank href=" .base_url().$value2->MENU_Url. ">" .$value2->MENU_Descripcion. "</a></li>";
-                } 
-            }
-            $filamenu.="</ul>";
-            $filamenu.="</li>";
-        }
-        $filamenu.="<li class='glossymenutitle'><a href='".base_url()."index.php/inicio/salir'>Salir</a></li>";
-        $filamenu.="</ul>";
-        $rpta  = "";
+        $menu             = get_menu($filter);
         $total = 0;
-        $data['fecha'] = $fecha;
-        $data['filamenu']      = $filamenu;
-        $data['menu']          = $menu_padre;
-        $data['registros']     = count($menu_padre);
-        $data['oculto']        = form_hidden(array("serie"=>"","numero"=>"","codot"=>""));
-        $this->load->view("seguridad/principal",$data);
+        $data['fecha']  = $fecha;
+        $data['menu']   = $menu;
+        $data['oculto'] = form_hidden(array("serie"=>"","numero"=>"","codot"=>""));
+        $this->load->view("seguridad/principal",$data);    
     }
     
     public function salir(){

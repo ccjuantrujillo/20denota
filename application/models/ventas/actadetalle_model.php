@@ -61,8 +61,10 @@ class Actadetalle_model extends CI_Model{
         $this->db->update($this->table,$data);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('ACTADETP_Codigo'=>$codigo));        
+    public function eliminar($filter){
+        if(isset($filter->acta) && $filter->acta!='')               $this->db->where(array("ACTAP_Codigo"=>$filter->acta));
+        if(isset($filter->actadetalle) && $filter->actadetalle!='') $this->db->where(array("ACTADETP_Codigo"=>$filter->actadetalle));
+        $this->db->delete($this->table);        
     }
 }
 ?>

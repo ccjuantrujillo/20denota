@@ -27,10 +27,10 @@ jQuery(document).ready(function(){
         location.href = url;
     });
 
-    $("#cerrar").click(function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });
+//    $("#cerrar").click(function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });
 
     $("body").on('click',"#grabar",function(){
         url = base_url+"index.php/maestros/aula/grabar";

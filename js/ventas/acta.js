@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
         fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
         fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fcompromiso["+n+"]' id='fcompromiso["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});'></td>";
-        fila  += "<td align='center'><a>Editar</a>&nbsp;<a>Eliminar</a></td>";
+        fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
         fila  += "</tr>";
         $("#tabla_detalle").append(fila);
         selectResponsable(n);
@@ -61,12 +61,7 @@ jQuery(document).ready(function(){
     $("body").on('click',"#cancelar",function(){
         url = base_url+"index.php/ventas/acta/listar";
         location.href = url;
-    });
-    
-    $("body").on("click","#cerrar",function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });          
+    });      
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/acta/grabar";
@@ -88,7 +83,7 @@ jQuery(document).ready(function(){
         }
     }); 
     
-   $("body").on("click",".eliminar",function(){
+   $("body").on("click",".eliminardetalle",function(){
         if(confirm('Esta seguro desea eliminar este registro?')){
             coddetalle = $(this).parent().parent().attr("id");
             dataString = "codigo="+coddetalle;
@@ -111,15 +106,44 @@ jQuery(document).ready(function(){
         }        
     });    
     
-   $("body").on("click",".editar",function(){
-        coddetalle = $(this).parent().parent().attr("id");
-        alert(coddetalle);
-    });        
+    $("body").on("click",".editardetalle",function(){ 
+        codigodetalle = $(this).parent().parent().attr("id");
+        codigo = $("#codigo").val();
+        dataString = "";    
+        url = base_url+"index.php/ventas/acta/editar/e/"+codigo+"/"+codigodetalle;
+        $.post(url,dataString,function(data){
+            $('#basic-modal-content').modal();
+            $('#mensaje').html(data);
+        });          
+     });    
     
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });   
+    $("body").on("click",".eliminar",function(){
+       if(confirm('Esta seguro desea eliminar este registro?')){
+            coddetalle = $(this).parent().parent().attr("id");
+            dataString = "codigo="+coddetalle;
+            url = base_url+"index.php/ventas/acta/eliminar";
+            $.post(url,dataString,function(data){
+                if(data=="true"){
+                    //alert('Operacion realizada con exito');  
+                    url = base_url+"index.php/ventas/acta/listar";
+                    location.href = url;
+                }
+                else if(data=="false"){
+                    alert("No se puede eliminar el registro");
+                }
+            });           
+       }        
+    });           
+    
+   $("body").on("click",".editar",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "";    
+        url = base_url+"index.php/ventas/acta/editar/e/"+codigo;
+        $.post(url,dataString,function(data){
+            $('#basic-modal-content').modal();
+            $('#mensaje').html(data);
+        });  
+    });        
     
   $("body").on('focus',"#fecha",function(){
        $(this).datepicker({
@@ -129,32 +153,6 @@ jQuery(document).ready(function(){
        });
   });  
 });
-
-function editar(codigo){
-    dataString = "codigo="+codigo;    
-    url = base_url+"index.php/ventas/acta/editar/e/"+codigo;
-    $.post(url,dataString,function(data){
-        $('#basic-modal-content').modal();
-        $('#mensaje').html(data);
-    });        
-}
-
-function eliminar(codigo){
-    if(confirm('Esta seguro desea eliminar este registro?')){
-        dataString = "codigo="+codigo;
-        url = base_url+"index.php/ventas/matricula/eliminar";
-        $.post(url,dataString,function(data){
-            if(data=="true"){
-                alert('Operacion realizada con exito');  
-                url = base_url+"index.php/ventas/matricula/listar";
-                location.href = url;
-            }
-            else if(data=="false"){
-                alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
-            }
-        });
-    }
-}
 
 function selectResponsable(n){
     a      = "responsable["+n+"]";

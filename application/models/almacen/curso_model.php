@@ -1,11 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Curso_model extends CI_Model{
-    var $compania;
     var $table;
-    
     public function __construct(){
         parent::__construct();
-        $this->compania = $this->session->userdata('compania');
         $this->table    = "curso";
     }
 	
@@ -20,14 +17,12 @@ class Curso_model extends CI_Model{
     }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $where = array('p.CICLOP_Codigo'=>$this->compania);
-        if(isset($filter->familia) && $filter->familia!='')   $where = array_merge($where,array("p.FAMI_Codigo"=>$filter->familia));
-        if(isset($filter->tipo) && $filter->tipo!='')         $where = array_merge($where,array("p.TIPPROD_Codigo"=>$filter->tipo));
-        if(isset($filter->estado) && $filter->estado!='')     $where = array_merge($where,array("p.PROD_FlagEstado"=>$filter->estado));
-        if(isset($filter->curso) && $filter->curso!='') $where = array_merge($where,array("p.PROD_Codigo"=>$filter->curso));
         $this->db->select('*,DATE_FORMAT(p.PROD_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as p");
-        $this->db->where($where);
+        if(isset($filter->familia) && $filter->familia!='')         $this->db->where(array("p.FAMI_Codigo"=>$filter->familia));
+        if(isset($filter->tipo) && $filter->tipo!='')               $this->db->where(array("p.TIPPROD_Codigo"=>$filter->tipo));
+        if(isset($filter->estado) && $filter->estado!='')           $this->db->where(array("p.PROD_FlagEstado"=>$filter->estado));
+        if(isset($filter->curso) && $filter->curso!='')             $this->db->where(array("p.PROD_Codigo"=>$filter->curso));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -52,7 +47,6 @@ class Curso_model extends CI_Model{
     }
 
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania; 
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();
     }    

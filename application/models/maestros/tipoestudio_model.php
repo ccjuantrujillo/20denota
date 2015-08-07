@@ -21,10 +21,11 @@ class Tipoestudio_model extends CI_Model{
     }
     
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
-		$this->db->select('*');
+        $this->db->select('*');
         $this->db->from($this->table,$number_items,$offset);
-		if(isset($filter->estado) && $filter->estado!='')  $this->db->where(array("TIPC_FlagEstado"=>$filter->estado));
-		if(isset($filter->ciclo) && $filter->ciclo!='')    $this->db->where(array("CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->estado) && $filter->estado!='')      $this->db->where(array("TIPC_FlagEstado"=>$filter->estado));
+        if(isset($filter->ciclo) && $filter->ciclo!='')        $this->db->where(array("CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->tipoestudio) && $filter->tipoestudio!='')  $this->db->where(array("TIPP_Codigo"=>$filter->tipoestudio));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -43,7 +44,7 @@ class Tipoestudio_model extends CI_Model{
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado;
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;	
     }
 }

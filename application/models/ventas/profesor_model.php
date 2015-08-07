@@ -1,11 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Profesor_model extends CI_Model{
-    var $compania;
     var $table;
-
     public function __construct(){
         parent::__construct();
-        $this->compania  = $this->session->userdata('compania');
         $this->table_det2 = "curso";
         $this->table_det  = "persona";
         $this->table      = "profesor";
@@ -61,7 +58,6 @@ class Profesor_model extends CI_Model{
     }
 
     public function insertar($data){
-       $data['CICLOP_Codigo'] = $this->compania;
        $this->db->insert($this->table,$data);
        return $this->db->insert_id();
     }

@@ -63,10 +63,10 @@ jQuery(document).ready(function(){
         location.href = url;
     });
     
-    $("body").on("click","#cerrar",function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });          
+//    $("body").on("click","#cerrar",function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });          
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/tareo/grabar";
@@ -104,10 +104,10 @@ jQuery(document).ready(function(){
         alert(coddetalle);
     });        
     
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });   
+//    $("body").on("click","#logo",function(){
+//        url = base_url+"index.php/inicio/principal";
+//        location.href = url;
+//    });   
     
   $("body").on('focus',"#fecha",function(){
        $(this).datepicker({

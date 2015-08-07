@@ -66,10 +66,10 @@ jQuery(document).ready(function(){
         location.href = url;
     });
     
-    $("body").on("click","#cerrar",function(){
-        url = base_url+"index.php/inicio/index";
-        location.href = url;
-    });          
+//    $("body").on("click","#cerrar",function(){
+//        url = base_url+"index.php/inicio/index";
+//        location.href = url;
+//    });          
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/matricula/grabar";
@@ -90,10 +90,13 @@ jQuery(document).ready(function(){
             alert("Debe escribir una clave");
         }
     }); 
-    
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
+
+    $("body").on('focus',"#fecha",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
     });   
 });
 

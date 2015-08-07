@@ -14,63 +14,59 @@
     <div class="contenidotabla" >  
         <h1><?php echo $titulo;?></h1>   
         <?php echo $form_open;?>
-        <table>
+        <table style="background-color: #f4f7ff">
             <tr>
-              <td width="50%">Codigo:</td>
+              <td width="50%" bgcolor="#d5e2f2">Codigo:</td>
               <td class="formss"><input name="codigo" id="codigo" type="text" value="<?php echo $lista->codigo;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"/></td>
             </tr>
             <tr>
-              <td>D.N.I.:</td>
+              <td bgcolor="#d5e2f2">D.N.I.:</td>
               <td class="formss"><input name="numero" id="numero" type="text" maxlength="8" value="<?php echo $lista->numerodoc;?>" class="cajaMinima" onkeydown="return numbersonly(this,event,'.');"/></td>
             </tr>
             <tr>
-              <td>A.Paterno:</td>
+              <td bgcolor="#d5e2f2">A.Paterno:</td>
               <td class="formss"><input name="paterno" id="paterno" type="text" value="<?php echo $lista->paterno;?>" class="cajaMedia"/></td>
             </tr>
             <tr>
-              <td>A.Materno:</td>
+              <td bgcolor="#d5e2f2">A.Materno:</td>
               <td class="formss"><input name="materno" id="materno" type="text" value="<?php echo $lista->materno;?>" class="cajaMedia"/></td>
             </tr>
             <tr>
-              <td>Nombres:</td>
+              <td bgcolor="#d5e2f2">Nombres:</td>
               <td class="formss"><input name="nombres" id="nombres" type="text" value="<?php echo $lista->nombres;?>" class="cajaMedia"/></td>
             </tr>   
             <tr>
-              <td>Email:</td>
+              <td bgcolor="#d5e2f2">Email:</td>
               <td class="formss"><input name="email" id="email" type="text" value="<?php echo $lista->email;?>" class="cajaMedia minus" onblur="return ValidateEmail(this,event)"/></td>
             </tr>  
             <tr>
-              <td>Telefono:</td>
+              <td bgcolor="#d5e2f2">Telefono:</td>
               <td class="formss"><input name="telefono" id="telefono" type="text" value="<?php echo $lista->telefono;?>" class="cajaMedia"/></td>
             </tr>  
             <tr>
-              <td>Direccion:</td>
+              <td bgcolor="#d5e2f2">Direccion:</td>
               <td class="formss"><input name="direccion" id="direccion" type="text" value="<?php echo $lista->direccion;?>" class="cajaGrande"/></td>
             </tr>              
             <tr>
-              <td>F.Nacimiento:</td>
+              <td bgcolor="#d5e2f2">F.Nacimiento:</td>
               <td class="formss">
                   <input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10">
               </td>
             </tr>    
             <tr>
-              <td>Estado:</td>
+              <td bgcolor="#d5e2f2">Estado:</td>
               <td class="formss"><?php echo $selestado;?></td>
             </tr> 
-            <tr>
-              <td colspan="2">
-                <div class="frmboton">
-                    <div class="frmboton_login">
-                        <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
-                        <input id="grabar" class="botones" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
-                    </div>
-                </div>
-              </td>
-            </tr>
         </table>
         <?php echo $oculto;?>
         <?php echo $form_close;?>
     </div>
+    <div class="frmboton">
+        <div class="frmboton_matricula">
+            <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>                                                      
+            <input class="botones" id="grabar" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
+        </div>
+    </div>   
 </div>
 </body>
 </html>

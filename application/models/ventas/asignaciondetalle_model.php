@@ -6,10 +6,13 @@ class Asignaciondetalle_model extends CI_Model
     public function __construct(){
         parent::__construct();
         $this->compania = $this->session->userdata('compania');
-        $this->table      = "asignaciondetalle";
-        $this->table_det  = "asignacion";
-        $this->table_prof = "profesor";
-        $this->table_per  = "persona";
+        $this->table       = "asignaciondetalle";
+        $this->table_det   = "asignacion";
+        $this->table_prof  = "profesor";
+        $this->table_per   = "persona";
+        $this->table_tipoestudio  = "tipoestudio";
+        $this->table_aula  = "aula";
+        $this->table_local = "local";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -27,7 +30,11 @@ class Asignaciondetalle_model extends CI_Model
         $this->db->select('*,DATE_FORMAT(c.ASIGDETC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.ASIGP_Codigo=c.ASIGP_Codigo','inner');
+        $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
+        $this->db->join($this->table_aula.' as f','f.AULAP_Codigo=c.AULAP_Codigo','inner');
+        $this->db->join($this->table_local.' as g','g.LOCP_Codigo=f.LOCP_Codigo','inner');
         if(isset($filter->asignacion) && $filter->asignacion!='')   $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
+        if(isset($filter->asignaciondetalle) && $filter->asignaciondetalle!='')   $this->db->where(array("c.ASIGDETP_Codigo"=>$filter->asignaciondetalle));
         if(isset($filter->aula) && $filter->aula!='')               $this->db->where(array("c.AULAP_Codigo"=>$filter->aula));  
         if(isset($filter->tipoestudio) && $filter->tipoestudio!='') $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));            
         if(isset($filter->order_by) && count($filter->order_by)>0){
@@ -48,7 +55,7 @@ class Asignaciondetalle_model extends CI_Model
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado[0];
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;
     }
 
@@ -62,8 +69,10 @@ class Asignaciondetalle_model extends CI_Model
         $this->db->update($this->table,$data);
     }
 
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('ASIGDETP_Codigo' => $codigo));        
+    public function eliminar($filter){
+        if(isset($filter->asignacion) && $filter->asignacion!='')               $this->db->where(array("ASIGP_Codigo"=>$filter->asignacion));
+        if(isset($filter->asignaciondetalle) && $filter->asignaciondetalle!='') $this->db->where(array("ASIGDETP_Codigo"=>$filter->asignaciondetalle));
+        $this->db->delete($this->table);           
     }
 }
 ?>

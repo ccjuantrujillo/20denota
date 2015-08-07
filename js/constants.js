@@ -1,4 +1,16 @@
 var base_url  = "http://localhost/20denota/";
+jQuery(document).ready(function(){
+   $("#cerrar").click(function(){
+       url = base_url+"index.php/inicio/index";
+       location.href = url;
+   });   
+    
+    $("body").on("click","#logo",function(){
+        url = base_url+"index.php/inicio/principal";
+        location.href = url;
+    });  
+});
+
 function numbersonly(myfield, e, dec){
     var key;
     var keychar;

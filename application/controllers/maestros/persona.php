@@ -66,12 +66,10 @@ class Persona extends CI_Controller{
         $filter->codigo   = 1; 
         $filter->rol      = 4; 
         $filter->order_by = array("p.MENU_Codigo"=>"asc");
-        $menu_padre = $this->permiso_model->listar($filter); 
-
-        $departamento      = "";
-        $provincia         = "";
-        $distrito          = ""; 
-            
+        $menu             = $this->permiso_model->listar($filter); 
+        $departamento     = "";
+        $provincia        = "";
+        $distrito         = ""; 
         $lista = new stdClass();
         if($accion == "e"){
             $filter            = new stdClass();
@@ -100,7 +98,7 @@ class Persona extends CI_Controller{
             $lista->materno    = $personas->PERSC_ApellidoMaterno;  
             $lista->nombres    = $personas->PERSC_Nombre;  
             $lista->codigo     = $personas->PERSP_Codigo;  
-            $lista->tipodoc    = $personas->PERSC_TipoDocIdentidad;  
+            $lista->tipodoc    = $personas->TIPDOCP_Codigo;  
         }
         elseif($accion == "n"){
             $lista->tipodoc    = 0;
@@ -124,6 +122,7 @@ class Persona extends CI_Controller{
             $lista->nombres    = "";  
             $lista->sexo       = 0;  
             $lista->codigo     = "";  
+            $lista->tipodoc    = 0;  
         } 
         $filter            = new stdClass();
         $filter->ubigeo    = $lista->ubinac;
@@ -142,7 +141,7 @@ class Persona extends CI_Controller{
         $seldist              = form_dropdown('distrito',$this->ubigeo_model->seleccionar('',$filter),$departamento.$provincia.$distrito,"id='distrito' class='comboMedio'"); 
         $arrSexo              = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
         $data['titulo']       = "EDITAR PERSONA"; 
-        $data['menu']         = $menu_padre;
+        $data['menu']         = $menu;
         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']   = form_close();         
         $data['lista']	      = $lista;  
@@ -165,26 +164,27 @@ class Persona extends CI_Controller{
         $domicilio   = $this->input->get_post('distrito');
         $nacion      = $this->input->get_post('nacionalidad');
         $tipodoc     = $this->input->get_post('tipodoc');
-        $arrfnacimiento = explode("/",trim($this->input->post('fnacimiento')));
+        $fnacimiento = $this->input->get_post('fnacimiento');
+        $arrfnacimiento = $fnacimiento!=""?explode("/",trim($fnacimiento)):"00/00/0000";
         $fnacimiento = $arrfnacimiento[2]."-".$arrfnacimiento[1]."-".$arrfnacimiento[0];
         $data   = array(
-                        "PERSC_Nombre"             => strtoupper($this->input->post('nombres')),
-                        "PERSC_ApellidoPaterno"    => strtoupper($this->input->post('paterno')),
-                        "PERSC_ApellidoMaterno"    => strtoupper($this->input->post('materno')),
+                        "PERSC_Nombre"             => ($this->input->post('nombres')),
+                        "PERSC_ApellidoPaterno"    => ($this->input->post('paterno')),
+                        "PERSC_ApellidoMaterno"    => ($this->input->post('materno')),
                         "PERSC_NumeroDocIdentidad" => $this->input->post('numero'),
-                        "PERSC_Direccion"          => strtoupper($this->input->post('direccion')),
+                        "PERSC_Direccion"          => ($this->input->post('direccion')),
                         "PERSC_Telefono"           => $this->input->post('telefono'),
                         "PERSC_Movil"              => $this->input->post('movil'),
                         "PERSC_Email"              => strtolower($this->input->post('email')),
-                        "PERSC_Domicilio"          => strtoupper($this->input->post('direccion')),
-                        "PERSC_Sexo"               => $this->input->post('cboSexo'),
+                        "PERSC_Domicilio"          => ($this->input->post('direccion')),
+                        "PERSC_Sexo"               => $this->input->post('sexo'),
                         "PERSC_Fax"                => $this->input->post('fax'),
                         "PERSC_Web"                => $this->input->post('web'),
                         "PERSC_Sexo"               => $this->input->post('sexo'),
                         "PERSC_FechaNacimiento"    => ($fnacimiento!=""?$fnacimiento:"")
                        );
         if($accion == "n"){
-            $this->codigo = $this->persona_model->insertar($data);            
+            $this->codigo = $codigo==""?$this->persona_model->insertar($data):$codigo;            
         }
         elseif($accion == "e"){
             $this->persona_model->modificar($codigo,$data);     
@@ -216,6 +216,46 @@ class Persona extends CI_Controller{
         $CI->pdf->Cell(18,3,"F.FIN",1,0,"R",0);
 
         $CI->pdf->Output();        
+    }
+    
+    /*Busca a las personas que son profesores*/
+    public function buscar_profesor($j=0){
+        $filter     = new stdClass();
+        $filter_not = new stdClass();
+        $filter->order_by    = array("PERSC_ApellidoPaterno"=>"asc","PERSC_ApellidoMaterno"=>"asc","PERSC_Nombre"=>"asc");
+        $registros  = count($this->persona_model->listar_profesor($filter,$filter_not));
+        $profesores = $this->persona_model->listar_profesor($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $usuarios   = $this->persona_model->listar_usuario($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $diferencia = array_udiff($profesores,$usuarios, create_function(
+                '$a,$b','return ($a->PERSP_Codigo - $b->PERSP_Codigo);'
+        ));    
+        $item       = 1;
+        $lista      = array(); 
+        if(count($diferencia)>0){
+            foreach($diferencia as $indice => $value){
+                $lista[$indice]           = new stdClass();
+                $lista[$indice]->profesor = $value->PROP_Codigo;
+                $lista[$indice]->numero   = $value->PERSC_NumeroDocIdentidad;
+                $lista[$indice]->nombres  = $value->PERSC_Nombre;
+                $lista[$indice]->paterno  = $value->PERSC_ApellidoPaterno;
+                $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
+                $lista[$indice]->telefono = $value->PERSC_Telefono;
+                $lista[$indice]->movil    = $value->PERSC_Movil;
+                $lista[$indice]->codigo   = $value->PROP_Codigo;
+                $lista[$indice]->estado   = $value->PROC_FlagEstado;
+                $lista[$indice]->fechareg = $value->PERSC_FechaRegistro;
+            }
+        }
+        $configuracion = $this->configuracion;
+        $configuracion['base_url']    = base_url()."index.php/maestros/persona/buscar_profesor";
+        $configuracion['total_rows']  = $registros;
+        $this->pagination->initialize($configuracion);
+        /*Enviamos los datos a la vista*/
+        $data['lista']           = $lista;
+        $data['j']               = $j;
+        $data['registros']       = $registros;
+        $data['paginacion']      = $this->pagination->create_links();
+        $this->load->view("ventas/profesor_buscar",$data);        
     }
 }
 ?>

@@ -5,12 +5,12 @@
     <title><?php echo titulo;?></title>
     <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />     
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" /> 
-    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> 
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>   
+    <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>inicio.js"></script>
 </head>
-<body>
+    <body <?php echo $onload;?>>
 <div class="contenido" > 
     <div align='center' class='error' id='divMayus' style='display: none'>Recuerde Colocar Usuario y Clave en MAYUSCULAS .</div>
     <div class="header">
@@ -25,7 +25,6 @@
                 <p class="frmcamp">
                     <span>Usuario</span> 
                     <input name="txtUsuario" type="text" id="txtUsuario" class="cajaMedia minus"/>
-                    <input name="compania" type="hidden" id="compania" value="1"/>
                 </p>
                 <p class="frmcamp">
                     <span>Password</span> 

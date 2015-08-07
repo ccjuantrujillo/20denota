@@ -41,10 +41,10 @@ jQuery(document).ready(function(){
         });
     }); 
     
-    $("body").on("click","#logo",function(){
-        url = base_url+"index.php/inicio/principal";
-        location.href = url;
-    });  
+//    $("body").on("click","#logo",function(){
+//        url = base_url+"index.php/inicio/principal";
+//        location.href = url;
+//    });  
     
   $("body").on('focus',"#fnacimiento",function(){
        $(this).datepicker({

@@ -14,7 +14,7 @@
         <h1><?php echo $titulo;?></h1>    
         <?php echo $form_open;?>
         <div id="cabecera">
-            <table border="0">
+            <table  style="background-color: #f4f7ff">
                 <tr>
                     <td  width='18%' align="right">Codigo: </td>
                     <td width='20%' colspan="3" class="formss">
@@ -71,17 +71,41 @@
                 <?php
                 if(count($lista->actadetalle)>0){
                     foreach($lista->actadetalle as $item => $value){
+                        if($codigodetalle==$value->ACTADETP_Codigo){
+                        $optResponsable = "";
+                        foreach ($responsable as $item2 => $value2){
+                            $optResponsable.= "<option value='".$item2."' ".($item2==$value->PROP_Codigo?"selected='selected'":"").">".$value2."</option>";
+                        }
+                        ?>
+                        <tr id="<?php echo $value->ACTADETP_Codigo;?>">
+                            <td width="3%" align="center"><?php echo $item+1;?></td>
+                            <td align="left" valign="top">
+                                <textarea name="acuerdo[<?php echo $item;?>]" id="acuerdo[<?php echo $item;?>]" placeholder='Acuerdos de la reunion' cols='53' rows='1'><?php echo $value->ACTADETC_Observacion;?></textarea>
+                            </td>
+                            <td align="center"><select class="comboGrande" name="responsable[<?php echo $item;?>]" id="responsable[<?php echo $item;?>]"><?php echo $optResponsable;?></select></td>
+                            <td align="center"><input type='text' maxlength='10' class='cajaMinima' name="fcompromiso[<?php echo $item;?>]" id="fcompromiso[<?php echo $item;?>]" onmousedown="$(this).datepicker({dateFormat:'dd/mm/yy',changeYear: true,yearRange:'1945:2025'});" value="<?php echo date_sql($value->ACTADETC_FechaCompromiso);?>"></td> 
+                            <td align="center">
+                                <a href="#" class="editardetalle">Editar</a>&nbsp;
+                                <a href="#" class="eliminardetalle">Eliminar</a>
+                            </td>
+                        </tr>
+                        <?php                            
+                        }
+                        else{
+                            ?>
+                            <tr id="<?php echo $value->ACTADETP_Codigo;?>">
+                                <td width="3%" align="center"><?php echo $item+1;?></td>
+                                <td align="left"><?php echo $value->ACTADETC_Observacion;?></td>
+                                <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
+                                <td align="center"><?php echo date_sql($value->ACTADETC_FechaCompromiso);?></td> 
+                                <td align="center">
+                                    <a href="#" class="editardetalle">Editar</a>&nbsp;
+                                    <a href="#" class="eliminardetalle">Eliminar</a>
+                                </td>
+                            </tr>                            
+                            <?php
+                        }
                     ?>
-                    <tr id="<?php echo $value->ACTADETP_Codigo;?>">
-                        <td width="3%" align="center"><?php echo $item+1;?></td>
-                        <td align="left"><?php echo $value->ACTADETC_Observacion;?></td>
-                        <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
-                        <td align="center"><?php echo date_sql($value->ACTADETC_FechaCompromiso);?></td> 
-                        <td align="center">
-                            <a href="#" class="editar">Editar</a>&nbsp;
-                            <a href="#" class="eliminar">Eliminar</a>
-                        </td>
-                    </tr>
                     <?php                                
                     }
                 }
@@ -94,8 +118,9 @@
             </table>
         </div>
         <div class="frmboton">
-            <div class="frmboton_login">
+            <div class="frmboton_matricula">
                 <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
+                <input id="imprimir" class="botones" type="button" value="Imprimir" alt="Imprimir" title="Imprimir"/>                        
                 <input id="grabar" class="botones" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
             </div>
         </div>
