@@ -25,9 +25,6 @@
         <div class="titulotabla">
             <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo curso" id="nuevo"/>
             <h1>Listado de Cursos</h1>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/curso/listar">Cursos</a></div>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/semana/listar">Semanas</a></div>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/tema/listar">Temas</a></div>
         </div>
         <div class="listartabla">
             <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registro(s)</div>

@@ -39,6 +39,10 @@
               <td bgcolor="#d5e2f2">Descripcion:</td>
               <td class="formss"><input name="descripcion" id="descripcion" type="text" value="<?php echo $lista->descripcion;?>" class="cajaGrande"/></td>
             </tr>
+            <tr>
+              <td bgcolor="#d5e2f2">Tipo de Ciclo:</td>
+              <td class="formss"><?php echo $seltipociclo;?></td>
+            </tr>
         </table>
         <?php echo $oculto;?>
         <?php echo $form_close;?>

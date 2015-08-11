@@ -5,9 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
-    <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />  
-    <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />    
-    <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" />   
 </head>
 <body>
 <div class="contenido">

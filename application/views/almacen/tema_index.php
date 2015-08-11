@@ -25,20 +25,19 @@
         <div class="titulotabla">
             <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo tema" id="nuevo"/>
             <h1>Listado de Temas</h1>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/curso/listar">Cursos</a></div>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/semana/listar">Semana</a></div>
-            <div style="width:100px;float:left;"><a href="<?php echo base_url();?>index.php/almacen/tema/listar">Temas</a></div>
         </div>
         <div class="listartabla">
             <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
                 <table  border="1"  cellspacing="0" cellpadding="0">
                   <tr class="list1">
-                    <td width="43">No</td>
+                    <td width="30">No</td>
+                    <td width="95">Ciclo</td>
+                    <td width="86">Tipo de estudio</td>
                     <td width="86">Curso</td>
                     <td width="86">Semana</td>
                     <td width="193">Descripcion de tema</td>
-                    <td width="62">Editar</td>
-                    <td width="77">Eliminar</td>
+                    <td width="50">Editar</td>
+                    <td width="50">Eliminar</td>
                   </tr>
                   <?php
                   if(count($lista)>0){
@@ -47,8 +46,10 @@
                        ?>
                       <tr class="<?php echo $clase;?>">
                         <td><?php echo ++$j;?></td>
-                        <td align="left"><?php echo $value->producto;?></td>
-                        <td align="left"><?php echo $value->atributo;?></td>
+                        <td align="left"><?php echo $value->ciclo;?></td>
+                        <td align="left"><?php echo $value->tipoestudio;?></td>
+                        <td align="left"><?php echo $value->curso;?></td>
+                        <td align="left"><?php echo $value->semana;?></td>
                         <td align="left"><?php echo $value->descripcion;?></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                         <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>

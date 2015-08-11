@@ -118,7 +118,7 @@ class Matricula extends CI_Controller {
         $data['sellocal']   = form_dropdown('local',$this->local_model->seleccionar('0'),$lista->local,"id='local' class='comboMedio'"); 
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
-		$this->load->view("ventas/matricula_nuevo",$data);
+        $this->load->view("ventas/matricula_nuevo",$data);
     }
 
     public function grabar(){

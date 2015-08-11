@@ -32,10 +32,11 @@
                   <tr class="list1">
                     <td width="10">No</td>
                     <td width="10">Codigo</td>
-                    <td width="30">Nombre</td>
+                    <td width="60">Nombre</td>
+                    <td width="70">Tipo de ciclo</td>
                     <td width="30">Fecha de Inicio</td>
                     <td width="30">Fecha de Fin</td>
-                    <td width="90">Descripcion</td>
+                    <td width="100">Descripcion</td>
                     <td width="10">Editar</td>
                     <td width="10">Eliminar</td>
                   </tr>
@@ -48,6 +49,7 @@
                         <td><?php echo ++$j;?></td>
                         <td align="center"><?php echo $value->codigo;?></td>
                         <td align="center"><?php echo $value->nombre;?></td>
+                        <td align="center"><?php echo $value->tipociclo;?></td>
                         <td align="center"><?php echo $value->fecha_inicio;?></td>
                         <td align="center"><?php echo $value->fecha_fin;?></td>
                         <td align="center"><?php echo $value->descripcion;?></td>

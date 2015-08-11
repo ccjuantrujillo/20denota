@@ -24,8 +24,12 @@
               <td class="formss"><input name="codigo" id="codigo" type="text" value="<?php echo $lista->codigo;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"/></td>
             </tr>
             <tr>
+              <td width="50%" bgcolor="#d5e2f2">Tipo de ciclo:</td>
+              <td class="formss"><?php echo $seltipociclo;?></td>
+            </tr>            
+            <tr>
               <td bgcolor="#d5e2f2">Nombre:</td>
-              <td class="formss"><input name="nombre" id="nombre" type="text" maxlength="8" value="<?php echo $lista->nombre;?>" class="cajaMinima" onkeydown=""/></td>
+              <td class="formss"><input name="nombre" id="nombre" type="text" value="<?php echo $lista->nombre;?>" class="cajaGrande" onkeydown=""/></td>
             </tr>
             <tr>
               <td bgcolor="#d5e2f2">Descripcion:</td>

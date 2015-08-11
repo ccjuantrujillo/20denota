@@ -34,6 +34,7 @@ class Ciclo extends CI_Controller
                 $lista[$indice]->fecha_inicio = date_sql(substr($value->CICC_FECHA_INICIO,0,10));
                 $lista[$indice]->fecha_fin    = date_sql(substr($value->CICC_FECHA_FIN,0,10));
                 $lista[$indice]->descripcion  = $value->CICC_DESCRIPCION;
+                $lista[$indice]->tipociclo    = $value->TIPOCICLOC_Descripcion;
             }
         }
         $configuracion = $this->configuracion;
@@ -60,6 +61,7 @@ class Ciclo extends CI_Controller
              $lista->descripcion = $ciclos->CICC_DESCRIPCION;
              $lista->codigo      = $ciclos->CICLOP_Codigo;
              $lista->nombre      = $ciclos->COMPC_Nombre;
+             $lista->tipociclo   = $ciclos->TIPOCICLOP_Codigo;
          }
          elseif($accion == "n"){
              $lista->finicio     = "";
@@ -67,14 +69,15 @@ class Ciclo extends CI_Controller
              $lista->descripcion = "";
              $lista->codigo      = "";
              $lista->nombre      = "";
+             $lista->tipociclo   = "";
          }
-         $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
-         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-         $data['titulo']     = $accion=="e"?"Editar Ciclo":"Crear Ciclo";
-         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
-         $data['form_close'] = form_close();
-         $data['lista']	     = $lista;
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
+         $arrTipociclo         = array("0"=>"::Seleccione::","1"=>"Ciclo 1","2"=>"Ciclo 2");
+         $data['titulo']       = $accion=="e"?"Editar Ciclo":"Crear Ciclo";
+         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
+         $data['form_close']   = form_close();
+         $data['lista']	       = $lista;
+         $data['seltipociclo'] = form_dropdown('tipociclo',$arrTipociclo,$lista->tipociclo,"id='tipociclo' class='comboMedio'");
+         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
          $this->load->view("maestros/ciclo_nuevo",$data);
     }
      
@@ -82,17 +85,17 @@ class Ciclo extends CI_Controller
         $accion      = $this->input->get_post('accion');
         $codigo      = $this->input->get_post('codigo');
         $data   = array(
-                        "COMPC_Nombre" => strtoupper($this->input->post('nombre')),
+                        "COMPC_Nombre"      => strtoupper($this->input->post('nombre')),
                         "CICC_FECHA_INICIO" => date_sql_ret($this->input->post('finicio')),
                         "CICC_FECHA_FIN"    => date_sql_ret($this->input->post('ffin')),
-                        "CICC_DESCRIPCION"  => strtoupper($this->input->post('descripcion'))
+                        "CICC_DESCRIPCION"  => strtoupper($this->input->post('descripcion')),
+                        "TIPOCICLOP_Codigo" => strtoupper($this->input->post('tipociclo'))
                        );
         if($accion == "n"){
             $this->codigo = $this->ciclo_model->insertar($data);
         }
         elseif($accion == "e"){
             $this->ciclo_model->modificar($codigo,$data);
-
         }
     }
     

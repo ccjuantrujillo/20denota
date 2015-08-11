@@ -11,6 +11,8 @@ class Semana extends CI_Controller {
         $this->load->model(almacen.'tema_model');
         $this->load->model(almacen.'unidadmedida_model');
         $this->load->model(seguridad.'permiso_model');  
+        $this->load->model(maestros.'ciclo_model'); 
+        $this->load->model(maestros.'tipoestudio_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -27,26 +29,22 @@ class Semana extends CI_Controller {
         $menu       = get_menu($filter);     
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
-        $filter->order_by    = array("d.PROD_Nombre"=>"asc","c.PRODATRIB_Nombre"=>"asc");
+        $filter->order_by    = array("f.COMPC_Nombre"=>"desc","e.TIPC_Nombre"=>"asc","c.PRODATRIB_Nombre"=>"asc");
         $registros = count($this->semana_model->listar($filter,$filter_not));
         $productoatrib = $this->semana_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
         if(count($productoatrib)>0){
             foreach($productoatrib as $indice=>$valor){  
-                $filter                       = new stdClass();
-                $filter->productoatributo     = $valor->PRODATRIB_Codigo;
-                $preguntas                    = $this->tema_model->listar($filter);
                 $lista[$indice]               = new stdClass();
                 $lista[$indice]->codigo       = $valor->PRODATRIB_Codigo;
-                $lista[$indice]->producto     = $valor->PROD_Nombre;
+                $lista[$indice]->producto     = "";
                 $lista[$indice]->nombre       = $valor->PRODATRIB_Nombre;
                 $lista[$indice]->descripcion  = $valor->PRODATRIB_Descripcion;
-                $lista[$indice]->preguntasnec = $valor->PRODATRIB_Preguntas;
-                $lista[$indice]->preguntas    = count($preguntas);
-                $lista[$indice]->vimeo        = trim($valor->PRODATRIB_Vimeo);
-                $lista[$indice]->estado       = $valor->PROD_FlagEstado;     
-                $lista[$indice]->fechareg     = $valor->fechareg;     
+                $lista[$indice]->ciclo        = $valor->COMPC_Nombre;
+                $lista[$indice]->tipoestudio  = $valor->TIPC_Nombre;
+                $lista[$indice]->finicio      = date_sql($valor->PRODATRIB_FechaInicio);
+                $lista[$indice]->ffin         = date_sql($valor->PRODATRIB_FechaFin);   
             }
         }
         $configuracion = $this->configuracion;
@@ -63,40 +61,45 @@ class Semana extends CI_Controller {
     }
 
     public function editar($accion,$codigo=""){
+        $ciclo       = $this->input->get_post('ciclo'); 
+        $tipoestudio = $this->input->get_post('tipoestudio'); 
+        $nombre      = $this->input->get_post('nombre'); 
+        $descripcion = $this->input->get_post('descripcion'); 
+        $finicio     = $this->input->get_post('finicio'); 
+        $ffin        = $this->input->get_post('ffin'); 
         $lista = new stdClass();
         if($accion == "e"){   
-            $filter                   = new stdClass();
-            $filter->semana = $codigo;
-            $productoatributo         = $this->semana_model->obtener($filter);
-            $filter                   = new stdClass();
-            $filter->semana = $codigo;
-            $preguntas                = $this->tema_model->listar($filter);
-            $filter                   = new stdClass();
-            $filter->curso         = $productoatributo->PROD_Codigo;
-            $productos                = $this->curso_model->obtener($filter);
-            $lista->nombre            = $productoatributo->PRODATRIB_Nombre;
-            $lista->descripcion       = $productoatributo->PRODATRIB_Descripcion;
-            $lista->preguntasnec      = $productoatributo->PRODATRIB_Preguntas;
-            $lista->preguntas         = count($preguntas);
-            $lista->vimeo             = $productoatributo->PRODATRIB_Vimeo;
-            $lista->producto          = $productoatributo->PROD_Codigo;
+            $filter             = new stdClass();
+            $filter->semana     = $codigo;
+            $semanas            = $this->semana_model->obtener($filter);
+            $lista->nombre      = $nombre!=""?$nombre:$semanas->PRODATRIB_Nombre;
+            $lista->descripcion = $descripcion!=""?$descripcion:$semanas->PRODATRIB_Descripcion;
+            $lista->finicio     = $finicio!=""?$finicio:date_sql($semanas->PRODATRIB_FechaInicio);
+            $lista->ffin        = $ffin!=""?$ffin:date_sql($semanas->PRODATRIB_FechaFin);
+            $lista->ciclo       = $ciclo!=""?$ciclo:$semanas->CICLOP_Codigo; 
+            $lista->tipoestudio = $tipoestudio!=""?$tipoestudio:$semanas->TIPP_Codigo; 
         }
         elseif($accion == "n"){
-            $lista->nombre       = "";
-            $lista->descripcion  = "";
-            $lista->preguntas    = "";
-            $lista->preguntasnec = 5;
-            $lista->vimeo        = "";
-            $lista->producto     = "";
+            $lista->nombre       = $nombre;
+            $lista->descripcion  = $descripcion;
+            $lista->finicio      = $finicio;
+            $lista->ffin         = $ffin;
+            $lista->ciclo        = $ciclo;
+            $lista->tipoestudio  = $tipoestudio;
         }
+        $filter           = new stdClass();
+        $filter->ciclo    = $lista->ciclo;
+        $oTipoCiclo       = $this->ciclo_model->obtener($filter);
+        $lista->tipociclo = isset($oTipoCiclo->TIPOCICLOP_Codigo)?$oTipoCiclo->TIPOCICLOP_Codigo:"";
         $data['titulo']      = $accion=="e"?"Modificar Semana":"Nuevo Semana"; ;        
-        $data['form_open']   = form_open('',array("name"=>"form1","id"=>"form1","onsubmit"=>"","method"=>"post","enctype"=>"multipart/form-data"));
+        $data['form_open']   = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"","method"=>"post","enctype"=>"multipart/form-data"));
         $data['form_close']  = form_close();
         $data['lista']	     = $lista;
+        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboGrande'");
         $filter              = new stdClass();
-        $filter->order_by    = array("p.PROD_Nombre"=>"asc");
-        $data['selproducto'] = form_dropdown('producto',$this->curso_model->seleccionar('0',$filter),$lista->producto,"id='producto' class='comboGrande'");
-        $data['oculto']      = form_hidden(array('accion'=>$accion,'codigo'=>$codigo));
+        $filter->tipociclo   = $lista->tipociclo;
+        $data['seltipoestudio'] = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboGrande'");
+        $data['oculto']         = form_hidden(array('accion'=>$accion,'codigo'=>$codigo));
         $this->load->view('almacen/semana_nuevo',$data);
     }  
     
@@ -104,11 +107,12 @@ class Semana extends CI_Controller {
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "PRODATRIB_Nombre"      => strtoupper($this->input->post('nombre')),
-                        "PRODATRIB_Descripcion" => strtoupper($this->input->post('descripcion')),
-                        "PRODATRIB_Preguntas"   => $this->input->post('preguntas'),
-                        "PRODATRIB_Vimeo"       => $this->input->post('vimeo'),
-                        "PROD_Codigo"           => $this->input->post('producto')
+                        "PRODATRIB_Nombre"      => ($this->input->post('nombre')),
+                        "PRODATRIB_Descripcion" => ($this->input->post('descripcion')),
+                        "CICLOP_Codigo"         => $this->input->post('ciclo'),
+                        "TIPP_Codigo"           => $this->input->post('tipoestudio'),
+                        "PRODATRIB_FechaInicio" => date_sql_ret($this->input->post('finicio')),
+                        "PRODATRIB_FechaFin"    => date_sql_ret($this->input->post('ffin'))
                        );
         if($accion == "n"){
             $this->semana_model->insertar($data);            

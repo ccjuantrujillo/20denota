@@ -22,7 +22,7 @@ jQuery(document).ready(function(){
     
     $("body").on("click","#grabar",function(){
         url = base_url+"index.php/almacen/semana/grabar";
-        dataString  = $('#form1').serialize();
+        dataString  = $('#frmPersona').serialize();
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
             location.href = base_url+"index.php/almacen/semana/listar";
@@ -35,15 +35,31 @@ jQuery(document).ready(function(){
         location.href = url;
     });  
     
-//    $("body").on("click","#cerrar",function(){
-//        url = base_url+"index.php/inicio/index";
-//        location.href = url;
-//    });   
-//    
-//    $("body").on("click","#logo",function(){
-//        url = base_url+"index.php/inicio/principal";
-//        location.href = url;
-//    });         
+   $("body").on('change',"#ciclo",function(){
+       accion      = $("#accion").val();
+       codigo      = $("#codigo").val();
+       dataString  = $('#frmPersona').serialize();
+       url = base_url+"index.php/almacen/semana/editar/"+accion+"/"+codigo;
+       $.post(url,dataString,function(data){
+           $('#mensaje').html(data);
+       });             
+   });      
+   
+    $("body").on('focus',"#finicio",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });   
+    
+    $("body").on('focus',"#ffin",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });       
 });
 
 function editar(codigo){

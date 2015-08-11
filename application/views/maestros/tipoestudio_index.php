@@ -32,6 +32,7 @@
                   <tr class="list1">
                     <td width="20">No</td>
                     <td width="20">Codigo</td>
+                    <td width="80">Tipo de ciclo</td>
                     <td width="80">Nombre</td>
                     <td width="60">Descripcion</td>
                     <td width="30">Fecha de registro</td>
@@ -46,6 +47,7 @@
                       <tr class="<?php echo $clase;?>">
                         <td><?php echo ++$j;?></td>
                         <td align="center"><?php echo $value->codigo;?></td>
+                        <td align="center"><?php echo $value->tipociclo;?></td>
                         <td align="center"><?php echo $value->nombre;?></td>
                         <td align="center"><?php echo $value->descripcion;?></td>
                         <td align="center"><?php echo $value->fecha_registro;?></td>

@@ -11,6 +11,8 @@ class Tema extends CI_Controller {
         $this->load->model(almacen.'tema_model');
         $this->load->model(almacen.'unidadmedida_model');
         $this->load->model(seguridad.'permiso_model');  
+        $this->load->model(maestros.'ciclo_model');  
+        $this->load->model(maestros.'tipoestudio_model');  
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -27,20 +29,21 @@ class Tema extends CI_Controller {
         $menu       = get_menu($filter);        
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
-        $filter->order_by    = array("e.PROD_Nombre"=>"asc","d.PRODATRIB_Nombre"=>"asc","c.PRODATRIBDET_Descripcion"=>"asc");
+        $filter->order_by    = array("e.PROD_Nombre"=>"asc");
         $registros = count($this->tema_model->listar($filter,$filter_not));
-        $productoatribdet = $this->tema_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $temas     = $this->tema_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
-        if(count($productoatribdet)>0){
-            foreach($productoatribdet as $indice=>$valor){  
+        if(count($temas)>0){
+            foreach($temas as $indice=>$valor){  
                 $lista[$indice]                 = new stdClass();
                 $lista[$indice]->codigo         = $valor->PRODATRIBDET_Codigo;
-                $lista[$indice]->producto       = $valor->PROD_Nombre;
-                $lista[$indice]->atributo       = $valor->PRODATRIB_Nombre;
+                $lista[$indice]->curso          = $valor->PROD_Nombre;
+                $lista[$indice]->semana         = $valor->PRODATRIB_Nombre;
                 $lista[$indice]->descripcion    = $valor->PRODATRIBDET_Descripcion;
                 $lista[$indice]->numero         = $valor->PRODATRIBDET_Numero;
-                
+                $lista[$indice]->ciclo          = $valor->COMPC_Nombre;
+                $lista[$indice]->tipoestudio    = $valor->TIPC_Nombre;
             }
         }
         $configuracion = $this->configuracion;
@@ -58,53 +61,55 @@ class Tema extends CI_Controller {
     }
 
     public function editar($accion,$codigo=""){
-        $atributo = $this->input->get_post('atributo');
-        $producto = $this->input->get_post('producto');
-        if($atributo == "") $atributo = 0;
-        if($producto == "") $producto = 0;
+        $semana   = $this->input->get_post('semana');
+        $curso    = $this->input->get_post('curso');
+        $ciclo    = $this->input->get_post('ciclo');
+        $tipoestudio = $this->input->get_post('tipoestudio');
+        $descripcion = $this->input->get_post('descripcion');
         $lista    = new stdClass();
         if($accion == "e"){
-            $titulo                   = "Editar Tema";      
-            $filter                   = new stdClass();
-            $filter->productoatributodetalle = $codigo;
-            $productoatributodet = $this->tema_model->obtener($filter);
-            $lista->numero       = $productoatributodet->PRODATRIBDET_Numero;
-            $lista->descripcion  = $productoatributodet->PRODATRIBDET_Descripcion;
-            $lista->alternativa1 = $productoatributodet->PRODATRIBDET_Alternativa1;
-            $lista->alternativa2 = $productoatributodet->PRODATRIBDET_Alternativa2;
-            $lista->alternativa3 = $productoatributodet->PRODATRIBDET_Alternativa3;
-            $lista->alternativa4 = $productoatributodet->PRODATRIBDET_Alternativa4;
-            $lista->alternativa5 = $productoatributodet->PRODATRIBDET_Alternativa5;
-            $lista->flgcorrecta  = trim($productoatributodet->PRODATRIBDET_FlagCorrecta);
-            $lista->nombre       = $productoatributodet->PROD_Nombre;
-            $lista->atributo     = $productoatributodet->PRODATRIB_Codigo;
-            $lista->producto     = $productoatributodet->PROD_Codigo;
+            $titulo               = "Editar Tema";      
+            $filter               = new stdClass();
+            $filter->tema         = $codigo;
+            $temas = $this->tema_model->obtener($filter);
+            $lista->numero       = $temas->PRODATRIBDET_Numero;
+            $lista->descripcion  = $descripcion!=""?$descripcion:$temas->PRODATRIBDET_Descripcion;
+            $lista->nombre       = $temas->PROD_Nombre;
+            $lista->semana       = $temas->PRODATRIB_Codigo;
+            $lista->curso        = $temas->PROD_Codigo;
+            $lista->ciclo        = $ciclo!=""?$ciclo:$temas->CICLOP_Codigo;
+            $lista->tipoestudio  = $tipoestudio!=""?$tipoestudio:$temas->TIPP_Codigo;
         }
         elseif($accion == "n"){
             $titulo              = "Nuevo Tema";            
-            $lista->descripcion  = "";
-            $lista->alternativa1 = "";
-            $lista->alternativa2 = "";
-            $lista->alternativa3 = "";
-            $lista->alternativa4 = "";
-            $lista->alternativa5 = "";
-            $lista->flgcorrecta  = "";
+            $lista->descripcion  = $descripcion;
             $lista->nombre       = "";
-            $lista->atributo     = $atributo;
-            $lista->producto     = $producto;
+            $lista->semana       = $semana;
+            $lista->curso        = $curso;
             $lista->numero       = "";
+            $lista->ciclo        = $ciclo;
+            $lista->tipoestudio  = $tipoestudio;
         }
+        $filter              = new stdClass();
+        $filter->ciclo       = $lista->ciclo;        
+        $objCiclo            = $this->ciclo_model->obtener($filter);
+        $lista->tipociclo    = isset($objCiclo->TIPOCICLOP_Codigo)?$objCiclo->TIPOCICLOP_Codigo:"";        
         $data['titulo']      = $titulo;        
-        $data['form_open']   = form_open('',array("name"=>"form1","id"=>"form1","onsubmit"=>"","method"=>"post","enctype"=>"multipart/form-data"));
+        $data['form_open']   = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"","method"=>"post","enctype"=>"multipart/form-data"));
         $data['form_close']  = form_close();
         $data['lista']	     = $lista;
+        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboGrande'");
+        $filter              = new stdClass();
+        $filter->tipociclo   = $lista->tipociclo;
+        $data['seltipoestudio'] = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboGrande'");
         $filter              = new stdClass();
         $filter->order_by    = array("p.PROD_Nombre"=>"asc");
-        $data['selproducto'] = form_dropdown('producto',$this->curso_model->seleccionar('0',$filter),$lista->producto,"id='producto' class='comboGrande''");
+        $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboGrande''");
         $filter              = new stdClass();
-        $filter->curso    = $lista->producto;
-        $filter->order_by    = array("c.PRODATRIB_Descripcion"=>"asc");
-        $data['selatributo'] = form_dropdown('atributo',$this->semana_model->seleccionar('0',$filter),$lista->atributo,"id='atributo' class='comboGrande'");
+        $filter->ciclo       = $lista->ciclo;
+        $filter->tipoestudio = $lista->tipoestudio;
+        $filter->order_by    = array("c.PRODATRIB_Nombre"=>"asc");
+        $data['selsemana']   = form_dropdown('semana',$this->semana_model->seleccionar('0',$filter),$lista->semana,"id='semana' class='comboGrande'");
         $data['oculto']      = form_hidden(array('accion'=>$accion,'codigo'=>$codigo));
         $this->load->view('almacen/tema_nuevo',$data);
     }  
@@ -113,15 +118,11 @@ class Tema extends CI_Controller {
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "PRODATRIBDET_Numero"         => strtoupper($this->input->post('numero')),
-                        "PRODATRIBDET_Descripcion" => strtoupper($this->input->post('descripcion')),
-                        "PRODATRIBDET_Alternativa1"     => $this->input->post('alternativa1'),
-                        "PRODATRIBDET_Alternativa2"     => $this->input->post('alternativa2'),
-                        "PRODATRIBDET_Alternativa3"     => $this->input->post('alternativa3'),
-                        "PRODATRIBDET_Alternativa4"     => $this->input->post('alternativa4'),
-                        "PRODATRIBDET_Alternativa5"     => $this->input->post('alternativa5'),
-                        "PRODATRIBDET_FlagCorrecta"     => $this->input->post('flgcorrecta'),
-                        "PRODATRIB_Codigo"              => $this->input->post('atributo')
+                        "PRODATRIBDET_Numero"      => ($this->input->post('numero')),
+                        "PRODATRIBDET_Descripcion" => ($this->input->post('descripcion')),
+                        "PRODATRIB_Codigo"         => $this->input->post('semana'),
+                        "CICLOP_Codigo"            => $this->input->post('ciclo'),
+                        "PROD_Codigo"              => $this->input->post('curso')
                        );
         if($accion == "n"){
             $this->tema_model->insertar($data);

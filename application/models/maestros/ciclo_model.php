@@ -6,11 +6,11 @@ class Ciclo_model extends CI_Model{
     public function __construct(){
         parent::__construct();
         $this->table   = "ciclo";
+        $this->table_tipociclo = "tipociclo";
     }
 	
     public function seleccionar($default=""){
-        $nombre_defecto = $default==""?":: Seleccione ::":$default;
-        $arreglo = array(''=>$nombre_defecto);
+        if($default!="") $arreglo = array($default=>':: Seleccione ::');
         foreach($this->listar() as $indice=>$valor)
         {
             $indice1   = $valor->CICLOP_Codigo;
@@ -23,6 +23,7 @@ class Ciclo_model extends CI_Model{
     public function listar($filter="",$filter_not='',$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
+        $this->db->join($this->table_tipociclo.' as d','d.TIPOCICLOP_Codigo=c.TIPOCICLOP_Codigo','inner');
         if(isset($filter->ciclo) && $filter->ciclo!='')    $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));  
         $query = $this->db->get();
         $resultado = array();
@@ -37,7 +38,7 @@ class Ciclo_model extends CI_Model{
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
         else
-            $resultado = (object)$listado[0];
+            $resultado = isset($listado[0])?(object)$listado[0]:"";
         return $resultado;
     }
 	
