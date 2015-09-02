@@ -10,7 +10,7 @@
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>   
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>almacen/curso.js"></script>
+    <script type="text/javascript" src="<?php echo js;?>almacen/cursotipoestudio.js"></script>
 </head>
 <body>
 
@@ -23,24 +23,20 @@
     <div class="zonebody patbotom">
         <ul id="nav"><?php echo $menu;?></ul>
         <div class="titulotabla">
-            <h1>Listado de Cursos</h1>         	            
-            <ul class="lista_busqueda">
-                <select><option>::Seleccione::</option></select>
-                <input type="text" id="busqueda" name="busqueda">
-                <span id="buscar">Buscar</span>
-            </ul>   
-            <ul class="lista_botones"><li id="nuevo">Crear un nuevo curso</li></ul>   
-            <ul class="lista_botones"><li id="pdf">Ver pdf</li></ul>            
-            <ul class="lista_botones"><li id="excel">Ver Excel</li></ul>            
-        </div>    
+            <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear curso por tipo estudio" id="nuevo"/>
+            <h1><?php echo $titulo;?></h1>
+        </div>
         <div class="listartabla">
             <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registro(s)</div>
                 <table  border="1"  cellspacing="0" cellpadding="0">
                   <tr class="list1">
                     <td width="43">No</td>
-                    <td width="193"><a href="#">Curso</a></td>
-                    <td width="86"><a href="#">Fecha registro</a></td>
+                    <td width="193">Ciclo</td>
+                    <td width="193">Curso</td>
+                    <td width="193">Tipo Estudio</td>
+                    <td width="86">Fecha registro</td>
                     <td width="63">Estado</td>
+                    <td width="62">Ver</td>
                     <td width="62">Editar</td>
                     <td width="77">Eliminar</td>
                   </tr>
@@ -53,9 +49,12 @@
                        ?>
                       <tr class="<?php echo $clase;?>">
                         <td><?php echo ++$j;?></td>
-                        <td align="left"><?php echo $value->nombre;?></td>
+                        <td align="left"><?php echo $value->ciclo;?></td>
+                        <td align="left"><?php echo $value->curso;?></td>
+                        <td align="left"><?php echo $value->tipoestudio;?></td>
                         <td align="center"><?php echo $value->fechareg;?></td>
                         <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" width="20px" height="20px"/><?php echo $estado;?></td>
+                        <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                         <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                       </tr>  

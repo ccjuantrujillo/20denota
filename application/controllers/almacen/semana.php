@@ -25,7 +25,7 @@ class Semana extends CI_Controller {
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');	
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);     
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
@@ -107,8 +107,8 @@ class Semana extends CI_Controller {
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "PRODATRIB_Nombre"      => ($this->input->post('nombre')),
-                        "PRODATRIB_Descripcion" => ($this->input->post('descripcion')),
+                        "PRODATRIB_Nombre"      => $this->input->post('nombre'),
+                        "PRODATRIB_Descripcion" => $this->input->post('descripcion'),
                         "CICLOP_Codigo"         => $this->input->post('ciclo'),
                         "TIPP_Codigo"           => $this->input->post('tipoestudio'),
                         "PRODATRIB_FechaInicio" => date_sql_ret($this->input->post('finicio')),
@@ -125,7 +125,7 @@ class Semana extends CI_Controller {
     public function eliminar(){
         $codigo = $this->input->post('codigo');
         $filter = new stdClass();
-        $filter->productoatributo = $codigo;
+        $filter->semana = $codigo;
         $preguntas = $this->tema_model->listar($filter);
         $resultado = false;
         if(count($preguntas)==0){

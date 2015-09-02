@@ -19,7 +19,7 @@ function get_menu($filter)
                       $submenu = "";
                       foreach ($menu as $item3 => $value3){
                           if($value3->MENU_Codigo_Padre == $value2->MENU_Codigo){
-                              $submenu.="<li><a href='".base_url().$value3->MENU_Url."'>".$value3->MENU_Descripcion."</a></li>";
+                              $submenu.="<li><a href='".($value3->MENU_Url!="#"?base_url().$value3->MENU_Url:"#")."'>".$value3->MENU_Descripcion."</a></li>";
                           }
                       }
                       if($submenu!=""){

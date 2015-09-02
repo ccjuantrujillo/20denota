@@ -30,7 +30,7 @@ class Acta extends CI_Controller {
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
         $filter->order_by = array("p.ACTAC_Numero"=>"desc");

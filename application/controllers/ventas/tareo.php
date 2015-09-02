@@ -31,7 +31,7 @@ class Tareo extends CI_Controller {
     public function listar(){
          $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);              
         $filter     = new stdClass();
         $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
@@ -79,7 +79,7 @@ class Tareo extends CI_Controller {
         if($fecha=="") $fecha = date("d/m/Y");  
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);           
         $filter        = new stdClass();
         $filter->aula  = $aula;

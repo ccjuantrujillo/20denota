@@ -64,7 +64,7 @@ class Inicio extends CI_Controller {
         $rolusu        = $this->session->userdata('rolusu');
         $filter           = new stdClass();
         $filter->rol      = $rolusu; 
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu             = get_menu($filter);
         $total = 0;
         $data['fecha']  = $fecha;

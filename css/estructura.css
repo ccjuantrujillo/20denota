@@ -57,13 +57,38 @@ blockquote, q {
 .frmcamp{padding:5px;}
 .frmcamp span{float: left;margin-right:5px;text-align:right;width: 70px;margin-bottom: 15px;}
 
-
 .frmboton{float:left;padding-top:5px;width:100%;padding-left: 40px;}
 .frmboton h2 a,.frmboton h2{font-size: 12px;text-align: center;text-decoration: none;padding-bottom: 5px;}
 .frmboton_login{margin: 0 auto;width: 158px;}
 .frmboton_matricula{margin: 0 auto;width: 300px;}
 .footer{float: left;width:100%;padding-top: 5px;}
 .footer h2{font-size: 11px;float: left;}
+
+.aceptarlog2{ background-color:#EB1C24; color:#FFF; border:none; font-size:11px;padding:3px 18px; cursor:pointer;}
+.aceptarlog2:hover{ background-color:#F00;}
+
+.lista_botones{float: left;left:55%;list-style-type:none;padding: 0px;margin: 0px 3px;position: relative;cursor: pointer}
+.lista_botones li{background-position: 2px 2px;background-color:#EB1C24; color:#FFF; border:none; font-size:11px;padding:4px 4px 4px 28px;background-repeat: no-repeat;border:0px solid #000;margin:0px;position: relative;}
+.lista_botones li:hover{background-color:#F00;cursor: pointer;}
+.lista_botones #grabar {background-image: url("../img/grabar.png");}
+.lista_botones #aprobar {background-image: url("../img/icono_aprobar.png");}
+.lista_botones #desaprobar {background-image: url("../img/icono_desaprobar.png");}
+.lista_botones #buscar {background-image: url("../img/icono_buscar.png");}
+.lista_botones #editar {background-image: url("../img/modificar.png");}
+.lista_botones #nuevo {background-image: url("../img/botonnuevo.png");}
+.lista_botones #limpiar {background-image: url("../img/icono_limpiar.png");}
+.lista_botones #imprimir {background-image: url("../img/icono_imprimir.png");}
+.lista_botones #cancelar {background-image: url("../img/botoncancelar.jpg");}
+.lista_botones #salir {background-image: url("../img/exit.png");}
+.lista_botones #eliminar {background-image: url("../img/eliminar.png");}
+.lista_botones #excel {background-image: url("../img/excel.gif");}
+.lista_botones #pdf {background-image: url("../img/pdf.gif");}
+.lista_botones #html {background-image: url("../img/ie.png");}
+.lista_botones #grafica {background-image: url("../img/bar.png");}
+
+.lista_busqueda{float:left;position: relative;list-style-type:none;cursor: pointer;margin:0px 3px;}
+.lista_busqueda input{width: 100px;}
+.lista_busqueda li{width: 250px;}
 
 /*--------------Principal-------------------*/
 .zonebody{border-bottom: 1px solid #D6D6D6;float:left;width:100%;}
@@ -82,17 +107,19 @@ blockquote, q {
 .zonebody ul.nav ul li ul li a {width: 100px;margin: 0;padding: 0;color: #9c0101;}
 .zonebody ul.nav ul li ul li a:hover {width: 200px;margin:0;color: #9c0101;background: none;}
 .patbotom{ padding-bottom:40px;}*/
-
+/*
 .zonebody ul.body_section{ float:left; padding-top:20px; margin-bottom:25px;}
-.zonebody ul.body_section li{ float:left; width:306px; padding-left:20px; border-right:1px solid #D6D6D6;}
+.zonebody ul.body_section li{ float:left; width:306px; padding-left:20px; border-right:1px solid #D6D6D6;}*/
 
 /*--------------Lista de items-------------------*/
-.titulotabla{border-bottom: 1px solid #ccc;float: left;padding: 15px 0;width: 100%;margin-bottom: 10px;}
-.titulotabla span{float: left;margin-left: 30px;text-decoration: none;margin-top: -14px;}
-.titulotabla span a {text-decoration: none;}
-.titulotabla ul{padding-left: 120px;padding-top: 20px;}
-.titulotabla ul li{float: left;margin-right: 26px;}
-.titulotabla h1{font-size: 40px;text-align: center;font-family:"Times New Roman","Times","serif";}
+.titulotabla{border-bottom: 1px solid #ccc;float: left;padding: 5px 0;width: 100%;margin-bottom: 10px;margin-top: 5px;}
+/*.titulotabla span{float: left;margin-left: 30px;text-decoration: none;margin-top: -14px;}
+.titulotabla span a {text-decoration: none;}*/
+/*.titulotabla ul{padding-left: 120px;padding-top: 20px;}
+.titulotabla ul li{float: left;margin-right: 26px;}*/
+.titulotabla h1{font-size: 35px;text-align: center;font-family:"Times New Roman","Times","serif";}
+
+
 .listartabla{ width:800px; margin:0px auto;} 
 .listartabla table { width:800px; border-color:#EDEDED; }
 .listartabla tr.list1 td { background-color:#D9E8FB; text-align:center; padding:3px 0;}
@@ -159,9 +186,7 @@ p#bot{padding-bottom: 5px;}
 .minus{text-transform:none;}
 .textareaGrande {font:8pt helvetica;color:#000;}
 
-.aceptarlog2{ background-color:#EB1C24; color:#FFF; border:none; font-size:11px;
-padding:3px 18px; cursor:pointer;}
-.aceptarlog2:hover{ background-color:#F00;}
+
 
 #basic-modal-content {display:none;}
 #simplemodal-overlay {background-color:#000; cursor:wait;}
