@@ -13,8 +13,8 @@ class Cursotipoestudio_model extends CI_Model{
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
         foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor){
-            $indice1   = $valor->PROD_Codigo;
-            $valor1    = $valor->PROD_Nombre;
+            $indice1   = $valor->CURSOTIPOP_Codigo;
+            $valor1    = $valor->TIPC_Nombre;
             $arreglo[$indice1] = $valor1;
         }
         return $arreglo;

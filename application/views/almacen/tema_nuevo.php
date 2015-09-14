@@ -5,10 +5,6 @@
     <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Language" content="es"> 
-<!--    <script type="text/javascript" src="< ?php echo js;?>constants.js"></script> 
-    <script type="text/javascript" src="< ?php echo js;?>jquery.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>jquery.simplemodal.js"></script>    
-    <script type="text/javascript" src="< ?php echo js;?>almacen/productoatributodetalle.js"></script>-->
 </head>	
 <body>
 <div class="contenido">
@@ -21,13 +17,13 @@
               <td class="formss"><?php echo $selciclo;?> </td>
             </tr>  
             <tr>
+              <td width="50%" bgcolor="#d5e2f2">Curso</td>
+              <td class="formss"><?php echo $selcurso;?> </td>
+            </tr>  
+            <tr>
               <td width="50%" bgcolor="#d5e2f2">Tipo de estudio</td>
               <td class="formss"><?php echo $seltipoestudio;?> </td>
             </tr>              
-            <tr>
-              <td width="50%" bgcolor="#d5e2f2">Curso</td>
-              <td class="formss"><?php echo $selcurso;?> </td>
-            </tr>     
             <tr>
               <td bgcolor="#d5e2f2">Semana</td>
               <td class="formss"><?php echo $selsemana;?> </td>

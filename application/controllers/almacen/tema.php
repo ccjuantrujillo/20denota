@@ -7,6 +7,8 @@ class Tema extends CI_Controller {
         parent::__construct();
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");        
         $this->load->model(almacen.'curso_model');
+        $this->load->model(almacen.'cursociclo_model');
+        $this->load->model(almacen.'cursotipoestudio_model');
         $this->load->model(almacen.'semana_model');
         $this->load->model(almacen.'tema_model');
         $this->load->model(almacen.'unidadmedida_model');
@@ -29,7 +31,7 @@ class Tema extends CI_Controller {
         $menu       = get_menu($filter);        
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
-        $filter->order_by    = array("e.PROD_Nombre"=>"asc");
+        $filter->order_by    = array("d.COMPC_Nombre"=>"desc","g.TIPC_Nombre"=>"asc","e.PROD_Nombre"=>"asc","f.PRODATRIB_Nombre"=>"asc");
         $registros = count($this->tema_model->listar($filter,$filter_not));
         $temas     = $this->tema_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
@@ -64,7 +66,7 @@ class Tema extends CI_Controller {
         $semana   = $this->input->get_post('semana');
         $curso    = $this->input->get_post('curso');
         $ciclo    = $this->input->get_post('ciclo');
-        $tipoestudio = $this->input->get_post('tipoestudio');
+        $cursotipoestudio = $this->input->get_post('cursotipoestudio');
         $descripcion = $this->input->get_post('descripcion');
         $lista    = new stdClass();
         if($accion == "e"){
@@ -75,10 +77,11 @@ class Tema extends CI_Controller {
             $lista->numero       = $temas->PRODATRIBDET_Numero;
             $lista->descripcion  = $descripcion!=""?$descripcion:$temas->PRODATRIBDET_Descripcion;
             $lista->nombre       = $temas->PROD_Nombre;
-            $lista->semana       = $temas->PRODATRIB_Codigo;
-            $lista->curso        = $temas->PROD_Codigo;
+            $lista->semana       = $semana!=""?$semana:$temas->PRODATRIB_Codigo;
+            $lista->curso        = $curso!=""?$curso:$temas->CURSOCIP_Codigo;
             $lista->ciclo        = $ciclo!=""?$ciclo:$temas->CICLOP_Codigo;
-            $lista->tipoestudio  = $tipoestudio!=""?$tipoestudio:$temas->TIPP_Codigo;
+            $lista->cursotipoestudio  = $cursotipoestudio!=""?$cursotipoestudio:$temas->CURSOTIPOP_Codigo;
+            $lista->tipoestudio  = $temas->TIPP_Codigo;
         }
         elseif($accion == "n"){
             $titulo              = "Nuevo Tema";            
@@ -88,7 +91,11 @@ class Tema extends CI_Controller {
             $lista->curso        = $curso;
             $lista->numero       = "";
             $lista->ciclo        = $ciclo;
-            $lista->tipoestudio  = $tipoestudio;
+            $lista->cursotipoestudio  = $cursotipoestudio;
+            $filter              = new stdClass();
+            $filter->cursotipoestudio = $cursotipoestudio;
+            $datos   = $this->cursotipoestudio_model->obtener($filter);
+            $lista->tipoestudio  = $cursotipoestudio!=0?$datos->TIPP_Codigo:"";
         }
         $filter              = new stdClass();
         $filter->ciclo       = $lista->ciclo;        
@@ -100,11 +107,12 @@ class Tema extends CI_Controller {
         $data['lista']	     = $lista;
         $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboGrande'");
         $filter              = new stdClass();
-        $filter->tipociclo   = $lista->tipociclo;
-        $data['seltipoestudio'] = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboGrande'");
+        $filter->order_by    = array("d.PROD_Nombre"=>"asc");
+        $filter->ciclo       = $lista->ciclo;
+        $data['selcurso']    = form_dropdown('curso',$this->cursociclo_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboGrande''");
         $filter              = new stdClass();
-        $filter->order_by    = array("p.PROD_Nombre"=>"asc");
-        $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboGrande''");
+        $filter->cursociclo  = $lista->curso;
+        $data['seltipoestudio'] = form_dropdown('cursotipoestudio',$this->cursotipoestudio_model->seleccionar('0',$filter),$lista->cursotipoestudio,"id='tipoestudio' class='comboGrande'");        
         $filter              = new stdClass();
         $filter->ciclo       = $lista->ciclo;
         $filter->tipoestudio = $lista->tipoestudio;
@@ -121,8 +129,7 @@ class Tema extends CI_Controller {
                         "PRODATRIBDET_Numero"      => ($this->input->post('numero')),
                         "PRODATRIBDET_Descripcion" => ($this->input->post('descripcion')),
                         "PRODATRIB_Codigo"         => $this->input->post('semana'),
-                        "CICLOP_Codigo"            => $this->input->post('ciclo'),
-                        "PROD_Codigo"              => $this->input->post('curso')
+                        "CURSOTIPOP_Codigo"        => $this->input->post('cursotipoestudio')
                        );
         if($accion == "n"){
             $this->tema_model->insertar($data);

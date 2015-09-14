@@ -13,27 +13,7 @@ jQuery(document).ready(function(){
             $('#basic-modal-content').modal();
             $('#mensaje').html(data);
         });             
-    }); 
-    
-//    $("body").on("change","#producto",function(){
-//        accion      = $("#accion").val();
-//        codigo      = $("#codigo").val();
-//        dataString  = $('#form1').serialize();
-//        url = base_url+"index.php/almacen/tema/editar/"+accion+"/"+codigo;
-//        $.post(url,dataString,function(data){
-//            $('#mensaje').html(data);
-//        });             
-//    });     
-    
-//    $("body").on("change","#atributo",function(){
-//        accion      = $("#accion").val();
-//        codigo      = $("#codigo").val();
-//        dataString  = $('#form1').serialize();
-//        url = base_url+"index.php/almacen/tema/editar/"+accion+"/"+codigo;
-//        $.post(url,dataString,function(data){
-//            $('#mensaje').html(data);
-//        });             
-//    });         
+    });     
 
     $("body").on("click","#limpiar",function(){
         url = base_url+"index.php/almacen/tema/listar";
@@ -55,7 +35,7 @@ jQuery(document).ready(function(){
         location.href = url;
     });  
     
-   $("body").on('change',"#ciclo",function(){
+   $("body").on('change',"select",function(){
        accion      = $("#accion").val();
        codigo      = $("#codigo").val();
        dataString  = $('#frmPersona').serialize();
@@ -65,15 +45,25 @@ jQuery(document).ready(function(){
        });             
    });      
    
-   $("body").on('change',"#tipoestudio",function(){
-       accion      = $("#accion").val();
-       codigo      = $("#codigo").val();
-       dataString  = $('#frmPersona').serialize();
-       url = base_url+"index.php/almacen/tema/editar/"+accion+"/"+codigo;
-       $.post(url,dataString,function(data){
-           $('#mensaje').html(data);
-       });             
-   });      
+//   $("body").on('change',"#curso",function(){
+//       accion      = $("#accion").val();
+//       codigo      = $("#codigo").val();
+//       dataString  = $('#frmPersona').serialize();
+//       url = base_url+"index.php/almacen/tema/editar/"+accion+"/"+codigo;
+//       $.post(url,dataString,function(data){
+//           $('#mensaje').html(data);
+//       });             
+//   });     
+//   
+//   $("body").on('change',"#tipoestudio",function(){
+//       accion      = $("#accion").val();
+//       codigo      = $("#codigo").val();
+//       dataString  = $('#frmPersona').serialize();
+//       url = base_url+"index.php/almacen/tema/editar/"+accion+"/"+codigo;
+//       $.post(url,dataString,function(data){
+//           $('#mensaje').html(data);
+//       });             
+//   });      
 });
 
 function editar(codigo){

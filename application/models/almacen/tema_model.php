@@ -9,6 +9,8 @@ class Tema_model extends CI_Model{
         $this->table_curso  = "curso";
         $this->table_semana = "semana";
         $this->table_tipoestudio = "tipoestudio";
+        $this->table_cursotipoestudio  = "cursotipoestudio";
+        $this->table_cursociclo  = "cursociclo";
     }
 	
     public function seleccionar($tipOt,$default=""){
@@ -26,10 +28,12 @@ class Tema_model extends CI_Model{
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table.' as c');
-        $this->db->join($this->table_ciclo.' as d','d.CICLOP_Codigo=c.CICLOP_Codigo','inner');        
-        $this->db->join($this->table_curso.' as e','e.PROD_Codigo=c.PROD_Codigo','inner'); 
+        $this->db->join($this->table_cursotipoestudio.' as m','m.CURSOTIPOP_Codigo=c.CURSOTIPOP_Codigo','inner');         
+        $this->db->join($this->table_cursociclo.' as n','n.CURSOCIP_Codigo=m.CURSOCIP_Codigo','inner'); 
+        $this->db->join($this->table_ciclo.' as d','d.CICLOP_Codigo=n.CICLOP_Codigo','inner');        
+        $this->db->join($this->table_curso.' as e','e.PROD_Codigo=n.PROD_Codigo','inner'); 
         $this->db->join($this->table_semana.' as f','f.PRODATRIB_Codigo=c.PRODATRIB_Codigo','inner'); 
-        $this->db->join($this->table_tipoestudio.' as g','g.TIPP_Codigo=f.TIPP_Codigo','inner'); 
+        $this->db->join($this->table_tipoestudio.' as g','g.TIPP_Codigo=m.TIPP_Codigo','inner'); 
         if(isset($filter->curso) && $filter->curso!='')   $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
         if(isset($filter->ciclo) && $filter->ciclo!='')   $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->semana) && $filter->semana!='') $this->db->where(array("c.PRODATRIB_Codigo"=>$filter->semana));	
