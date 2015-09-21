@@ -50,7 +50,7 @@
               </tr>                             
             </table>
         </div>
-        <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;">
+        <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;background: #e8edff;">
             <table width="100%" id="tabla_detalle">
                 <tr>
                     <th width="3%" align="center">No</th>
@@ -73,8 +73,8 @@
                             foreach ($semana as $item2 => $value2){
                                 $optSemana.= "<option value='".$item2."' ".($item2==$value->ASIGDETC_Dia?"selected='selected'":"").">".$value2."</option>";
                             } 
-                            foreach ($tipoestudio as $item3 => $value3){
-                                $optTipoestudio.= "<option value='".$item3."' ".($item3==$value->TIPP_Codigo?"selected='selected'":"").">".$value3."</option>";
+                            foreach ($tipoestudiociclo as $item3 => $value3){
+                                $optTipoestudio.= "<option value='".$item3."' ".($item3==$value->TIPCICLOP_Codigo?"selected='selected'":"").">".$value3."</option>";
                             }  
                             foreach ($local as $item4 => $value4){
                                 $optLocal.= "<option value='".$item4."' ".($item4==$value->LOCP_Codigo?"selected='selected'":"").">".$value4."</option>";
@@ -86,7 +86,7 @@
                             <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
                                 <td width="3%" align="center"><?php echo $item+1;?></td>
                                 <td align="center"><select class='comboMinimo' name="dia[<?php echo $item;?>]" id="dia[<?php echo $item;?>]"><option value='0'>::Seleccione::</option><?php echo $optSemana;?></select></td>
-                                <td align="center"><select class='comboMinimo' name="tipoestudio[<?php echo $item;?>]" id="tipoestudio[<?php echo $item;?>]"><?php echo $optTipoestudio;?></select></td>
+                                <td align="center"><select class='comboMinimo' name="tipoestudiociclo[<?php echo $item;?>]" id="tipoestudiociclo[<?php echo $item;?>]"><?php echo $optTipoestudio;?></select></td>
                                 <td align="center"><select class='comboMedio' name="local[<?php echo $item;?>]" id="local[<?php echo $item;?>]" onchange="selectAula(<?php echo $item;?>)"><?php echo $optLocal;?></select></td> 
                                 <td align="center"><select class='comboMinimo' name="aula[<?php echo $item;?>]" id="aula[<?php echo $item;?>]"><?php echo $optAula;?></select></td> 
                                 <td align="center"><input type='time' maxlength='5' class='cajaReducida' name="desde[<?php echo $item;?>]" id="desde[<?php echo $item;?>]" value="<?php echo substr($value->ASIGDETC_Desde,0,5);?>"></td> 
@@ -121,7 +121,7 @@
                 }
                 else{
                     ?>
-                    <tr><td colspan="8" align="center">:::NO EXISTEN REGISTROS:::</td></tr>
+<!--                    <tr><td colspan="8" align="center">:::NO EXISTEN REGISTROS:::</td></tr>-->
                     <?php
                 }
                 ?>

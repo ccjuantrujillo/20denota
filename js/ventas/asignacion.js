@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         fila   = "<tr>";
         fila  += "<td align='center'>"+n+"</td>";
         fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><select class='comboMinimo' name='tipoestudio["+n+"]' id='tipoestudio["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select class='comboMinimo' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+")'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
@@ -190,7 +190,7 @@ function selecciona_profesor(codigo){
             nomper = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
             $("#profesor").val(value.PROP_Codigo);
             $("#nombres").val(nomper);
-            $("#cursos").val(value.PROD_Codigo);            
+            $("#cursos").val(value.PROD_Nombre);            
         });
     },"json");
 }
@@ -208,8 +208,8 @@ function selectDia(n){
 }
 
 function selectTipoEstudio(n){
-    a      = "tipoestudio["+n+"]";
-    url    = base_url+"index.php/maestros/tipoestudio/obtener";
+    a      = "tipoestudiociclo["+n+"]";
+    url    = base_url+"index.php/maestros/tipoestudiociclo/obtener";
     selecttipo = document.getElementById(a);
     objRes = new Object();
     objRes.ciclo = $("#ciclo").val();
@@ -217,7 +217,7 @@ function selectTipoEstudio(n){
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
-            opt.value = value.TIPP_Codigo;
+            opt.value = value.TIPCICLOP_Codigo;
             opt.appendChild(document.createTextNode(value.TIPC_Nombre));
             selecttipo.appendChild(opt);
         });

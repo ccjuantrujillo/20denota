@@ -1,18 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tipoestudio_model extends CI_Model{
+class Tipoestudiociclo_model extends CI_Model{
     var $table; 
     public function __construct(){
 	parent::__construct();
-        $this->table       = "tipoestudio";
-        $this->table_ciclo = "tipociclo";
+        $this->table       = "tipoestudiociclo";
+        $this->table_ciclo = "ciclo";
+        $this->table_tipoestudio = "tipoestudio";
     }
     
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
         foreach($this->listar($filter,$filter_not='',$number_items='',$offset='') as $indice=>$valor)
         {
-            $indice1   = $valor->TIPP_Codigo;
+            $indice1   = $valor->TIPCICLOP_Codigo;
             $valor1    = $valor->TIPC_Nombre;
             $arreglo[$indice1] = $valor1;
         }
@@ -22,7 +23,10 @@ class Tipoestudio_model extends CI_Model{
     public function listar($filter,$filter_not='',$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);
-        if(isset($filter->estado) && $filter->estado!='')           $this->db->where(array("c.TIPC_FlagEstado"=>$filter->estado));
+        $this->db->join($this->table_ciclo.' as d','d.CICLOP_Codigo=c.CICLOP_Codigo','inner');
+        $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
+        if(isset($filter->ciclo) && $filter->ciclo!='')             $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->tipoestudiociclo) && $filter->tipoestudiociclo!='') $this->db->where(array("c.TIPCICLOP_Codigo"=>$filter->tipoestudiociclo));
         if(isset($filter->tipoestudio) && $filter->tipoestudio!='') $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
@@ -47,12 +51,12 @@ class Tipoestudio_model extends CI_Model{
     }
     
      public function modificar($codigo,$data){
-        $this->db->where("TIPP_Codigo",$codigo);
+        $this->db->where("TIPCICLOP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }   
     
     public function eliminar($codigo){
-        $this->db->delete($this->table,array('TIPP_Codigo' => $codigo));        
+        $this->db->delete($this->table,array('TIPCICLOP_Codigo' => $codigo));        
     }
     
     public function insertar($data){

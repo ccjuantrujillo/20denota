@@ -15,6 +15,7 @@ class Asignacion extends CI_Controller {
         $this->load->model(maestros.'ciclo_model');  
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
+        $this->load->model(maestros.'tipoestudiociclo_model'); 
         $this->load->model(maestros.'local_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
@@ -117,10 +118,10 @@ class Asignacion extends CI_Controller {
         $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"); 
         $filter = new stdClass();
         $filter->ciclo = $lista->ciclo;
-        $data['tipoestudio']   = $this->tipoestudio_model->seleccionar('0',$filter);        
-        $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio'");         
-        $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-        $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
+        $data['tipoestudiociclo'] = $this->tipoestudiociclo_model->seleccionar('0',$filter);        
+        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio'");         
+        $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
+        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }
 
@@ -137,7 +138,7 @@ class Asignacion extends CI_Controller {
         $resultado = false;
         if($accion == "n"){
             $resultado = true;            
-            $this->codigo = $this->asignacion_model->insertar($data); 
+            $codigo = $this->asignacion_model->insertar($data); 
         }
         elseif($accion == "e"){
             $resultado = true;            
@@ -145,7 +146,7 @@ class Asignacion extends CI_Controller {
         }     
         /*Grabar detalle*/
         $dia   = $this->input->get_post('dia');
-        $tipoestudio = $this->input->get_post('tipoestudio');
+        $tipoestudiociclo = $this->input->get_post('tipoestudiociclo');
         $local = $this->input->get_post('local');
         $aula  = $this->input->get_post('aula');
         $desde = $this->input->get_post('desde');
@@ -154,11 +155,11 @@ class Asignacion extends CI_Controller {
             if($codigodetalle!=""){
                 foreach($dia as $item=>$value){
                     $data = array(     
-                                "AULAP_Codigo"   => $aula[$item],
-                                "TIPP_Codigo"    => $tipoestudio[$item],                   
-                                "ASIGDETC_Dia"   => $dia[$item],
-                                "ASIGDETC_Desde" => $desde[$item],
-                                "ASIGDETC_Hasta" => $hasta[$item]
+                                "AULAP_Codigo"     => $aula[$item],
+                                "TIPCICLOP_Codigo" => $tipoestudiociclo[$item],                   
+                                "ASIGDETC_Dia"     => $dia[$item],
+                                "ASIGDETC_Desde"   => $desde[$item],
+                                "ASIGDETC_Hasta"   => $hasta[$item]
                             );
                     $this->asignaciondetalle_model->modificar($codigodetalle,$data); 
                 }   
@@ -168,7 +169,7 @@ class Asignacion extends CI_Controller {
                     $data = array(
                                 "ASIGP_Codigo"   => $codigo,        
                                 "AULAP_Codigo"   => $aula[$item],
-                                "TIPP_Codigo"    => $tipoestudio[$item],                   
+                                "TIPCICLOP_Codigo"    => $tipoestudiociclo[$item],                   
                                 "ASIGDETC_Dia"   => $dia[$item],
                                 "ASIGDETC_Desde" => $desde[$item],
                                 "ASIGDETC_Hasta" => $hasta[$item]
@@ -182,6 +183,9 @@ class Asignacion extends CI_Controller {
 	
     public function eliminar(){
         $codigo = $this->input->post('codigo');
+        $filter = new stdClass();
+        $filter->asignacion = $codigo;
+        $this->asignaciondetalle_model->eliminar($filter);
         $this->asignacion_model->eliminar($codigo);
         $resultado = true;
         echo json_encode($resultado);

@@ -22,16 +22,17 @@
     </div>
     <div class="zonebody patbotom">
         <ul id="nav"><?php echo $menu;?></ul>
-        <div class="titulotabla">
-            <h1>Listado de Cursos</h1>         	            
-            <ul class="lista_busqueda">
+        <div class="titulotabla">     	            
+            <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear nuevo curso" id="nuevo"/>
+            <h1>Listado de cursos</h1>            
+<!--            <ul class="lista_busqueda">
                 <select><option>::Seleccione::</option></select>
                 <input type="text" id="busqueda" name="busqueda">
                 <span id="buscar">Buscar</span>
-            </ul>   
-            <ul class="lista_botones"><li id="nuevo">Crear un nuevo curso</li></ul>   
+            </ul>   -->
+<!--            <ul class="lista_botones"><li id="nuevo">Crear un nuevo curso</li></ul>   
             <ul class="lista_botones"><li id="pdf">Ver pdf</li></ul>            
-            <ul class="lista_botones"><li id="excel">Ver Excel</li></ul>            
+            <ul class="lista_botones"><li id="excel">Ver Excel</li></ul>            -->
         </div>    
         <div class="listartabla">
             <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registro(s)</div>
@@ -53,9 +54,9 @@
                        ?>
                       <tr class="<?php echo $clase;?>">
                         <td><?php echo ++$j;?></td>
-                        <td align="left"><?php echo $value->nombre;?></td>
-                        <td align="center"><?php echo $value->fechareg;?></td>
-                        <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" width="20px" height="20px"/><?php echo $estado;?></td>
+                        <td class="formss"><?php echo $value->nombre;?></td>
+                        <td><?php echo $value->fechareg;?></td>
+                        <td><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" width="20px" height="20px"/><?php echo $estado;?></td>
                         <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                         <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                       </tr>  

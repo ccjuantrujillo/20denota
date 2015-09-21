@@ -11,6 +11,7 @@ class Asignaciondetalle_model extends CI_Model
         $this->table_prof  = "profesor";
         $this->table_per   = "persona";
         $this->table_tipoestudio  = "tipoestudio";
+        $this->table_tipoestudiociclo  = "tipoestudiociclo";
         $this->table_aula  = "aula";
         $this->table_local = "local";
     }
@@ -30,7 +31,8 @@ class Asignaciondetalle_model extends CI_Model
         $this->db->select('*,DATE_FORMAT(c.ASIGDETC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.ASIGP_Codigo=c.ASIGP_Codigo','inner');
-        $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
+        $this->db->join($this->table_tipoestudiociclo.' as e','e.TIPCICLOP_Codigo=c.TIPCICLOP_Codigo','inner');
+        $this->db->join($this->table_tipoestudio.' as m','m.TIPP_Codigo=e.TIPP_Codigo','inner');
         $this->db->join($this->table_aula.' as f','f.AULAP_Codigo=c.AULAP_Codigo','inner');
         $this->db->join($this->table_local.' as g','g.LOCP_Codigo=f.LOCP_Codigo','inner');
         if(isset($filter->asignacion) && $filter->asignacion!='')   $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));

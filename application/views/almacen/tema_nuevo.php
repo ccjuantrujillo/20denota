@@ -18,7 +18,7 @@
             </tr>  
             <tr>
               <td width="50%" bgcolor="#d5e2f2">Curso</td>
-              <td class="formss"><?php echo $selcurso;?> </td>
+              <td class="formss"><?php echo $selcursociclo;?> </td>
             </tr>  
             <tr>
               <td width="50%" bgcolor="#d5e2f2">Tipo de estudio</td>

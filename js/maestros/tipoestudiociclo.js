@@ -8,7 +8,7 @@ jQuery(document).ready(function(){
 
     $("#nuevo").click(function(){
         dataString = "";
-        url = base_url+"index.php/maestros/tipoestudio/editar/n";
+        url = base_url+"index.php/maestros/tipoestudiociclo/editar/n";
         $.post(url,dataString,function(data){
             $('#basic-modal-content').modal();
             $('#mensaje').html(data);
@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
 //    });
 
     $('body').on('click',"#cancelar",function(){
-        url = base_url+"index.php/maestros/tipoestudio/listar";
+        url = base_url+"index.php/maestros/tipoestudiociclo/listar";
         location.href = url;
     });
 
@@ -33,11 +33,11 @@ jQuery(document).ready(function(){
 //    });
 
     $("body").on('click',"#grabar",function(){
-        url = base_url+"index.php/maestros/tipoestudio/grabar";
+        url = base_url+"index.php/maestros/tipoestudiociclo/grabar";
         dataString  = $('#frmPersona').serialize();
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
-            location.href = base_url+"index.php/maestros/tipoestudio/listar";
+            location.href = base_url+"index.php/maestros/tipoestudiociclo/listar";
         });
     });
 
@@ -57,7 +57,7 @@ jQuery(document).ready(function(){
 
 function editar(codigo){
     dataString = "codigo="+codigo;
-    url = base_url+"index.php/maestros/tipoestudio/editar/e/"+codigo;
+    url = base_url+"index.php/maestros/tipoestudiociclo/editar/e/"+codigo;
     $.post(url,dataString,function(data){
         $('#basic-modal-content').modal();
         $('#mensaje').html(data);
@@ -67,11 +67,11 @@ function editar(codigo){
 function eliminar(codigo){
     if(confirm('Esta seguro desea eliminar este tipo de estudio?')){
         dataString = "codigo="+codigo;
-        url = base_url+"index.php/maestros/tipoestudio/eliminar";
+        url = base_url+"index.php/maestros/tipoestudiociclo/eliminar";
         $.post(url,dataString,function(data){
 //            if(data=="true"){
 //                alert("El tipo de estudio se borro correctamente");
-                url = base_url+"index.php/maestros/tipoestudio/listar";
+                url = base_url+"index.php/maestros/tipoestudiociclo/listar";
                 location.href = url;
 //            }
 //            else{

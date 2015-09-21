@@ -43,23 +43,9 @@
                     <td valign="top" align="right">Agenda: </td>
                     <td align="left" colspan="5" class="formss"><span><textarea style="width:480px;" type='text' name="agenda" id="agenda" class="get text"><?php echo $lista->agenda;?></textarea></span></td>
                 </tr>
-                <tr>
-                    <td  width='11%' align="right" valign="top">Asistentes: </td>
-                    <td width='20%' colspan="2" class="formss"><?php echo $selasistente;?></td>
-                    <td  width='8%' align="center" valign="center">
-                        <div><input type='button' class='btn_sig' value='>>' onclick="addToList('combo1','combo2');"></div>
-                        <div><input type='button' class='btn_sig' value='<<' onclick="removeFromList('combo2','combo1');" style="margin-top: 3px;"></div>
-                    </td>
-                    <td  width='11%' align="left" valign="top" colspan="2" class="formss">
-                        <select name="asistentes[]" multiple="1" size="3" class="comboMultipleMedio" id="combo2">
-            <!--                    <option>&nbsp;</option>-->
-                        </select>&nbsp;&nbsp;
-                        <a href="#" id="agregar">Agregar</a>
-                    </td>
-                </tr>
             </table>
         </div>
-        <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;">
+        <div id="detalle" style = "float: left; height: 270px;overflow: auto; width: 100%;background: #e8edff;">
             <table width="100%" id="tabla_detalle">
                 <tr>
                     <th width="3%" align="center">No</th>
@@ -111,8 +97,35 @@
                 }
                 else{
                     ?>
-                    <tr><td colspan="7" align="center">:::NO EXISTEN REGISTROS:::</td></tr>
+<!--                    <tr><td colspan="7" align="center">:::NO EXISTEN REGISTROS:::</td></tr>-->
                     <?php
+                }
+                ?>
+            </table>
+        </div>
+        <div id="asistentes">
+            <h3>Asistencia: </h3>            
+            <table width="100%">
+                <tr>
+                    <th width="3%" align="center">No</th>
+                    <th width="50%" align="center">Apellidos y Nombres</th>
+                    <th align="center">H.Ingreso</th>
+                    <th align="center">H.Salida</th> 
+                    <th align="center">Justificacion</th>
+                </tr>
+                <?php
+                if(count($asistentes)>0){
+                    foreach($asistentes as $item => $value){
+                        ?>
+                        <tr>
+                            <th width="3%" align="center"><?php echo $item+1;?></th>
+                            <th width="50%" align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></th>
+                            <th align="center"><input type="time" value="" id="" name="" class="cajaReducida"></th>
+                            <th align="center"><input type="time" valeu="" id="" name="" class="cajaReducida"</th> 
+                            <th align="center"><input type="text" valeu="" id="" name="" class="cajaGrande"</th>
+                        </tr>  
+                        <?php
+                    }
                 }
                 ?>
             </table>

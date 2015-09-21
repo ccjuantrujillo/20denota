@@ -124,8 +124,8 @@ class Acta extends CI_Controller {
         $filter->curso = $lista->curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
+        $data['asistentes']   = $this->profesor_model->listar($filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande'"); 
-        $data['selasistente'] = form_dropdown('asistente',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='combo1' multiple='1' size='3' class='comboMultipleMedio'"); 
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
         $this->load->view("ventas/acta_nuevo",$data);
     }

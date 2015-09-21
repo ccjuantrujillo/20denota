@@ -17,15 +17,23 @@
             <tr>
               <td width="50%" bgcolor="#d5e2f2">Codigo:</td>
               <td class="formss"><input name="codigo" id="codigo" type="text" value="<?php echo $lista->codigo;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"/></td>
-            </tr>      
+            </tr> 
             <tr>
-              <td bgcolor="#d5e2f2">Nombre:</td>
-              <td class="formss"><input name="nombre" id="nombre" type="text" value="<?php echo $lista->nombre;?>" class="cajaGrande" onkeydown=""/></td>
-            </tr>
+              <td bgcolor="#d5e2f2">Ciclo</td>
+              <td class="formss"><?php echo $selciclo;?></td>
+            </tr>   
             <tr>
-              <td bgcolor="#d5e2f2">Descripcion:</td>
-              <td class="formss"><input name="descripcion" id="descripcion" type="text" value="<?php echo $lista->descripcion;?>" class="cajaSuperGrande"/></td>
+              <td bgcolor="#d5e2f2">Tipo de estudio</td>
+              <td class="formss"><?php echo $seltipoestudio;?></td>
+            </tr>               
+            <tr>
+              <td bgcolor="#d5e2f2">Observacion:</td>
+              <td class="formss"><input name="observacion" id="observacion" type="text" value="<?php echo $lista->observacion;?>" class="cajaSuperGrande"/></td>
             </tr>
+          <tr>
+            <td bgcolor="#d5e2f2">Estado</td>
+            <td class="formss"><?php echo $selestado;?></td>
+          </tr>             
         </table>
         <?php echo $oculto;?>
         <?php echo $form_close;?>
