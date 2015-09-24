@@ -1,11 +1,11 @@
 jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });       
-     
+//    $('ul li:has(ul)').hover(function(e) {
+//         $(this).find('ul').css({display: "block"});
+//     },
+//     function(e) {
+//         $(this).find('ul').css({display: "none"});
+//     });       
+//     
    $("body").on("click","#buscar",function(){
         $("#form_busqueda").submit();
     });
@@ -115,6 +115,8 @@ jQuery(document).ready(function(){
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/asignacion/grabar";
         clave      = $("#clave").val();
+        $('#estado').removeAttr('disabled');
+        $('#ciclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){

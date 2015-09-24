@@ -119,8 +119,8 @@ class Asignacion extends CI_Controller {
         $filter = new stdClass();
         $filter->ciclo = $lista->ciclo;
         $data['tipoestudiociclo'] = $this->tipoestudiociclo_model->seleccionar('0',$filter);        
-        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio'");         
-        $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
+        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
         $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }

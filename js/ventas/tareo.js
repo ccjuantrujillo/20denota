@@ -5,11 +5,11 @@ jQuery(document).ready(function(){
     //$(".time").mask("Hn:Nn:Nn");
 //    $(".time").mask("Hn:Nn");
     
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },function(e) {
-         $(this).find('ul').css({display: "none"});
-     });       
+//    $('ul li:has(ul)').hover(function(e) {
+//         $(this).find('ul').css({display: "block"});
+//     },function(e) {
+//         $(this).find('ul').css({display: "none"});
+//     });       
      
    $("body").on("click","#buscar",function(){
         $("#form_busqueda").submit();
@@ -82,7 +82,7 @@ jQuery(document).ready(function(){
         });            
     }); 
     
-   $("body").on("click",".eliminar",function(){
+   $("body").on("click","#eliminardetalle",function(){
         if(confirm('Esta seguro desea eliminar este registro?')){
             coddetalle = $(this).parent().parent().attr("id");
             dataString = "codigo="+coddetalle;
@@ -99,9 +99,16 @@ jQuery(document).ready(function(){
         }        
     });    
     
-   $("body").on("click",".editar",function(){
-        coddetalle = $(this).parent().parent().attr("id");
-        alert(coddetalle);
+   $("body").on("click","#editardetalle",function(){
+       tr = $(this).parent().parent();
+       tr.empty();
+       tr.append("<td align='center'>2</td>");
+       tr.append("<td align='center'>profesor</td>");
+       tr.append("<td align='center'><input id='hinicio[]' type='time' maxlength='5' name='hinicio[]' value=''  class='cajaReducida' onblur='valida(this.value,this);'></td>");
+       tr.append("<td align='center'><input id='hfin[]' type='time' maxlength='5' name='hfin[]' value=''  class='cajaReducida' onblur='valida(this.value,this);'></td>");
+       tr.append("<td align='center'>tipo</td>");
+       tr.append("<td align='center'>reemplazo</td>");
+       tr.append("<td align='center'><a href='#' id='editardetalle'><img src='<?php echo img;?>editar.jpg'/></a>&nbsp;</td>");
     });        
     
 //    $("body").on("click","#logo",function(){

@@ -181,6 +181,7 @@ class Profesor extends Persona
                 $lista[$indice]->profesor = $value->PROP_Codigo;
                 $lista[$indice]->estado   = $value->PROC_FlagEstado;
                 $lista[$indice]->fechareg = $value->fechareg;
+                $lista[$indice]->curso    = $value->PROD_Nombre;
             }
         }
         $configuracion = $this->configuracion;

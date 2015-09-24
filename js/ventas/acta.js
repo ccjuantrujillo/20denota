@@ -1,16 +1,4 @@
-jQuery(document).ready(function(){
-//    $.mask.definitions['H']='[012]';
-//    $.mask.definitions['N']='[012345]';
-//    $.mask.definitions['n']='[0123456789]';
-    //$(".time").mask("Hn:Nn:Nn");
-//    $(".time").mask("Hn:Nn");
-    
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },function(e) {
-         $(this).find('ul').css({display: "none"});
-     });       
-     
+jQuery(document).ready(function(){     
    $("body").on("click","#buscar",function(){
         $("#form_busqueda").submit();
     });
@@ -26,23 +14,41 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#agregar",function(){
         n      = $("#tabla_detalle tr").length;
-        fila   = "<tr>";
-        fila  += "<td align='center'>"+n+"</td>";
-        fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
-        fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fcompromiso["+n+"]' id='fcompromiso["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});'></td>";
-        fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
-        fila  += "</tr>";
-        $("#tabla_detalle").append(fila);
-        selectResponsable(n);
+        if($('#curso').val()!=0){
+            fila   = "<tr>";
+            fila  += "<td align='center'>"+n+"</td>";
+            fila  += "<td align='center'><input type='text' class='cajaMedia' name='nombre["+n+"]' id='nombre["+n+"]' value=''></td>";
+            fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
+            fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fcompromiso["+n+"]' id='fcompromiso["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='__/__/__'></td>";
+            fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
+            fila  += "</tr>";
+            $("#tabla_detalle").append(fila);
+            selectResponsable(n);            
+        }
+        else{
+            alert("Primero debe seleccinar un curso");
+        }
     });    
     
-    $("body").on('click',"#ver_cliente",function(){
-        url = base_url+"index.php/ventas/alumno/buscar";
-        window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
-    });    
+//    $("body").on('click',"#ver_cliente",function(){
+//        url = base_url+"index.php/ventas/alumno/buscar";
+//        window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+//    });    
     
-   $("body").on('change',"#curso",function(){
+    $("body").on('click',"#ver_asistentes",function(){
+        if($('#codigo').val()!=""){
+            curso = $("#curso").val();
+            acta  = $("#codigo").val();
+            url = base_url+"index.php/ventas/actaprofesor/editartodos/"+curso+"/"+acta;
+            window.open(url,"_blank","width=850,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");                      
+        }
+        else{
+            alert("Primero debe guardar el acta");
+        }
+    });      
+    
+   $("body").on('change',"#curso,#ciclo",function(){
        accion      = $("#accion").val();
        codigo      = $("#codigo").val();
        dataString  = $('#frmPersona').serialize();
@@ -66,6 +72,7 @@ jQuery(document).ready(function(){
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/acta/grabar";
         clave      = $("#clave").val();
+        $('#profesor').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){

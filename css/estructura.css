@@ -15,52 +15,51 @@ fieldset, form, label, legend,
 	font-style: inherit;
 	font-family: Arial, Helvetica, sans-serif;
 	color:#333; font-size:12px;
-
 }
-body   {background:#fff;}
 
-p, span {font-size:12px; font-family: Arial, Helvetica, sans-serif;
-         color:#333; margin: 0;padding: 0; font-weight:normal;}
+input[readonly]{background-color: #E6E6E6;}
+select:disabled{background-color: #E6E6E6;}
+
+p, span {font-size:12px; font-family: Arial, Helvetica, sans-serif;color:#333; margin: 0;padding: 0; font-weight:normal;}
 :focus {outline: 0;}
 span a{text-decoration:none;}
 
-ol, ul {	list-style: none;}
+ol, ul {list-style: none;}
 table {
 	border-collapse:collapse;
 	border-spacing: 0; margin:auto; float:left;
 }
 caption, th, td {font-weight: normal;}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: "";
-}
-blockquote, q {
-	quotes: "" "";
-}
-/* .container{width:100%;margin:0px auto 0px auto;float:auto;background-color:#fff;border: 1px solid #000;}
- .container h1{height:30px;padding:6px 0px 6px 6px;text-align: center;font-size: 25px;font-family:"Times New Roman","Times","serif";border-bottom:1px solid #CCCCCC;}
- .container table{width:100%;background-color:#fff;border-spacing:2px;;border-collapse: separate;}
- .container table td{text-align: right;padding: 5px;}*/
+blockquote:before, blockquote:after,q:before, q:after{content: "";}
+blockquote, q {quotes: "" "";}
 
-
-/*--------------Login-------------------*/
-.contenido{width: 98%;margin:0 auto;background-color: #fff;border:0px solid #000;height: 545px;}
-/*.header{float:left;width: 100%;border-bottom:1px solid #D6D6D6;}*/
+.contenido{width: 98%;margin:0 auto;border:0px solid #000;height: 545px;}
 .header{float:left;width: 100%;}
 .header img{padding: 15px 0;float: left;}
 .header h2{float:left;font-size: 12px;padding-top: 12px;padding-left: 3px;}
 .header h3{float: right;font-size: 12px;padding-top: 12px;padding-right: 3px;text-decoration: none;}
+.menu{float: left;width: 100%;}
+.titulo{float: left;border-bottom: 1px solid #ccc;padding: 5px 0;width: 100%;margin-bottom: 10px;margin-top: 5px;}
+.titulo h1{font-size: 35px;text-align: center;font-family:"Times New Roman","Times","serif";}
+.mensaje{clear: left;width: 80%;margin:0px auto;text-align: center;background-color:#D5E2F2; color:#F00;padding:4px 0px;}
+.tabla{margin:0px auto;text-align: center;width:80%;height: auto;} 
+.tabla table{border-color:#EDEDED;width: 100%;padding: 0px;border-spacing: 0px;} 
+.tabla tr.list1 td { background-color:#D9E8FB; text-align:center; padding:3px 0;}
+.tabla tr.list1 td a{ color:#069;}
+.tabla tr.list_a td{text-align:center; padding:8px 0;} 
+.tabla tr.list_b td{text-align:center; padding:8px 0; background-color:#F4F7FF} 
+
 .zonelogin{float: left;width: 100%;border-bottom:1px solid #D6D6D6;padding: 55px 0;}
 .frmlogin{width: 507px;margin:0 auto;}
 .frmlog{float: left;width: 232px;padding-left:150px;padding-top: 25px;}
 .frmcamp{padding:5px;}
 .frmcamp span{float: left;margin-right:5px;text-align:right;width: 70px;margin-bottom: 15px;}
 
-.frmboton{float:left;padding-top:5px;width:100%;padding-left: 40px;}
+.frmboton{float:left;padding-top:5px;width:100%;text-align: center;}
 .frmboton h2 a,.frmboton h2{font-size: 12px;text-align: center;text-decoration: none;padding-bottom: 5px;}
 .frmboton_login{margin: 0 auto;width: 158px;}
 .frmboton_matricula{margin: 0 auto;width: 300px;}
-.footer{float: left;width:100%;padding-top: 5px;}
+.footer{float: left;width:100%;padding-top:10px;margin-top:10px;border-top: 1px solid #ccc;}
 .footer h2{font-size: 11px;float: left;}
 
 .aceptarlog2{ background-color:#EB1C24; color:#FFF; border:none; font-size:11px;padding:3px 18px; cursor:pointer;}
@@ -90,42 +89,18 @@ blockquote, q {
 .lista_busqueda li{width: 250px;}
 
 /*--------------Principal-------------------*/
-.zonebody{border-bottom: 1px solid #D6D6D6;float:left;width:100%;}
-/*.zonebody ul.nav{float: left;background-color:#EB1C24;width: 98%;padding: 0 15px;display: block;}
-.zonebody ul.nav li{float: left;}
-.zonebody ul.nav li a{float: left;color: #fff;padding: 5px 16px;text-decoration: none;}
-.zonebody ul.nav li a:hover{background-color: #9C0E15}
-.zonebody ul.nav ul { display:none;position: absolute;top: 95px;width: 110px;background-color: #f4f4f4;padding: 0;list-style-type:none;}
-.zonebody ul.nav ul li {width: 100px;border: 1px solid #9c0101;border-top: none;padding: 5px 5px;color: #9c0101;}
-.zonebody ul.nav ul li:first-child {border-top: 1px solid #9c0101;}
-.zonebody ul.nav ul li a {width: 100px;margin: 0;padding: 0;color: #9c0101;}
-.zonebody ul.nav ul li a:hover {width: 200px;margin:0;color: #9c0101;background: none;}
-.zonebody ul.nav ul li ul{ display:none;left:110px;position: absolute;width: 110px;background-color: #f4f4f4;padding: 0;top:5px;list-style-type:none;}
-.zonebody ul.nav ul li ul li {width:100px;border: 1px solid #9c0101;border-top: none;padding: 5px 5px;color: #9c0101;}
-.zonebody ul.nav ul li ul li:first-child {border-top: 1px solid #9c0101;}
-.zonebody ul.nav ul li ul li a {width: 100px;margin: 0;padding: 0;color: #9c0101;}
-.zonebody ul.nav ul li ul li a:hover {width: 200px;margin:0;color: #9c0101;background: none;}
-.patbotom{ padding-bottom:40px;}*/
-/*
-.zonebody ul.body_section{ float:left; padding-top:20px; margin-bottom:25px;}
-.zonebody ul.body_section li{ float:left; width:306px; padding-left:20px; border-right:1px solid #D6D6D6;}*/
-
-/*--------------Lista de items-------------------*/
+.zonebody{border-bottom: 0px solid #D6D6D6;float:left;width:70%;}
 .titulotabla{border-bottom: 1px solid #ccc;float: left;padding: 5px 0;width: 100%;margin-bottom: 10px;margin-top: 5px;}
-/*.titulotabla span{float: left;margin-left: 30px;text-decoration: none;margin-top: -14px;}
-.titulotabla span a {text-decoration: none;}*/
-/*.titulotabla ul{padding-left: 120px;padding-top: 20px;}
-.titulotabla ul li{float: left;margin-right: 26px;}*/
 .titulotabla h1{font-size: 35px;text-align: center;font-family:"Times New Roman","Times","serif";}
 
-
-.listartabla{ width:800px; margin:0px auto;} 
-.listartabla table { width:800px; border-color:#EDEDED; }
+.listartabla{text-align: center;width:100%; margin:auto 20px;border: 1px solid #000;height: 400px;} 
+.listartabla .mensajetabla{background-color:#D5E2F2; color:#F00;padding:4px 0px;border: 1px solid #000;}
+.listartabla table {width:80%; border-color:#EDEDED; }
 .listartabla tr.list1 td { background-color:#D9E8FB; text-align:center; padding:3px 0;}
 .listartabla tr.list1 td a{ color:#069;}
 .listartabla tr.list_a td{text-align:center; padding:8px 0;} 
 .listartabla tr.list_b td{text-align:center; padding:8px 0; background-color:#F4F7FF} 
-.mensajetabla{ width:800px; background-color:#D5E2F2; color:#F00; text-align:center; padding:4px 0; float:left;}
+
 
 #tabla_detalle th{padding:4px;background:#b9c9fe;border-top: 4px solid #aabcfe;border-bottom: 1px solid #fff; color: #039;}
 #tabla_detalle td{padding:3px;background:#e8edff;border-bottom:1px solid #fff;color: #669;border-top: 1px solid transparent;}
@@ -160,12 +135,6 @@ blockquote, q {
     float: left;
 }
 .curbottom{ height:380px;}
-/*.botones{background: #ccc; 
-    background: -webkit-linear-gradient(top,#fc6,#f63);
-    background: linear-gradient(top,#fc6,#f63);
-    color: #666;
-    width: 70px;
-}*/
 p#bot{padding-bottom: 5px;}
 .botones{margin:0;background-color:#EB1C24;border: none;font-size: 11px;color: #FFF;padding: 3px 18px;cursor: pointer;width:76px !important;}
 .btn_sig{margin:0;background-color:#EB1C24;border: none;font-size: 11px;color: #FFF;padding: 3px 18px;cursor: pointer;width:40px !important;}
@@ -192,6 +161,6 @@ p#bot{padding-bottom: 5px;}
 #simplemodal-container {height:550px; width:1000px; color:#bbb; background-color:#333; border:4px solid #000; padding:12px;}
 #simplemodal-container .simplemodal-data {padding:8px;}
 #simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
-#simplemodal-container a {color:#ddd;}
+#simplemodal-container a {color:#F00;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 #simplemodal-container h3 {color:#84b8d9;}
