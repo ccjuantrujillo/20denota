@@ -39,6 +39,7 @@ class Tema_model extends CI_Model{
         if(isset($filter->ciclo) && $filter->ciclo!='')   $this->db->where(array("e.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->semana) && $filter->semana!='') $this->db->where(array("i.PRODATRIB_Codigo"=>$filter->semana));	
         if(isset($filter->tema) && $filter->tema!='')     $this->db->where(array("c.PRODATRIBDET_Codigo"=>$filter->tema));
+        if(isset($filter->tipoestudiociclo))              $this->db->where(array("f.TIPCICLOP_Codigo"=>$filter->tipoestudiociclo));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);

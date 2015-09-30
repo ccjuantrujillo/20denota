@@ -196,7 +196,7 @@ class Profesor extends Persona
         $this->load->view("ventas/profesor_buscar",$data);
     }
 
-    public function obtener($codigo=""){
+    public function obtener(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
         $profesores  = $this->profesor_model->listar($filter);

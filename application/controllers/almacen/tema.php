@@ -134,5 +134,13 @@ class Tema extends CI_Controller {
         $codigo = $this->input->post('codigo');
         $this->tema_model->eliminar($codigo);
     } 
+    
+    public function obtener(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $profesores  = $this->tema_model->listar($filter);
+        $resultado = json_encode($profesores);
+        echo $resultado;
+    }    
 }
 ?>

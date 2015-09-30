@@ -117,7 +117,7 @@ class Tipoestudiociclo extends CI_Controller
         $this->load->view('almacen/fabricante_ver',$data);
     }
     
-    public function obtener($codigo=""){
+    public function obtener(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
         $tipoestudios  = $this->tipoestudiociclo_model->listar($filter);
