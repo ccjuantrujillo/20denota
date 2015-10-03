@@ -19,12 +19,9 @@ jQuery(document).ready(function(){
             fila  += "<td align='center'>"+n+"</td>";
             fila  += "<td align='center'><input type='text' class='cajaMedia' name='nombre["+n+"]' id='nombre["+n+"]' value=''></td>";
             fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
-            fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-            fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fcompromiso["+n+"]' id='fcompromiso["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='__/__/__'></td>";
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
             fila  += "</tr>";
-            $("#tabla_detalle").append(fila);
-            selectResponsable(n);            
+            $("#tabla_detalle").append(fila);           
         }
         else{
             alert("Primero debe seleccinar un curso");
@@ -161,23 +158,23 @@ jQuery(document).ready(function(){
   });  
 });
 
-function selectResponsable(n){
-    a      = "responsable["+n+"]";
-    url    = base_url+"index.php/ventas/profesor/obtener";
-    select = document.getElementById(a);
-    objRes = new Object();
-    objRes.curso = $("#curso").val();
-    dataString   = {objeto: JSON.stringify(objRes)};
-    $.post(url,dataString,function(data){
-        $.each(data, function(item,value){
-            opt       = document.createElement('option');
-            opt.value = value.PROP_Codigo;
-            texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
-            opt.appendChild(document.createTextNode(texto));
-            select.appendChild(opt);
-        });
-    },"json");
-}
+//function selectResponsable(n){
+//    a      = "responsable["+n+"]";
+//    url    = base_url+"index.php/ventas/profesor/obtener";
+//    select = document.getElementById(a);
+//    objRes = new Object();
+//    objRes.curso = $("#curso").val();
+//    dataString   = {objeto: JSON.stringify(objRes)};
+//    $.post(url,dataString,function(data){
+//        $.each(data, function(item,value){
+//            opt       = document.createElement('option');
+//            opt.value = value.PROP_Codigo;
+//            texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
+//            opt.appendChild(document.createTextNode(texto));
+//            select.appendChild(opt);
+//        });
+//    },"json");
+//}
 
 function addToList(id1,id2) {
     var comp = document.getElementById(id1);

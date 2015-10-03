@@ -112,7 +112,7 @@ class Tareo extends CI_Controller {
             }
         }
         $data['lista']      = $lista;
-        $data['titulo']     = "Asistencia de los profesores";
+        $data['titulo']     = "Inasistencias y reemplazos";
         $data['menu']       = $menu;
         $data['form_open']  = form_open('ventas/tareo/editar',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         

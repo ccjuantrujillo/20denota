@@ -58,6 +58,8 @@ class Asignacion extends CI_Controller {
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
         $data['menu']         = $menu;
+        $data['titulo']       = "Cargas de trabajo";
+        $data['nuevo']        = "Crear una nueva carga de trabajo";
         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']   = form_close();         
         $data['j']            = $j;
@@ -99,29 +101,16 @@ class Asignacion extends CI_Controller {
             $lista->asignaciondetalle = array();
         } 
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $data['titulo']     = $accion=="e"?"Editar Carga Horaria":"Nueva Carga Horaria"; 
+        $data['titulo']     = $accion=="e"?"Editar Carga de Trabajo":"Nueva Carga de Trabajo"; 
         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close'] = form_close();         
         $data['lista']	    = $lista;  
         $data['accion']	    = $accion;  
-        $data['codigodetalle'] = $codigodetalle;  
         $data['aula']       = array();
-        if($codigodetalle!=""){
-            $filter             = new stdClass();            
-            $filter->asignaciondetalle = $codigodetalle;
-            $detalle            = $this->asignaciondetalle_model->obtener($filter);
-            $filter             = new stdClass();
-            $filter->local      = $detalle->LOCP_Codigo;
-            $data['aula']       = $this->aula_model->seleccionar('0',$filter);   
-        }
-        $data['local']      = $this->local_model->seleccionar('0',new stdClass()); 
-        $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"); 
-        $filter = new stdClass();
-        $filter->ciclo = $lista->ciclo;
-        $data['tipoestudiociclo'] = $this->tipoestudiociclo_model->seleccionar('0',$filter);        
+        $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");     
         $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
-        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
+        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/asignacion_nuevo",$data);
     }
 
@@ -151,21 +140,9 @@ class Asignacion extends CI_Controller {
         $aula  = $this->input->get_post('aula');
         $desde = $this->input->get_post('desde');
         $hasta = $this->input->get_post('hasta');
-        if(count($dia)>0 && is_array($dia)){
-            if($codigodetalle!=""){
-                foreach($dia as $item=>$value){
-                    $data = array(     
-                                "AULAP_Codigo"     => $aula[$item],
-                                "TIPCICLOP_Codigo" => $tipoestudiociclo[$item],                   
-                                "ASIGDETC_Dia"     => $dia[$item],
-                                "ASIGDETC_Desde"   => $desde[$item],
-                                "ASIGDETC_Hasta"   => $hasta[$item]
-                            );
-                    $this->asignaciondetalle_model->modificar($codigodetalle,$data); 
-                }   
-            }   
-            else{
-                foreach($dia as $item=>$value){
+        if(count($codigodetalle)>0 && is_array($codigodetalle)){
+            foreach($codigodetalle as $item=>$value){
+                if($dia[$item]!="" && $tipoestudiociclo[$item]!=0 && $aula[$item]!=0){
                     $data = array(
                                 "ASIGP_Codigo"   => $codigo,        
                                 "AULAP_Codigo"   => $aula[$item],
@@ -174,8 +151,13 @@ class Asignacion extends CI_Controller {
                                 "ASIGDETC_Desde" => $desde[$item],
                                 "ASIGDETC_Hasta" => $hasta[$item]
                             );
-                    $this->asignaciondetalle_model->insertar($data); 
-                }                
+                    if($codigodetalle[$item]==""){//Insertar
+                        $this->asignaciondetalle_model->insertar($data); 
+                    }
+                    else{//Editar
+                        $this->asignaciondetalle_model->modificar($codigodetalle[$item],$data); 
+                    }                    
+                }
             }
         }                            
         echo json_encode($resultado);
@@ -302,11 +284,13 @@ class Asignacion extends CI_Controller {
         $this->load->view(ventas."ot_buscar",$data);  
     }
       
-//    public function obtener_tipOt($tipoOt){
-//        $this->load->model(maestros.'tipoot_model');
-//        $tipoOt = $this->tipoot_model->obtener($tipoOt);
-//        echo json_encode($tipoOt);
-//    }
+    public function obtener(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->asignaciondetalle_model->obtener($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;        
+    }
     
      public function export_excel($type) {
         if($this->session->userdata('data_'.$type)){

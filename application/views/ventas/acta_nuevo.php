@@ -60,8 +60,6 @@
                 <th width="3%" align="center">No</th>
                 <th width="10%" align="center">Nombre</th>
                 <th width="50%" align="center">Descripcion</th>
-                <th align="center">Profesor</th>
-                <th align="center">F.Compromiso</th> 
                 <th align="center">Acciones</th>
             </tr>
             <?php
@@ -77,8 +75,6 @@
                         <td width="3%" align="center"><?php echo $item+1;?></td>
                         <td width="3%" align="center"><input type="text" class="cajaMedia" name="nombre[<?php echo $item;?>]" id="nombre[<?php echo $item;?>]" value="<?php echo $value->ACTADETC_Nombre;?>"></td>                        
                         <td align="left" valign="top"><textarea name="acuerdo[<?php echo $item;?>]" id="acuerdo[<?php echo $item;?>]" placeholder='Acuerdos de la reunion' cols='53' rows='1'><?php echo $value->ACTADETC_Observacion;?></textarea></td>
-                        <td align="center"><select class="comboGrande" name="responsable[<?php echo $item;?>]" id="responsable[<?php echo $item;?>]"><?php echo $optResponsable;?></select></td>
-                        <td align="center"><input type='text' maxlength='10' class='cajaMinima' name="fcompromiso[<?php echo $item;?>]" id="fcompromiso[<?php echo $item;?>]" onmousedown="$(this).datepicker({dateFormat:'dd/mm/yy',changeYear: true,yearRange:'1945:2025'});" value="<?php echo date_sql($value->ACTADETC_FechaCompromiso);?>"></td> 
                         <td align="center">
                             <a href="#" class="editardetalle">Editar</a>
                             <a href="#" class="eliminardetalle">Eliminar</a>
@@ -92,8 +88,6 @@
                             <td width="3%" align="center"><?php echo $item+1;?></td>
                             <td width="3%" align="center"><?php echo $value->ACTADETC_Nombre;?></td>
                             <td align="left"><?php echo $value->ACTADETC_Observacion;?></td>
-                            <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
-                            <td align="center"><?php echo date_sql($value->ACTADETC_FechaCompromiso);?></td> 
                             <td align="center">
                                 <a href="#" class="editardetalle">Editar</a>
                                 <a href="#" class="eliminardetalle">Eliminar</a>

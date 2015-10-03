@@ -45,7 +45,7 @@
                 <td>Apellidos y Nombres:</td>
                 <td class="formss" align="left" colspan="3">
                     <input name="nombres" id="nombres" type="text" value="<?php echo $lista->paterno.' '.$lista->materno.' '.$lista->nombres;?>" class="cajaGrande" readonly="readonly" style="background-color: #E6E6E6"/>&nbsp;&nbsp;
-                    <a href="#" <?php echo ($codigodetalle==""?"id='agregar'":"");?> >Agregar</a>
+                    <a href="#" id="agregar">Agregar</a>
                 </td>
               </tr>                             
             </table>
@@ -65,56 +65,21 @@
                 <?php
                 if(count($lista->asignaciondetalle)>0){
                     foreach($lista->asignaciondetalle as $item => $value){
-                        if($codigodetalle==$value->ASIGDETP_Codigo){
-                            $optSemana = "";
-                            $optTipoestudio = "";
-                            $optLocal  = "";
-                            $optAula   = "";
-                            foreach ($semana as $item2 => $value2){
-                                $optSemana.= "<option value='".$item2."' ".($item2==$value->ASIGDETC_Dia?"selected='selected'":"").">".$value2."</option>";
-                            } 
-                            foreach ($tipoestudiociclo as $item3 => $value3){
-                                $optTipoestudio.= "<option value='".$item3."' ".($item3==$value->TIPCICLOP_Codigo?"selected='selected'":"").">".$value3."</option>";
-                            }  
-                            foreach ($local as $item4 => $value4){
-                                $optLocal.= "<option value='".$item4."' ".($item4==$value->LOCP_Codigo?"selected='selected'":"").">".$value4."</option>";
-                            } 
-                            foreach ($aula as $item5 => $value5){
-                                $optAula.= "<option value='".$item5."' ".($item5==$value->AULAP_Codigo?"selected='selected'":"").">".$value5."</option>";
-                            }                            
-                            ?>
-                            <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
-                                <td width="3%" align="center"><?php echo $item+1;?></td>
-                                <td align="center"><select class='comboMinimo' name="dia[<?php echo $item;?>]" id="dia[<?php echo $item;?>]"><option value='0'>::Seleccione::</option><?php echo $optSemana;?></select></td>
-                                <td align="center"><select class='comboMinimo' name="tipoestudiociclo[<?php echo $item;?>]" id="tipoestudiociclo[<?php echo $item;?>]"><?php echo $optTipoestudio;?></select></td>
-                                <td align="center"><select class='comboMedio' name="local[<?php echo $item;?>]" id="local[<?php echo $item;?>]" onchange="selectAula(<?php echo $item;?>)"><?php echo $optLocal;?></select></td> 
-                                <td align="center"><select class='comboMinimo' name="aula[<?php echo $item;?>]" id="aula[<?php echo $item;?>]"><?php echo $optAula;?></select></td> 
-                                <td align="center"><input type='time' maxlength='5' class='cajaReducida' name="desde[<?php echo $item;?>]" id="desde[<?php echo $item;?>]" value="<?php echo substr($value->ASIGDETC_Desde,0,5);?>"></td> 
-                                <td align="center"><input type='time' maxlength='5' class='cajaReducida' name="hasta[<?php echo $item;?>]" id="hasta[<?php echo $item;?>]" value="<?php echo substr($value->ASIGDETC_Hasta,0,5);?>"></td> 
-                                <td align="center">
-                                    <a href="#" class="editardetalle">Editar</a>&nbsp;
-                                    <a href="#" class="eliminardetalle">Eliminar</a>
-                                </td>
-                            </tr> 
-                            <?php
-                        }
-                        else{
-                            ?>
-                            <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
-                                <td width="3%" align="center"><?php echo $item+1;?></td>
-                                <td align="center"><?php echo $semana[$value->ASIGDETC_Dia];?></td>
-                                <td align="center"><?php echo $value->TIPC_Nombre;?></td>
-                                <td align="center"><?php echo $value->LOCC_Nombre;?></td> 
-                                <td align="center"><?php echo $value->AULAC_Nombre;?></td> 
-                                <td align="center"><?php echo substr($value->ASIGDETC_Desde,0,5);?></td> 
-                                <td align="center"><?php echo substr($value->ASIGDETC_Hasta,0,5);?></td> 
-                                <td align="center">
-                                    <a href="#" class="editardetalle">Editar</a>&nbsp;
-                                    <a href="#" class="eliminardetalle">Eliminar</a>
-                                </td>
-                            </tr>                
-                            <?php
-                        }
+                        ?>
+                        <tr id="<?php echo $value->ASIGDETP_Codigo;?>">
+                            <td width="3%" align="center"><?php echo $item+1;?></td>
+                            <td align="center"><?php echo $semana[$value->ASIGDETC_Dia];?></td>
+                            <td align="center"><?php echo $value->TIPC_Nombre;?></td>
+                            <td align="center"><?php echo $value->LOCC_Nombre;?></td> 
+                            <td align="center"><?php echo $value->AULAC_Nombre;?></td> 
+                            <td align="center"><?php echo substr($value->ASIGDETC_Desde,0,5);?></td> 
+                            <td align="center"><?php echo substr($value->ASIGDETC_Hasta,0,5);?></td> 
+                            <td align="center">
+                                <a href="#" class="editardetalle">Editar</a>&nbsp;
+                                <a href="#" class="eliminardetalle">Eliminar</a>
+                            </td>
+                        </tr>                
+                        <?php
                     ?>
                     <?php                                
                     }

@@ -66,6 +66,7 @@ class Acta extends CI_Controller {
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
         $data['titulo']       = "Reuniones de plana";
+        $data['btnNuevo']     = "Crear una nueva reunion";
         $data['menu']         = $menu;       
         $data['j']            = $j;
         $data['registros']    = $registros;
@@ -172,10 +173,8 @@ class Acta extends CI_Controller {
                 foreach($acuerdo as $item=>$value){
                     if($responsable[$item]!=0){
                         $data = array(
-                                    "PROP_Codigo"              => $responsable[$item],
                                     "ACTADETC_Observacion"     => $acuerdo[$item],
-                                    "ACTADETC_Nombre"          => $nombre[$item],
-                                    "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
+                                    "ACTADETC_Nombre"          => $nombre[$item]            
                                 );
                         $this->actadetalle_model->modificar($codigodetalle,$data);                         
                     }
@@ -185,10 +184,8 @@ class Acta extends CI_Controller {
                 foreach($acuerdo as $item=>$value){
                     if($responsable[$item]!=0){
                         $data = array(
-                                    "PROP_Codigo"              => $responsable[$item],
                                     "ACTAP_Codigo"             => $codigo,
-                                    "ACTADETC_Observacion"     => $acuerdo[$item],
-                                    "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
+                                    "ACTADETC_Observacion"     => $acuerdo[$item]
                                 );
                         $this->actadetalle_model->insertar($data);    
                     }

@@ -22,8 +22,8 @@
     </div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
-        <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear una nueva carga horaria" id="nuevo"/>            
-        <h1>Carga horaria</h1>
+        <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="<?php echo $nuevo;?>" id="nuevo"/>            
+        <h1><?php echo $titulo;?></h1>
     </div>
     <div class="mensaje">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
     <div class="tabla">
