@@ -34,7 +34,7 @@ class Acta extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
-        $filter->order_by = array("p.ACTAC_Numero"=>"desc");
+        $filter->order_by = array("p.ACTAP_Codigo"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->acta_model->listar($filter,$filter_not));
         $matricula   = $this->acta_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
@@ -49,7 +49,6 @@ class Acta extends CI_Controller {
                 $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
                 $lista[$indice]->fechareg = $value->fechareg;
                 $lista[$indice]->fecha    = date_sql($value->ACTAC_Fecha);
-                $lista[$indice]->numero   = $value->ACTAC_Numero;
                 $lista[$indice]->titulo   = $value->ACTAC_Titulo;
                 $lista[$indice]->ciclo    = $value->COMPC_Nombre;
                 $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
@@ -83,14 +82,12 @@ class Acta extends CI_Controller {
         $hfin    = $this->input->get_post('hfin'); 
         $agenda  = $this->input->get_post('agenda'); 
         $fecha   = $this->input->get_post('fecha'); 
-        $numero  = $this->input->get_post('numero');
         $lista   = new stdClass();
         if($accion == "e"){
             $filter             = new stdClass();
             $filter->acta       = $codigo;
             $acta               = $this->acta_model->obtener($filter);
             $lista->profesor    = $acta->PROP_Codigo;  
-            $lista->numero      = $numero!=""?$numero:$acta->ACTAC_Numero;  
             $lista->fecha       = $fecha!=""?$fecha:date_sql($acta->ACTAC_Fecha);  
             $lista->acta        = $acta->ACTAP_Codigo;
             $lista->titulo      = $titulo!=""?$titulo:$acta->ACTAC_Titulo;
@@ -108,7 +105,6 @@ class Acta extends CI_Controller {
         elseif($accion == "n"){ 
             $lista->profesor    = "";  
             $lista->fecha       = date("d/m/Y",time());
-            $lista->numero      = $numero; 
             $lista->acta        = "";
             $lista->titulo      = $titulo;
             $lista->agenda      = $agenda;
@@ -126,8 +122,7 @@ class Acta extends CI_Controller {
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
         $data['accion']	       = $accion;               
-        $data['codigodetalle'] = $codigodetalle;  
-        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $filter = new stdClass();
         $filter->ciclo         = $lista->ciclo;
         $data['seltipoestudio']= form_dropdown('tipoestudio',$this->tipoestudiociclo_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
@@ -137,22 +132,22 @@ class Acta extends CI_Controller {
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/acta_nuevo",$data);
     }
 
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
-        $codigodetalle = $this->input->get_post('codigodetalle');
+        $codigodetalle = $this->input->get_post('codigodetalle');   
         $data   = array(
-                        "ACTAC_Numero"       => $this->input->post('numero'),
 			"ACTAC_Fecha"        => date_sql_ret($this->input->post('fecha')),
                         "PROP_Codigo"        => $this->input->post('profesor'),
                         "ACTAC_Titulo"       => $this->input->post('titulo'),
                         "ACTAC_Hinicio"      => $this->input->post('hinicio'),
                         "ACTAC_Hfin"         => $this->input->post('hfin'),
-                        "ACTAC_Agenda"       => $this->input->post('agenda')
+                        "ACTAC_Agenda"       => $this->input->post('agenda'),
+                        "TIPCICLOP_Codigo"   => $this->input->post('tipoestudio')
                        );
         $resultado = false;
         if($accion == "n"){
@@ -166,31 +161,20 @@ class Acta extends CI_Controller {
         /*GRABAR DETALLE*/
         $acuerdo     = $this->input->get_post('acuerdo');
         $nombre      = $this->input->get_post('nombre');
-        $responsable = $this->input->get_post('responsable');
-        $fcompromiso = $this->input->get_post('fcompromiso');
-        if(count($acuerdo)>0 && is_array($acuerdo)){
-            if($codigodetalle!=""){//Editar
-                foreach($acuerdo as $item=>$value){
-                    if($responsable[$item]!=0){
-                        $data = array(
-                                    "ACTADETC_Observacion"     => $acuerdo[$item],
-                                    "ACTADETC_Nombre"          => $nombre[$item]            
-                                );
-                        $this->actadetalle_model->modificar($codigodetalle,$data);                         
-                    }
-                } 
-            }
-            else{//Grabar
-                foreach($acuerdo as $item=>$value){
-                    if($responsable[$item]!=0){
-                        $data = array(
-                                    "ACTAP_Codigo"             => $codigo,
-                                    "ACTADETC_Observacion"     => $acuerdo[$item]
-                                );
-                        $this->actadetalle_model->insertar($data);    
-                    }
-                }        
-            }            
+        if(count($codigodetalle)>0 && is_array($codigodetalle)){
+            foreach($codigodetalle as $item=>$value){
+                $data = array(
+                            "ACTAP_Codigo"         => $codigo,
+                            "ACTADETC_Observacion" => $acuerdo[$item],
+                            "ACTADETC_Nombre"      => $nombre[$item]            
+                        );
+                if($codigodetalle[$item]==""){//Insertar
+                   $this->actadetalle_model->insertar($data); 
+                }
+                else{//Editar
+                   $this->actadetalle_model->modificar($codigodetalle[$item],$data); 
+                }  
+            }         
         }
         echo json_encode($resultado);
     }
@@ -214,6 +198,14 @@ class Acta extends CI_Controller {
         $this->actadetalle_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
+    } 
+    
+    public function obtenerdetalle(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->actadetalle_model->obtener($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;        
     }    
 
     public function ver($codigo){

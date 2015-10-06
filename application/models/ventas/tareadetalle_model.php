@@ -35,6 +35,7 @@ class Tareadetalle_model extends CI_Model{
         $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=h.TIPCICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as j','j.TIPP_Codigo=i.TIPP_Codigo','inner');
         if(isset($filter->tarea) && $filter->tarea!='')       $this->db->where(array("d.TAREAP_Codigo"=>$filter->tarea));
+        if(isset($filter->tareadetalle) && $filter->tareadetalle!='')       $this->db->where(array("d.TAREADETP_Codigo"=>$filter->tareadetalle));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("d.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->ciclo) && $filter->ciclo!='')       $this->db->where(array("h.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->order_by) && count($filter->order_by)>0){

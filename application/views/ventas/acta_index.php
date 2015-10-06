@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>  
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
@@ -33,7 +32,6 @@
             <td width="60">Fecha</td>
             <td width="90">Ciclo</td>
             <td width="60">Tipo estudio</td>
-            <td width="50">Numero</td>
             <td width="80">Plana</td>
             <td width="160">Elaborado por</td>
             <td width="120">Titulo</td>
@@ -50,8 +48,7 @@
                 <td><?php echo ++$j;?></td>
                 <td><?php echo $value->fecha;?></td>
                 <td><?php echo $value->ciclo;?></td>
-                <td><?php echo $value->tipoestudio;?></td>
-                <td><?php echo $value->numero;?></td>                
+                <td><?php echo $value->tipoestudio;?></td>               
                 <td><?php echo $value->curso;?></td>
                 <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                 <td><?php echo $value->titulo;?></td>

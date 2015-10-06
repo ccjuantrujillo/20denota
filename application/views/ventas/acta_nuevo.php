@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>        
@@ -16,10 +15,7 @@
         <table  style="background-color: #f4f7ff">
             <tr>
                 <td  width='18%' align="right">Codigo: </td>
-                <td width='20%' colspan="3" class="formss">
-                    <input type='text' name="codigo" id="codigo" value="<?php echo $lista->acta;?>" readonly="readonly" class="cajaReducida">
-                    &nbsp;&nbsp;&nbsp;Numero:<input type='text' name="numero" id="numero" value="<?php echo $lista->numero;?>" class="cajaMinima" onkeydown="return numbersonly(this,event,'.');" <?php echo ($accion=="e"?"readonly='readonly'":"");?>/>
-                </td>
+                <td width='20%' colspan="3" class="formss"><input type='text' name="codigo" id="codigo" value="<?php echo $lista->acta;?>" readonly="readonly" class="cajaReducida"></td>
                 <td align="right">Fecha&nbsp;</td>
                 <td width='29%' class="formss"><input type="text" name="fecha" id="fecha" style="width:60px" readonly value="<?php echo $lista->fecha;?>" class="cajaMinima" maxlength="10"></td>
             </tr>
@@ -65,37 +61,16 @@
             <?php
             if(count($lista->actadetalle)>0){
                 foreach($lista->actadetalle as $item => $value){
-                    if($codigodetalle==$value->ACTADETP_Codigo){
-                    $optResponsable = "";
-                    foreach ($responsable as $item2 => $value2){
-                        $optResponsable.= "<option value='".$item2."' ".($item2==$value->PROP_Codigo?"selected='selected'":"").">".$value2."</option>";
-                    }
                     ?>
                     <tr id="<?php echo $value->ACTADETP_Codigo;?>">
                         <td width="3%" align="center"><?php echo $item+1;?></td>
-                        <td width="3%" align="center"><input type="text" class="cajaMedia" name="nombre[<?php echo $item;?>]" id="nombre[<?php echo $item;?>]" value="<?php echo $value->ACTADETC_Nombre;?>"></td>                        
-                        <td align="left" valign="top"><textarea name="acuerdo[<?php echo $item;?>]" id="acuerdo[<?php echo $item;?>]" placeholder='Acuerdos de la reunion' cols='53' rows='1'><?php echo $value->ACTADETC_Observacion;?></textarea></td>
+                        <td width="3%" align="center"><?php echo $value->ACTADETC_Nombre;?></td>
+                        <td align="left"><?php echo $value->ACTADETC_Observacion;?></td>
                         <td align="center">
                             <a href="#" class="editardetalle">Editar</a>
                             <a href="#" class="eliminardetalle">Eliminar</a>
                         </td>
-                    </tr>
-                    <?php                            
-                    }
-                    else{
-                        ?>
-                        <tr id="<?php echo $value->ACTADETP_Codigo;?>">
-                            <td width="3%" align="center"><?php echo $item+1;?></td>
-                            <td width="3%" align="center"><?php echo $value->ACTADETC_Nombre;?></td>
-                            <td align="left"><?php echo $value->ACTADETC_Observacion;?></td>
-                            <td align="center">
-                                <a href="#" class="editardetalle">Editar</a>
-                                <a href="#" class="eliminardetalle">Eliminar</a>
-                            </td>
-                        </tr>                            
-                        <?php
-                    }
-                ?>
+                    </tr>                            
                 <?php                                
                 }
             }

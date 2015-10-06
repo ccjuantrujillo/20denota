@@ -23,7 +23,7 @@ class Profesor_model extends CI_Model{
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
         $this->db->join($this->table_det2.' as e','e.PROD_Codigo=c.PROD_Codigo','inner');
-        if(isset($filter->profesor) && $filter->profesor!='')  $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
+        if(isset($filter->profesor))     $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->curso))        $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
         if(isset($filter_not->profesor) && $filter_not->profesor!=''){
             if(is_array($filter_not->profesor) && count($filter_not->profesor)>0){
@@ -50,9 +50,10 @@ class Profesor_model extends CI_Model{
 
     public function obtener($filter,$filter_not='',$number_items='',$offset=''){
         $listado = $this->listar($filter,$filter_not='',$number_items='',$offset='');
+        $resultado = new stdClass();
         if(count($listado)>1)
             $resultado = "Existe mas de un resultado";
-        else
+        elseif(count($listado)==1)
             $resultado = (object)$listado[0];
         return $resultado;
     }

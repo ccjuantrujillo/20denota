@@ -1,16 +1,4 @@
-jQuery(document).ready(function(){
-//    $.mask.definitions['H']='[012]';
-//    $.mask.definitions['N']='[012345]';
-//    $.mask.definitions['n']='[0123456789]';
-    //$(".time").mask("Hn:Nn:Nn");
-//    $(".time").mask("Hn:Nn");
-    
-//    $('ul li:has(ul)').hover(function(e) {
-//         $(this).find('ul').css({display: "block"});
-//     },function(e) {
-//         $(this).find('ul').css({display: "none"});
-//     });       
-     
+jQuery(document).ready(function(){    
    $("body").on("click","#buscar",function(){
         $("#form_busqueda").submit();
     });
@@ -25,16 +13,20 @@ jQuery(document).ready(function(){
     });
     
     $("body").on('click',"#agregar",function(){
-        n      = $("#tabla_detalle tr").length;
+        n      = $("#tabla_detalle tr").length - 1;
         fila   = "<tr>";
-        fila  += "<td align='center'>"+n+"</td>";
-        fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
-        fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fcompromiso["+n+"]' id='fcompromiso["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});'></td>";
-        fila  += "<td align='center'><a>Editar</a>&nbsp;<a>Eliminar</a></td>";
+        fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
+        fila  += "<td align='center' valgin='top'><select name='profesor["+n+"]' id='profesor["+n+"]' class='comboGrande'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><input id='hinicio["+n+"]' type='time' maxlength='5' name='hinicio["+n+"]' value='' class='cajaReducida' onblur='valida(this.value,this);'></td>";
+        fila  += "<td align='center'><input id='hfin["+n+"]' type='time' maxlength='5' name='hfin["+n+"]' value='' class='cajaReducida' onblur='valida(this.value,this);'></td>";
+        fila  += "<td align='center'><select name='tipo["+n+"]' id='tipo["+n+"]' class='comboMinimo'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select name='reemplazo["+n+"]' id='reemplazo["+n+"]' class='comboGrande'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><a href='#' class='editardetalle'><img src='"+base_url+"/img/editar.jpg'></a>&nbsp;<a href='#' class='eliminardetalle'><img src='"+base_url+"/img/eliminar.jpg'></a></td>";
         fila  += "</tr>";
         $("#tabla_detalle").append(fila);
-        selectResponsable(n);
+        selectProfesor(n);
+        selectReemplazo(n);
+        selectTipo(n);
     });    
     
     $("body").on('click',"#ver_cliente",function(){
@@ -61,12 +53,7 @@ jQuery(document).ready(function(){
     $("body").on('click',"#cancelar",function(){
         url = base_url+"index.php/ventas/tareo/listar";
         location.href = url;
-    });
-    
-//    $("body").on("click","#cerrar",function(){
-//        url = base_url+"index.php/inicio/index";
-//        location.href = url;
-//    });          
+    });        
     
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/tareo/grabar";
@@ -100,21 +87,27 @@ jQuery(document).ready(function(){
     });    
     
    $("body").on("click","#editardetalle",function(){
-       tr = $(this).parent().parent();
-       tr.empty();
-       tr.append("<td align='center'>2</td>");
-       tr.append("<td align='center'>profesor</td>");
-       tr.append("<td align='center'><input id='hinicio[]' type='time' maxlength='5' name='hinicio[]' value=''  class='cajaReducida' onblur='valida(this.value,this);'></td>");
-       tr.append("<td align='center'><input id='hfin[]' type='time' maxlength='5' name='hfin[]' value=''  class='cajaReducida' onblur='valida(this.value,this);'></td>");
-       tr.append("<td align='center'>tipo</td>");
-       tr.append("<td align='center'>reemplazo</td>");
-       tr.append("<td align='center'><a href='#' id='editardetalle'><img src='<?php echo img;?>editar.jpg'/></a>&nbsp;</td>");
-    });        
-    
-//    $("body").on("click","#logo",function(){
-//        url = base_url+"index.php/inicio/principal";
-//        location.href = url;
-//    });   
+        tr = $(this).parent().parent();  
+        n  = tr.children("td")[0].innerHTML - 1;        
+        codigodetalle = $(this).parent().parent().attr("id"); 
+        url = base_url+"index.php/ventas/tareo/obtener";
+        objRes = new Object();
+        objRes.tareo = codigodetalle;
+        dataString   = {objeto: JSON.stringify(objRes)};        
+        $.post(url,dataString,function(data){
+            tr.empty();              
+            tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
+            tr.append("<td align='center'><select name='profesor["+n+"]' id='profesor["+n+"]' class='comboGrande'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><input id='hinicio["+n+"]' type='time' maxlength='5' name='hinicio["+n+"]' value='"+data["TAREOC_Hinicio"]+"'  class='cajaReducida' onblur='valida(this.value,this);'></td>");
+            tr.append("<td align='center'><input id='hfin["+n+"]' type='time' maxlength='5' name='hfin["+n+"]' value='"+data["TAREOC_Hfin"]+"'  class='cajaReducida' onblur='valida(this.value,this);'></td>");
+            tr.append("<td align='center'><select name='tipo["+n+"]' id='tipo["+n+"]' class='comboMinimo'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><select name='reemplazo["+n+"]' id='reemplazo["+n+"]' class='comboGrande'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><a href='#' class='editardetalle'><img src='"+base_url+"/img/editar.jpg'></a>&nbsp;<a href='#' class='eliminardetalle'><img src='"+base_url+"/img/eliminar.jpg'></a></td>");
+            selectProfesor(n,data["PROP_Codigo"]);
+            selectReemplazo(n,data["TAREOC_ProfesorReemplazado"]);
+            selectTipo(n,data["TIPOASISP_Codigo"]);            
+        },"json");  
+    });          
     
   $("body").on('focus',"#fecha",function(){
        $(this).datepicker({
@@ -128,77 +121,92 @@ jQuery(document).ready(function(){
   });  
 });
 
-function editar(codigo){
-    dataString = "codigo="+codigo;    
-    url = base_url+"index.php/ventas/tareo/editar/e/"+codigo;
-    $.post(url,dataString,function(data){
-        $('#basic-modal-content').modal();
-        $('#mensaje').html(data);
-    });        
-}
-
-//function eliminar(codigo){
-//    if(confirm('Esta seguro desea eliminar este registro?')){
-//        dataString = "codigo="+codigo;
-//        url = base_url+"index.php/ventas/matricula/eliminar";
-//        $.post(url,dataString,function(data){
-//            if(data=="true"){
-//                alert('Operacion realizada con exito');  
-//                url = base_url+"index.php/ventas/matricula/listar";
-//                location.href = url;
-//            }
-//            else if(data=="false"){
-//                alert("No se puede eliminar el registro,\nel usuario ha visualizado los videos");
-//            }
-//        });
-//    }
-//}
-
-function selectResponsable(n){
-    a      = "responsable["+n+"]";
+function selectProfesor(n,valor){
+    valor = (valor) ? valor : null;
+    a      = "profesor["+n+"]";
     url    = base_url+"index.php/ventas/profesor/obtener";
-    select = document.getElementById(a);
+    select_a = document.getElementById(a);
     objRes = new Object();
-    objRes.curso = $("#curso").val();
+    //objRes.curso = $("#curso").val();
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.PROP_Codigo;
+            if(valor==value.PROP_Codigo){opt.selected=true;}
             texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
             opt.appendChild(document.createTextNode(texto));
-            select.appendChild(opt);
+            select_a.appendChild(opt);
         });
     },"json");
 }
 
-function addToList(id1,id2) {
-    var comp = document.getElementById(id1);
-    var comp2 = document.getElementById(id2);
-    var value = comp.options[comp.selectedIndex].value;
-    var text = comp.options[comp.selectedIndex].text;
-    var selectedOption = comp.options[comp.selectedIndex];
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    comp2.options.add(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
+function selectReemplazo(n,valor){
+    valor = (valor) ? valor : null;
+    b      = "reemplazo["+n+"]";
+    url    = base_url+"index.php/ventas/profesor/obtener";
+    select_b = document.getElementById(b);
+    objRes = new Object();
+    //objRes.curso = $("#curso").val();
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        $.each(data, function(item,value){
+            opt_b       = document.createElement('option');
+            opt_b.value = value.PROP_Codigo;
+            if(valor==value.PROP_Codigo){opt_b.selected=true;}
+            texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
+            opt_b.appendChild(document.createTextNode(texto));
+            select_b.appendChild(opt_b);
+        });
+    },"json");
 }
 
-function removeFromList(combo2,combo1) {
-    var comp2 = document.getElementById(combo2); //combo1
-    var comp1 = document.getElementById(combo1); //combo2
-    var value = comp2.options[comp2.selectedIndex].value;
-    var text = comp2.options[comp2.selectedIndex].text;
-    var selectedOption = comp2.options[comp2.selectedIndex];
-//    window.alert(value + ", " + text);
-//    return;
-//    var pos = comp2.options[comp.selectedIndex].id;
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    
-//    comp.options[index] = new Option(myobject[index], index);
-    comp1.appendChild(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
+function selectTipo(n,valor){
+    valor = (valor) ? valor : null;
+    c      = "tipo["+n+"]";
+    url    = base_url+"index.php/maestros/tipoasistencia/obtener";
+    selecttipo = document.getElementById(c);
+    objRes = new Object();
+    dataString   = {objeto: JSON.stringify(objRes)};
+    $.post(url,dataString,function(data){
+        $.each(data, function(item,value){
+            opt       = document.createElement('option');
+            opt.value = value.TIPOASISP_Codigo;
+            if(valor==value.TIPOASISP_Codigo){opt.selected=true;}
+            opt.appendChild(document.createTextNode(value.TIPOASISC_Nombre));
+            selecttipo.appendChild(opt);
+        });
+    },"json");
 }
+
+//
+//function addToList(id1,id2) {
+//    var comp = document.getElementById(id1);
+//    var comp2 = document.getElementById(id2);
+//    var value = comp.options[comp.selectedIndex].value;
+//    var text = comp.options[comp.selectedIndex].text;
+//    var selectedOption = comp.options[comp.selectedIndex];
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    comp2.options.add(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
+//}
+//
+//function removeFromList(combo2,combo1) {
+//    var comp2 = document.getElementById(combo2); //combo1
+//    var comp1 = document.getElementById(combo1); //combo2
+//    var value = comp2.options[comp2.selectedIndex].value;
+//    var text = comp2.options[comp2.selectedIndex].text;
+//    var selectedOption = comp2.options[comp2.selectedIndex];
+////    window.alert(value + ", " + text);
+////    return;
+////    var pos = comp2.options[comp.selectedIndex].id;
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    
+////    comp.options[index] = new Option(myobject[index], index);
+//    comp1.appendChild(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
+//}

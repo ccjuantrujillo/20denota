@@ -13,20 +13,19 @@ jQuery(document).ready(function(){
     });
     
     $("body").on('click',"#agregar",function(){
-        n      = $("#tabla_detalle tr").length;
+        n      = $("#tabla_detalle tr").length - 1;
         if($('#curso').val()!=0){
             fila   = "<tr>";
-            fila  += "<td align='center'>"+n+"</td>";
+            fila  += "<td align='center'><input type='text' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
             fila  += "<td align='center'><select class='comboGrande' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>";
-            fila  += "<td align='center'><input type='text' maxlength='10' class='cajaMinima' name='fechaentrega["+n+"]' id='fechaentrega["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='__/__/__'></td>";
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
             fila  += "</tr>";
             $("#tabla_detalle").append(fila);
             selectTipoestudiociclo(n);  
-            //selectTema(n);  
+            selectTema(n);  
             selectResponsable(n);            
         }
         else{
@@ -102,14 +101,25 @@ jQuery(document).ready(function(){
     });    
     
     $("body").on("click",".editardetalle",function(){ 
-        codigodetalle = $(this).parent().parent().attr("id");
-        codigo = $("#codigo").val();
-        dataString = "";    
-        url = base_url+"index.php/ventas/tarea/editar/e/"+codigo+"/"+codigodetalle;
-        $.post(url,dataString,function(data){
-            $('#basic-modal-content').modal();
-            $('#mensaje').html(data);
-        });          
+    tr = $(this).parent().parent();  
+    n  = tr.children("td")[0].innerHTML - 1;        
+    codigodetalle = $(this).parent().parent().attr("id"); 
+    url = base_url+"index.php/ventas/tarea/obtenerdetalle";
+    objRes = new Object();
+    objRes.tareadetalle = codigodetalle;
+    dataString   = {objeto: JSON.stringify(objRes)}; 
+    $.post(url,dataString,function(data){
+        tr.empty();              
+        tr.append("<td align='center'><input type='text' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
+        tr.append("<td align='center'><select class='comboGrande' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>");
+        tr.append("<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
+        tr.append("<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
+        tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>");        
+        tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
+        selectTipoestudiociclo(n,data["TIPCICLOP_Codigo"]);  
+        selectTema(n,data["PRODATRIBDET_Codigo"]);  
+        selectResponsable(n,data["PROP_Codigo"]);  
+     },"json");              
      });    
     
     $("body").on("click",".eliminar",function(){
@@ -157,7 +167,8 @@ jQuery(document).ready(function(){
   });    
 });
 
-function selectTipoestudiociclo(n){
+function selectTipoestudiociclo(n,valor){
+    valor = (valor) ? valor : null;
     a      = "tipoestudiociclo["+n+"]";
     url    = base_url+"index.php/maestros/tipoestudiociclo/obtener";
     objRes = new Object();
@@ -167,6 +178,7 @@ function selectTipoestudiociclo(n){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.TIPCICLOP_Codigo;
+            if(valor==value.TIPCICLOP_Codigo){opt.selected=true;}
             texto     = value.TIPC_Nombre;
             opt.appendChild(document.createTextNode(texto));
             document.getElementById(a).appendChild(opt);
@@ -174,7 +186,8 @@ function selectTipoestudiociclo(n){
     },"json");
 }
 
-function selectTema(n){
+function selectTema(n,valor){
+    valor = (valor) ? valor : null;
     b      = "tema["+n+"]";
     d      = "tipoestudiociclo["+n+"]";
     document.getElementById(b).options.length=0;
@@ -192,6 +205,7 @@ function selectTema(n){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.PRODATRIBDET_Codigo;
+            if(valor==value.PRODATRIBDET_Codigo){opt.selected=true;}
             texto     = value.PRODATRIB_Nombre +" - "+ value.TEMAC_Descripcion;
             opt.appendChild(document.createTextNode(texto));
             document.getElementById(b).appendChild(opt);
@@ -199,7 +213,8 @@ function selectTema(n){
     },"json");
 }
 
-function selectResponsable(n){
+function selectResponsable(n,valor){
+    valor = (valor) ? valor : null;
     c      = "responsable["+n+"]";
     url    = base_url+"index.php/ventas/profesor/obtener";
     objRes = new Object();
@@ -209,40 +224,41 @@ function selectResponsable(n){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.PROP_Codigo;
+            if(valor==value.PROP_Codigo){opt.selected=true;}
             texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
             opt.appendChild(document.createTextNode(texto));
             document.getElementById(c).appendChild(opt);
         });
     },"json");
 }
-
-function addToList(id1,id2) {
-    var comp = document.getElementById(id1);
-    var comp2 = document.getElementById(id2);
-    var value = comp.options[comp.selectedIndex].value;
-    var text = comp.options[comp.selectedIndex].text;
-    var selectedOption = comp.options[comp.selectedIndex];
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    comp2.options.add(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
-}
-
-function removeFromList(combo2,combo1) {
-    var comp2 = document.getElementById(combo2); //combo1
-    var comp1 = document.getElementById(combo1); //combo2
-    var value = comp2.options[comp2.selectedIndex].value;
-    var text = comp2.options[comp2.selectedIndex].text;
-    var selectedOption = comp2.options[comp2.selectedIndex];
-//    window.alert(value + ", " + text);
-//    return;
-//    var pos = comp2.options[comp.selectedIndex].id;
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    
-//    comp.options[index] = new Option(myobject[index], index);
-    comp1.appendChild(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
-}
+//
+//function addToList(id1,id2) {
+//    var comp = document.getElementById(id1);
+//    var comp2 = document.getElementById(id2);
+//    var value = comp.options[comp.selectedIndex].value;
+//    var text = comp.options[comp.selectedIndex].text;
+//    var selectedOption = comp.options[comp.selectedIndex];
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    comp2.options.add(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
+//}
+//
+//function removeFromList(combo2,combo1) {
+//    var comp2 = document.getElementById(combo2); //combo1
+//    var comp1 = document.getElementById(combo1); //combo2
+//    var value = comp2.options[comp2.selectedIndex].value;
+//    var text = comp2.options[comp2.selectedIndex].text;
+//    var selectedOption = comp2.options[comp2.selectedIndex];
+////    window.alert(value + ", " + text);
+////    return;
+////    var pos = comp2.options[comp.selectedIndex].id;
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    
+////    comp.options[index] = new Option(myobject[index], index);
+//    comp1.appendChild(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
+//}

@@ -126,7 +126,7 @@ class Tarea extends CI_Controller {
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/tarea_nuevo",$data);
     }
 
@@ -154,37 +154,24 @@ class Tarea extends CI_Controller {
             $this->tarea_model->modificar($codigo,$data);                                
         }  
         /*GRABAR DETALLE*/
-        $acuerdo     = $this->input->get_post('acuerdo');
-        $nombre      = $this->input->get_post('nombre');
+        $cantidad    = $this->input->get_post('cantidad');
+        $tema        = $this->input->get_post('tema');
         $responsable = $this->input->get_post('responsable');
-        $fcompromiso = $this->input->get_post('fcompromiso');
-        if(count($acuerdo)>0 && is_array($acuerdo)){
-            if($codigodetalle!=""){//Editar
-                foreach($acuerdo as $item=>$value){
-                    if($responsable[$item]!=0){
-                        $data = array(
-                                    "PROP_Codigo"              => $responsable[$item],
-                                    "ACTADETC_Observacion"     => $acuerdo[$item],
-                                    "ACTADETC_Nombre"          => $nombre[$item],
-                                    "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
-                                );
-                        $this->actadetalle_model->modificar($codigodetalle,$data);                         
-                    }
-                } 
-            }
-            else{//Grabar
-                foreach($acuerdo as $item=>$value){
-                    if($responsable[$item]!=0){
-                        $data = array(
-                                    "PROP_Codigo"              => $responsable[$item],
-                                    "ACTAP_Codigo"             => $codigo,
-                                    "ACTADETC_Observacion"     => $acuerdo[$item],
-                                    "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
-                                );
-                        $this->actadetalle_model->insertar($data);    
-                    }
-                }        
-            }            
+        if(count($codigodetalle)>0 && is_array($codigodetalle)){
+            foreach($codigodetalle as $item=>$value){
+                $data = array(
+                            "TAREAP_Codigo"       => $codigo,
+                            "PROP_Codigo"         => $responsable[$item],
+                            "PRODATRIBDET_Codigo" => $tema[$item],
+                            "TAREADETC_Cantidad"  => $cantidad[$item]                
+                        );
+                if($codigodetalle[$item]==""){//Insertar
+                   $this->tareadetalle_model->insertar($data); 
+                }
+                else{//Editar
+                   $this->tareadetalle_model->modificar($codigodetalle[$item],$data); 
+                }  
+            }          
         }
         echo json_encode($resultado);
     }
@@ -210,6 +197,14 @@ class Tarea extends CI_Controller {
         echo json_encode($resultado);
     }    
 
+    public function obtenerdetalle(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->tareadetalle_model->obtener($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;        
+    } 
+    
     public function ver($codigo){
         $filter           = new stdClass();
         $filter->orden    = $codigo;

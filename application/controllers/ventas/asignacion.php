@@ -284,7 +284,7 @@ class Asignacion extends CI_Controller {
         $this->load->view(ventas."ot_buscar",$data);  
     }
       
-    public function obtener(){
+    public function obtenerdetalle(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
         $aulas  = $this->asignaciondetalle_model->obtener($filter);

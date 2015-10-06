@@ -13,10 +13,10 @@ jQuery(document).ready(function(){
     });
     
     $("body").on('click',"#agregar",function(){
-        n      = $("#tabla_detalle tr").length;
+        n      = $("#tabla_detalle tr").length - 1;
         if($('#curso').val()!=0){
             fila   = "<tr>";
-            fila  += "<td align='center'>"+n+"</td>";
+            fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
             fila  += "<td align='center'><input type='text' class='cajaMedia' name='nombre["+n+"]' id='nombre["+n+"]' value=''></td>";
             fila  += "<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'></textarea></td>";
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
@@ -45,7 +45,7 @@ jQuery(document).ready(function(){
         }
     });      
     
-   $("body").on('change',"#curso,#ciclo",function(){
+   $("body").on('change',"#ciclo",function(){
        accion      = $("#accion").val();
        codigo      = $("#codigo").val();
        dataString  = $('#frmPersona').serialize();
@@ -53,7 +53,23 @@ jQuery(document).ready(function(){
        $.post(url,dataString,function(data){
            $('#mensaje').html(data);
        });             
-   });       
+   }); 
+   
+     $("body").on('change',"#curso",function(){
+        url    = base_url+"index.php/ventas/profesor/obtener/";
+        objRes = new Object();
+        objRes.curso = $("#curso").val();
+        dataString   = {objeto: JSON.stringify(objRes)};
+        $("#profesor").children().remove().end().append("<option value='0'>:: Seleccione ::</option>");
+       $.post(url,dataString,function(data){
+            $.each(data, function(item,value){
+               opt       = document.createElement('option');
+               opt.value = value.PROP_Codigo;
+               opt.appendChild(document.createTextNode(value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre));
+               $('#profesor').append(opt);
+           });
+       },"json");             
+   }); 
     
     $("body").on('click',"#imprimir",function(){
         codigo   = $("#codigo").val();
@@ -70,6 +86,7 @@ jQuery(document).ready(function(){
         url        = base_url+"index.php/ventas/acta/grabar";
         clave      = $("#clave").val();
         $('#profesor').removeAttr('disabled');
+        $('#tipoestudio').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){
@@ -111,14 +128,20 @@ jQuery(document).ready(function(){
     });    
     
     $("body").on("click",".editardetalle",function(){ 
-        codigodetalle = $(this).parent().parent().attr("id");
-        codigo = $("#codigo").val();
-        dataString = "";    
-        url = base_url+"index.php/ventas/acta/editar/e/"+codigo+"/"+codigodetalle;
+        tr = $(this).parent().parent();  
+        n  = tr.children("td")[0].innerHTML - 1;        
+        codigodetalle = $(this).parent().parent().attr("id"); 
+        url = base_url+"index.php/ventas/acta/obtenerdetalle";
+        objRes = new Object();
+        objRes.actadetalle = codigodetalle;
+        dataString   = {objeto: JSON.stringify(objRes)}; 
         $.post(url,dataString,function(data){
-            $('#basic-modal-content').modal();
-            $('#mensaje').html(data);
-        });          
+            tr.empty();              
+            tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
+            tr.append("<td align='center'><input type='text' class='cajaMedia' name='nombre["+n+"]' id='nombre["+n+"]' value='"+data["ACTADETC_Nombre"]+"'></td>");
+            tr.append("<td align='left' valgin='top'><textarea name='acuerdo["+n+"]' id='acuerdo["+n+"]' placeholder='Acuerdos de la reunion' cols='53' rows='1'>"+data["ACTADETC_Observacion"]+"</textarea></td>");
+            tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
+        },"json");          
      });    
     
     $("body").on("click",".eliminar",function(){
@@ -157,52 +180,34 @@ jQuery(document).ready(function(){
        });
   });  
 });
-
-//function selectResponsable(n){
-//    a      = "responsable["+n+"]";
-//    url    = base_url+"index.php/ventas/profesor/obtener";
-//    select = document.getElementById(a);
-//    objRes = new Object();
-//    objRes.curso = $("#curso").val();
-//    dataString   = {objeto: JSON.stringify(objRes)};
-//    $.post(url,dataString,function(data){
-//        $.each(data, function(item,value){
-//            opt       = document.createElement('option');
-//            opt.value = value.PROP_Codigo;
-//            texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
-//            opt.appendChild(document.createTextNode(texto));
-//            select.appendChild(opt);
-//        });
-//    },"json");
+//
+//function addToList(id1,id2) {
+//    var comp = document.getElementById(id1);
+//    var comp2 = document.getElementById(id2);
+//    var value = comp.options[comp.selectedIndex].value;
+//    var text = comp.options[comp.selectedIndex].text;
+//    var selectedOption = comp.options[comp.selectedIndex];
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    comp2.options.add(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
 //}
-
-function addToList(id1,id2) {
-    var comp = document.getElementById(id1);
-    var comp2 = document.getElementById(id2);
-    var value = comp.options[comp.selectedIndex].value;
-    var text = comp.options[comp.selectedIndex].text;
-    var selectedOption = comp.options[comp.selectedIndex];
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    comp2.options.add(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
-}
-
-function removeFromList(combo2,combo1) {
-    var comp2 = document.getElementById(combo2); //combo1
-    var comp1 = document.getElementById(combo1); //combo2
-    var value = comp2.options[comp2.selectedIndex].value;
-    var text = comp2.options[comp2.selectedIndex].text;
-    var selectedOption = comp2.options[comp2.selectedIndex];
-//    window.alert(value + ", " + text);
-//    return;
-//    var pos = comp2.options[comp.selectedIndex].id;
-    var optn = document.createElement("option");
-    optn.text = text;
-    optn.value = value;
-    
-//    comp.options[index] = new Option(myobject[index], index);
-    comp1.appendChild(optn);
-    selectedOption.parentNode.removeChild(selectedOption);
-}
+//
+//function removeFromList(combo2,combo1) {
+//    var comp2 = document.getElementById(combo2); //combo1
+//    var comp1 = document.getElementById(combo1); //combo2
+//    var value = comp2.options[comp2.selectedIndex].value;
+//    var text = comp2.options[comp2.selectedIndex].text;
+//    var selectedOption = comp2.options[comp2.selectedIndex];
+////    window.alert(value + ", " + text);
+////    return;
+////    var pos = comp2.options[comp.selectedIndex].id;
+//    var optn = document.createElement("option");
+//    optn.text = text;
+//    optn.value = value;
+//    
+////    comp.options[index] = new Option(myobject[index], index);
+//    comp1.appendChild(optn);
+//    selectedOption.parentNode.removeChild(selectedOption);
+//}

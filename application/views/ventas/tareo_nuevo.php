@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>  
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
@@ -28,13 +27,14 @@
                 <div style="float:left;">
                     Local:<?php echo $sellocal;?>&nbsp;&nbsp;
                     Aula:<?php echo $selaula;?>&nbsp;&nbsp;
+                    <a href='#' id='agregar'>Agregar</a>
                 </div>
                 <div style="float:right;margin-right:5%;">
                     Fecha: <input type="text" maxlength="10" class="cajaMinima" value="<?php echo $lista->fecha;?>" readonly="" style="width:60px" id="fecha" name="fecha"></input>
                 </div>
             </div>
             <div class="tabla">
-                <table border="1" width="100%">
+                <table border="1" width="100%" id='tabla_detalle'>
                     <tr class="list1">
                       <td width="43">No</td>
                       <td width="300">Profesor</td>
@@ -51,11 +51,11 @@
                          ?>
                         <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                           <td><?php echo ++$item;?></td>
-                          <td align="center"><?php echo $value->profesor;?><input type="hidden" name="codigo[]" id="codigo[]" value="<?php echo $value->codigo;?>"></td>
-                          <td align="center"><input id="hinicio[]" type='time' maxlength="5" name="hinicio[]" value="<?php echo $value->hinicio;?>"  class="cajaReducida" onblur="valida(this.value,this);" ></td>
-                          <td align="center"><input id="hfin[]" type='time' maxlength="5" name="hfin[]" value="<?php echo $value->hfin;?>"  class="cajaReducida" onblur="valida(this.value,this);" ></td>
+                          <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
+                          <td align="center"><?php echo $value->hinicio;?></td>
+                          <td align="center"><?php echo $value->hfin;?></td>
                           <td align="center"><?php echo $value->tipo;?></td>
-                          <td align="center"><?php echo $value->reemplazo;?></td>
+                          <td align="center"><?php echo $value->paterno_reemp." ".$value->materno_reemp." ".$value->nombres_reemp;?></td>
                           <td>
                               <a href="#" id="editardetalle"><img src="<?php echo img;?>editar.jpg"/></a>&nbsp;
                               <a href="#" id="eliminardetalle"><img src="<?php echo img;?>eliminar.jpg"/></a>
@@ -66,7 +66,7 @@
                     }
                     else{
                         ?>
-                      <tr class="list_a"><td colspan='8'>::NO EXISTEN REGISTROS::</td></tr>
+<!--                      <tr class="list_a"><td colspan='8'>::NO EXISTEN REGISTROS::</td></tr>-->
                         <?php
                     }
                     ?>

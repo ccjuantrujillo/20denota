@@ -160,7 +160,7 @@ jQuery(document).ready(function(){
        tr = $(this).parent().parent();  
        n  = tr.children("td")[0].innerHTML - 1;        
        codigodetalle = $(this).parent().parent().attr("id"); 
-       url = base_url+"index.php/ventas/asignacion/obtener";
+       url = base_url+"index.php/ventas/asignacion/obtenerdetalle";
        objRes = new Object();
        objRes.asignaciondetalle = codigodetalle;
        dataString   = {objeto: JSON.stringify(objRes)};       

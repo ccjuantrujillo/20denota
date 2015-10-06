@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>  
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
@@ -22,7 +21,7 @@
     </div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
-        <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva acta" id="nuevo"/>            
+        <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva tarea" id="nuevo"/>            
         <h1><?php echo $titulo;?></h1>
     </div>
     <div class="mensaje" style="width:90%;">Se han encontrado (<?php echo $registros;?>) registros(s)</div>

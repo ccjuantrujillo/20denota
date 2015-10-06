@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>        
@@ -58,7 +57,6 @@
                 <th width="30%" align="center">Tema</th>
                 <th width="30%" align="center">Profesor</th>
                 <th align="center">Cantidad</th>
-                <th align="center">F.Entrega</th> 
                 <th align="center">Acciones</th>
             </tr>
             <?php
@@ -75,7 +73,6 @@
                         <td width="3%" align="center"><input type="text" class="cajaMedia" name="nombre[<?php echo $item;?>]" id="nombre[<?php echo $item;?>]" value="<?php echo $value->ACTADETC_Nombre;?>"></td>                        
                         <td align="left" valign="top"><textarea name="acuerdo[<?php echo $item;?>]" id="acuerdo[<?php echo $item;?>]" placeholder='Acuerdos de la reunion' cols='53' rows='1'><?php echo $value->ACTADETC_Observacion;?></textarea></td>
                         <td align="center"><select class="comboGrande" name="responsable[<?php echo $item;?>]" id="responsable[<?php echo $item;?>]"><?php echo $optResponsable;?></select></td>
-                        <td align="center"><input type='text' maxlength='10' class='cajaMinima' name="fcompromiso[<?php echo $item;?>]" id="fcompromiso[<?php echo $item;?>]" onmousedown="$(this).datepicker({dateFormat:'dd/mm/yy',changeYear: true,yearRange:'1945:2025'});" value="<?php echo date_sql($value->ACTADETC_FechaCompromiso);?>"></td> 
                         <td align="center">
                             <a href="#" class="editardetalle">Editar</a>
                             <a href="#" class="eliminardetalle">Eliminar</a>
@@ -91,7 +88,6 @@
                             <td align="center"><?php echo $value->TEMAC_Descripcion;?></td>
                             <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
                             <td align="center"><?php echo $value->TAREADETC_Cantidad;?></td>
-                            <td align="center"><?php echo date_sql($value->TAREADETC_FechaEntrega);?></td> 
                             <td align="center">
                                 <a href="#" class="editardetalle">Editar</a>
                                 <a href="#" class="eliminardetalle">Eliminar</a>

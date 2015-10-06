@@ -24,7 +24,8 @@ class Actadetalle_model extends CI_Model{
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $this->db->select('*,DATE_FORMAT(d.ACTADETC_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table." as d");
-        if(isset($filter->acta) && $filter->acta!='')         $this->db->where(array("d.ACTAP_Codigo"=>$filter->acta));
+        if(isset($filter->acta) && $filter->acta!='')                $this->db->where(array("d.ACTAP_Codigo"=>$filter->acta));
+        if(isset($filter->actadetalle) && $filter->actadetalle!='')  $this->db->where(array("d.ACTADETP_Codigo"=>$filter->actadetalle));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);

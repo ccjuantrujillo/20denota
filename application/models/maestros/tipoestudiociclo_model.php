@@ -25,7 +25,7 @@ class Tipoestudiociclo_model extends CI_Model{
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_ciclo.' as d','d.CICLOP_Codigo=c.CICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
-        if(isset($filter->ciclo) && $filter->ciclo!='')             $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->ciclo))             $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->tipoestudiociclo) && $filter->tipoestudiociclo!='') $this->db->where(array("c.TIPCICLOP_Codigo"=>$filter->tipoestudiociclo));
         if(isset($filter->tipoestudio) && $filter->tipoestudio!='') $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));
         if(isset($filter->order_by) && count($filter->order_by)>0){
