@@ -18,12 +18,12 @@ class Tipoestudio extends CI_Controller
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);  
         $filter     = new stdClass();
         $filter_not = new stdClass();
         $filter_not->persona = "0";
-        $filter->order_by    = array("d.TIPOCICLOC_Descripcion"=>"asc","c.TIPP_Codigo"=>"asc");
+        $filter->order_by    = array("c.TIPP_Codigo"=>"asc");
         $registros = count($this->tipoestudio_model->listar($filter,$filter_not));
         $tipoestudios  = $this->tipoestudio_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
@@ -34,8 +34,6 @@ class Tipoestudio extends CI_Controller
                 $lista[$indice]->codigo      = $value->TIPP_Codigo;
                 $lista[$indice]->nombre      = $value->TIPC_Nombre;
                 $lista[$indice]->descripcion = $value->TIPC_Descripcion;
-                $lista[$indice]->fecha_registro  = $value->TIPC_FechaRegistro;
-                $lista[$indice]->tipociclo   = $value->TIPOCICLOC_Descripcion;
             }
         }
         $configuracion = $this->configuracion;
@@ -60,19 +58,16 @@ class Tipoestudio extends CI_Controller
              $lista->codigo       = $tiposeestudio->TIPP_Codigo;
              $lista->nombre       = $tiposeestudio->TIPC_Nombre;
              $lista->descripcion  = $tiposeestudio->TIPC_Descripcion;
-             $lista->tipociclo    = $tiposeestudio->TIPOCICLOP_Codigo;
          }
          elseif($accion == "n"){
              $lista->codigo      = "";
              $lista->nombre      = "";
              $lista->descripcion = "";
-             $lista->tipociclo   = "";
          }
          $data['titulo']     = $accion=="e"?"Editar Tipo de Estudio":"Crear Tipo de Estudio";
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
-         $data['seltipociclo'] = form_dropdown('tipociclo',$this->tipociclo_model->seleccionar('0'),$lista->tipociclo,"id='tipociclo' class='comboMedio'");
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
          $this->load->view("maestros/tipoestudio_nuevo",$data);
      }
@@ -82,8 +77,7 @@ class Tipoestudio extends CI_Controller
         $codigo      = $this->input->get_post('codigo');
         $data   = array(
                         "TIPC_Nombre"       => ($this->input->post('nombre')),
-                        "TIPC_Descripcion"  => ($this->input->post('descripcion')),
-                        "TIPOCICLOP_Codigo" => $this->input->post('tipociclo')
+                        "TIPC_Descripcion"  => ($this->input->post('descripcion'))
                        );
         if($accion == "n"){
             $this->codigo = $this->tipoestudio_model->insertar($data);

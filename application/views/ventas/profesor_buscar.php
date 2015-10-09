@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>  
-    <META HTTP-EQUIV="Refresh" content="300"> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
     <meta http-equiv="Content-Language" content="es"> 
     <title><?php echo titulo;?></title>          
@@ -13,16 +12,16 @@
 </head>
 <body>
 <div class="contenido">  
-    <div class="titulotabla">
+    <div class="titulo">
         <h1>Buscar profesores</h1>
     </div>
-    <div class="listartabla" style="margin-top:5px;">
+    <div class="tabla">
         <table  border="1"  cellspacing="0" cellpadding="0">
           <tr class="list1">
-            <td width="43">No</td>
-            <td width="43">Codigo</td>
-            <td width="193">Apellidos y Nombres</td>
-            <td width="86">Fecha registro</td>
+            <td width="30">No</td>
+            <td width="30">Curso</td>
+            <td width="100">Apellidos y Nombres</td>
+            <td width="30">Fecha registro</td>
           </tr>
           <?php
           if(count($lista)>0){
@@ -33,9 +32,9 @@
                ?>
             <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>" onclick="selecciona_profesor(<?php echo $value->codigo;?>);">
                 <td><?php echo ++$j;?></td>
-                <td align="center"><?php echo $value->profesor;?></td>
-                <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
-                <td align="center"><?php echo $value->fechareg;?></td>
+                <td><?php echo $value->curso;?></td>
+                <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
+                <td><?php echo $value->fechareg;?></td>
               </tr>  
                <?php 
             }
@@ -47,8 +46,8 @@
           }
           ?>
         </table>
-        <div class="mensajetabla"><?php echo $paginacion;?></div>
     </div>
+    <div class="mensaje"><?php echo $paginacion;?></div>
 </div>	
 </body>
 </html>

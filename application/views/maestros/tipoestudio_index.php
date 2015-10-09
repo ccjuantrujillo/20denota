@@ -20,55 +20,47 @@
         <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
         <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
     </div>
-    <div class="zonebody patbotom">
-        <ul id="nav"><?php echo $menu;?></ul>
-        <div class="titulotabla">
-            <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo tipo de estudio" id="nuevo"/>
-            <h1>Listado de Tipos de Estudio</h1>
-        </div>
-        <div class="listartabla">
-            <div class="mensajetabla">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
-                <table  border="1"  cellspacing="0" cellpadding="0">
-                  <tr class="list1">
-                    <td width="20">No</td>
-                    <td width="20">Codigo</td>
-                    <td width="80">Tipo de ciclo</td>
-                    <td width="80">Nombre</td>
-                    <td width="60">Descripcion</td>
-                    <td width="30">Fecha de registro</td>
-                    <td width="20">Editar</td>
-                    <td width="20">Eliminar</td>
-                  </tr>
-                  <?php
-                  if(count($lista)>0){
-                    foreach($lista as $item => $value){
-                        $clase = ($item%2)==0?"list_a":"list_b";
-                       ?>
-                      <tr class="<?php echo $clase;?>">
-                        <td><?php echo ++$j;?></td>
-                        <td align="center"><?php echo $value->codigo;?></td>
-                        <td align="center"><?php echo $value->tipociclo;?></td>
-                        <td align="center"><?php echo $value->nombre;?></td>
-                        <td align="center"><?php echo $value->descripcion;?></td>
-                        <td align="center"><?php echo $value->fecha_registro;?></td>
-                        <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
-                        <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
-                      </tr>
-                       <?php
-                    }
-                  }
-                  else{
-                      ?>
-                    <tr class="list_a"><td colspan='6'>::NO EXISTEN REGISTROS::</td></tr>
-                      <?php
-                  }
-                  ?>
-                </table>
-            <div class="mensajetabla"><?php echo $paginacion;?></div>
-        </div>
+    <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
+    <div class="titulo">
+        <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo tipo de estudio" id="nuevo"/>
+        <h1>Listado de Tipos de Estudio</h1>
     </div>
+    <div class="mensaje">Se han encontrado (<?php echo $registros;?>) registros(s)</div>
+    <div class="tabla">
+        <table  border="1"  cellspacing="0" cellpadding="0">
+          <tr class="list1">
+            <td width="20">No</td>
+            <td width="80">Nombre</td>
+            <td width="60">Descripcion</td>
+            <td width="20">Editar</td>
+            <td width="20">Eliminar</td>
+          </tr>
+          <?php
+          if(count($lista)>0){
+            foreach($lista as $item => $value){
+                $clase = ($item%2)==0?"list_a":"list_b";
+               ?>
+              <tr class="<?php echo $clase;?>">
+                <td><?php echo ++$j;?></td>
+                <td><?php echo $value->nombre;?></td>
+                <td style="text-align:left;"><?php echo $value->descripcion;?></td>
+                <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
+                <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
+              </tr>
+               <?php
+            }
+          }
+          else{
+              ?>
+            <tr class="list_a"><td colspan='4'>::NO EXISTEN REGISTROS::</td></tr>
+              <?php
+          }
+          ?>
+        </table>
+    </div>
+    <div class="mensaje"><?php echo $paginacion;?></div>
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
-    <div id="basic-modal-content"><div id="mensaje">&nbsp;</div></div>
+<div id="basic-modal-content"><div id="mensaje">&nbsp;</div></div>
 </body>
 </html>

@@ -9,6 +9,9 @@ class Acta_model extends CI_Model{
         $this->table       = "acta";
         $this->table_profe = "profesor";
         $this->table_pers  = "persona";
+        $this->table_tipoestudiociclo = "tipoestudiociclo";
+        $this->table_tipoestudio      = "tipoestudio";
+        $this->table_ciclo            = "ciclo";
     }
 	
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -26,6 +29,9 @@ class Acta_model extends CI_Model{
         $this->db->from($this->table." as p");
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=p.PROP_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
+        $this->db->join($this->table_tipoestudiociclo.' as g','g.TIPCICLOP_Codigo=p.TIPCICLOP_Codigo','inner');
+        $this->db->join($this->table_tipoestudio.' as h','h.TIPP_Codigo=g.TIPP_Codigo','inner');
+        $this->db->join($this->table_ciclo.' as i','i.CICLOP_Codigo=g.CICLOP_Codigo','inner');
         if(isset($filter->acta) && $filter->acta!='')         $this->db->where(array("p.ACTAP_Codigo"=>$filter->acta));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("p.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->order_by) && count($filter->order_by)>0){

@@ -17,6 +17,7 @@ class Tareo extends CI_Controller {
         $this->load->model(maestros.'ciclo_model');  
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
+        $this->load->model(maestros.'tipoasistencia_model');
         $this->load->model(maestros.'local_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
@@ -31,7 +32,7 @@ class Tareo extends CI_Controller {
     public function listar(){
          $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);              
         $filter     = new stdClass();
         $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
@@ -79,12 +80,12 @@ class Tareo extends CI_Controller {
         if($fecha=="") $fecha = date("d/m/Y");  
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);           
         $filter        = new stdClass();
         $filter->aula  = $aula;
         $filter->fecha = $fecha;
-//        $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
+       $filter->order_by = array("f.PERSC_ApellidoPaterno"=>"asc","f.PERSC_ApellidoMaterno"=>"asc");
         $filter_not = new stdClass(); 
         $tareo     = $this->tareo_model->listar($filter,$filter_not);
         $lista     = new stdClass();
@@ -103,16 +104,17 @@ class Tareo extends CI_Controller {
                 $lista->fila[$indice]->fecha    = $value->TAREOC_Fecha;
                 $lista->fila[$indice]->hinicio  = substr($value->TAREOC_Hinicio,0,5);
                 $lista->fila[$indice]->hfin     = substr($value->TAREOC_Hfin,0,5);
-                $tipos = array("0"=>"::Seleccione::","1"=>"Asistencia","2"=>"Reemlazo","3"=>"Inasistencia");
-                $lista->fila[$indice]->tipo     = form_dropdown('tipo[]',$tipos,$value->TAREOC_Tipo,"id='tipo[]' class='comboMinimo'"); 
+                $lista->fila[$indice]->tipo     = $value->TIPOASISC_Nombre; 
                 $filter = new stdClass();
-                $filter->local = $lista->local;  
-                $lista->fila[$indice]->profesor = form_dropdown('profesor[]',$this->profesor_model->seleccionar('0',$filter),$value->PROP_Codigo,"id='profesor[]' class='comboGrande'"); 
-                $lista->fila[$indice]->reemplazo = form_dropdown('reemplazo[]',$this->profesor_model->seleccionar('0',$filter),$value->TAREOC_ProfesorReemplazado,"id='reemplazo[]' class='comboGrande'"); 
+                $filter->profesor  = $value->TAREOC_ProfesorReemplazado;                  
+                $reemplazo = $this->profesor_model->obtener($filter);
+                $lista->fila[$indice]->nombres_reemp = isset($reemplazo->PERSC_Nombre)?$reemplazo->PERSC_Nombre:"";
+                $lista->fila[$indice]->paterno_reemp = isset($reemplazo->PERSC_ApellidoPaterno)?$reemplazo->PERSC_ApellidoPaterno:"";
+                $lista->fila[$indice]->materno_reemp = isset($reemplazo->PERSC_ApellidoMaterno)?$reemplazo->PERSC_ApellidoMaterno:"";
             }
         }
         $data['lista']      = $lista;
-        $data['titulo']     = "Asistencia de profesores";
+        $data['titulo']     = "Tardanzas y Reemplazos";
         $data['menu']       = $menu;
         $data['form_open']  = form_open('ventas/tareo/editar',array("name"=>"frmPersona","id"=>"frmPersona"));     
         $data['form_close'] = form_close();         
@@ -125,7 +127,8 @@ class Tareo extends CI_Controller {
     }
 
     public function grabar(){
-        $codigo    = $this->input->get_post('codigo');
+        $codigo        = $this->input->get_post('codigo');
+        $codigodetalle = $this->input->get_post('codigodetalle');
         $aula      = $this->input->get_post('aula');
         $fecha     = $this->input->get_post('fecha');
         $profesor  = $this->input->get_post('profesor');
@@ -133,8 +136,8 @@ class Tareo extends CI_Controller {
         $hfin      = $this->input->get_post('hfin');
         $tipo      = $this->input->get_post('tipo');
         $reemplazo = $this->input->get_post('reemplazo');
-        if(count($profesor)>0 && is_array($profesor)){
-            foreach($profesor as $item=>$value){
+        if(count($codigodetalle)>0 && is_array($codigodetalle)){
+            foreach($codigodetalle as $item=>$value){
                 $data = array(
                             "PROP_Codigo"                => $profesor[$item],
                             "AULAP_Codigo"               => $aula,
@@ -144,7 +147,12 @@ class Tareo extends CI_Controller {
                             "TAREOC_Hfin"                => trim($hfin[$item]).":00",
                             "TAREOC_Tipo"                => $tipo[$item]
                         );
-                $this->tareo_model->modificar($codigo[$item],$data); 
+                if($codigodetalle[$item]==""){//Insertar
+                    $this->tareo_model->insertar($data); 
+                }
+                else{//Editar
+                    $this->tareo_model->modificar($codigodetalle[$item],$data); 
+                }                 
             }
         }
         echo json_encode(true);
@@ -164,8 +172,16 @@ class Tareo extends CI_Controller {
         $this->actadetalle_model->eliminar($codigo);
         $resultado = true;
         echo json_encode($resultado);
-    }    
-
+    }        
+    
+    public function obtener(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->tareo_model->obtener($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;        
+    } 
+    
     public function ver($codigo){
         $filter           = new stdClass();
         $filter->orden    = $codigo;

@@ -21,11 +21,11 @@
                   <td class="formss"><?php echo $seltipoestudio;?></td>
                 </tr>                        
                 <tr>
-                  <td bgcolor="#d5e2f2">Nombre del video</td>
+                  <td bgcolor="#d5e2f2">Nombre de la semana</td>
                   <td class="formss"><input type="text" class="cajaGrande" name="nombre" id="nombre" value="<?php echo $lista->nombre;?>"></td>
                 </tr>
                 <tr>
-                  <td bgcolor="#d5e2f2">Descripcion</td>
+                  <td bgcolor="#d5e2f2">Observacion</td>
                   <td class="formss"><textarea name="descripcion" id="descripcion" cols="1" rows="3" style="width:250px" class="textareaGrande"><?php echo $lista->descripcion;?></textarea></td>
                 </tr>  
                 <tr>

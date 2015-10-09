@@ -1,10 +1,10 @@
 jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });        
+//    $('ul li:has(ul)').hover(function(e) {
+//         $(this).find('ul').css({display: "block"});
+//     },
+//     function(e) {
+//         $(this).find('ul').css({display: "none"});
+//     });        
     
     $("body").on("click","#nuevo",function(){
         dataString = "";

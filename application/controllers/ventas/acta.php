@@ -16,6 +16,7 @@ class Acta extends CI_Controller {
         $this->load->model(maestros.'ciclo_model');  
         $this->load->model(maestros.'aula_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
+        $this->load->model(maestros.'tipoestudiociclo_model'); 
         $this->load->model(maestros.'local_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
@@ -30,10 +31,10 @@ class Acta extends CI_Controller {
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
-        $filter->order_by = array("p.ACTAC_Numero"=>"desc");
+        $filter->order_by = array("p.ACTAP_Codigo"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->acta_model->listar($filter,$filter_not));
         $matricula   = $this->acta_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
@@ -48,8 +49,9 @@ class Acta extends CI_Controller {
                 $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
                 $lista[$indice]->fechareg = $value->fechareg;
                 $lista[$indice]->fecha    = date_sql($value->ACTAC_Fecha);
-                $lista[$indice]->numero   = $value->ACTAC_Numero;
                 $lista[$indice]->titulo   = $value->ACTAC_Titulo;
+                $lista[$indice]->ciclo    = $value->COMPC_Nombre;
+                $lista[$indice]->tipoestudio = $value->TIPC_Nombre;
                 $filter        = new stdClass();
                 $filter->curso = $value->PROD_Codigo;
                 $curso = $this->curso_model->obtener($filter);
@@ -62,10 +64,9 @@ class Acta extends CI_Controller {
         $this->pagination->initialize($configuracion);
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
-        $data['titulo']       = "Actas de reunion";
-        $data['menu']         = $menu;
-        $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close']   = form_close();         
+        $data['titulo']       = "Reuniones de plana";
+        $data['btnNuevo']     = "Crear una nueva reunion";
+        $data['menu']         = $menu;       
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
@@ -73,20 +74,20 @@ class Acta extends CI_Controller {
     }
 
     public function editar($accion,$codigo="",$codigodetalle=""){
+        $ciclo   = $this->input->get_post('ciclo'); 
+        $tipoestudio = $this->input->get_post('tipoestudio'); 
         $curso   = $this->input->get_post('curso'); 
         $titulo  = $this->input->get_post('titulo'); 
         $hinicio = $this->input->get_post('hinicio'); 
         $hfin    = $this->input->get_post('hfin'); 
         $agenda  = $this->input->get_post('agenda'); 
         $fecha   = $this->input->get_post('fecha'); 
-        $numero  = $this->input->get_post('numero');
         $lista   = new stdClass();
         if($accion == "e"){
             $filter             = new stdClass();
             $filter->acta       = $codigo;
             $acta               = $this->acta_model->obtener($filter);
             $lista->profesor    = $acta->PROP_Codigo;  
-            $lista->numero      = $numero!=""?$numero:$acta->ACTAC_Numero;  
             $lista->fecha       = $fecha!=""?$fecha:date_sql($acta->ACTAC_Fecha);  
             $lista->acta        = $acta->ACTAP_Codigo;
             $lista->titulo      = $titulo!=""?$titulo:$acta->ACTAC_Titulo;
@@ -95,6 +96,8 @@ class Acta extends CI_Controller {
             $lista->hinicio     = $hinicio!=""?$hinicio:substr($acta->ACTAC_Hinicio,0,5);
             $lista->hfin        = $hfin!=""?$hfin:substr($acta->ACTAC_Hfin,0,5);
             $lista->curso       = $curso!=""?$curso:$acta->PROD_Codigo;
+            $lista->ciclo       = $ciclo!=""?$ciclo:$acta->CICLOP_Codigo;
+            $lista->tipoestudio = $tipoestudio!=""?$tipoestudio:$acta->TIPCICLOP_Codigo;
             $filter             = new stdClass();
             $filter->acta       = $codigo;
             $lista->actadetalle = $this->actadetalle_model->listar($filter);            
@@ -102,7 +105,6 @@ class Acta extends CI_Controller {
         elseif($accion == "n"){ 
             $lista->profesor    = "";  
             $lista->fecha       = date("d/m/Y",time());
-            $lista->numero      = $numero; 
             $lista->acta        = "";
             $lista->titulo      = $titulo;
             $lista->agenda      = $agenda;
@@ -110,38 +112,42 @@ class Acta extends CI_Controller {
             $lista->hinicio     = $hinicio;
             $lista->hfin        = $hfin;
             $lista->curso       = $curso;
+            $lista->ciclo       = $ciclo;
+            $lista->tipoestudio = $tipoestudio;
             $lista->actadetalle = array();
         } 
         $arrEstado             = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $data['titulo']        = $accion=="e"?"Editar Acta":"Nueva Acta"; 
+        $data['titulo']        = $accion=="e"?"Editar Reunion":"Nueva Reunion"; 
         $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
         $data['accion']	       = $accion;               
-        $data['codigodetalle'] = $codigodetalle;   
-        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio'"); 
+        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $filter = new stdClass();
+        $filter->ciclo         = $lista->ciclo;
+        $data['seltipoestudio']= form_dropdown('tipoestudio',$this->tipoestudiociclo_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
         $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
-        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande'"); 
-        $data['selasistente'] = form_dropdown('asistente',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='combo1' multiple='1' size='3' class='comboMultipleMedio'"); 
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo,"codigodetalle"=>$codigodetalle));
+        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
+        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/acta_nuevo",$data);
     }
 
     public function grabar(){
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
-        $codigodetalle = $this->input->get_post('codigodetalle');
+        $codigodetalle = $this->input->get_post('codigodetalle');   
         $data   = array(
-                        "ACTAC_Numero"       => $this->input->post('numero'),
 			"ACTAC_Fecha"        => date_sql_ret($this->input->post('fecha')),
                         "PROP_Codigo"        => $this->input->post('profesor'),
                         "ACTAC_Titulo"       => $this->input->post('titulo'),
                         "ACTAC_Hinicio"      => $this->input->post('hinicio'),
                         "ACTAC_Hfin"         => $this->input->post('hfin'),
-                        "ACTAC_Agenda"       => $this->input->post('agenda')
+                        "ACTAC_Agenda"       => $this->input->post('agenda'),
+                        "TIPCICLOP_Codigo"   => $this->input->post('tipoestudio')
                        );
         $resultado = false;
         if($accion == "n"){
@@ -152,32 +158,23 @@ class Acta extends CI_Controller {
             $resultado = true;
             $this->acta_model->modificar($codigo,$data);                                
         }  
-        /*Grabar detalle*/
+        /*GRABAR DETALLE*/
         $acuerdo     = $this->input->get_post('acuerdo');
-        $responsable = $this->input->get_post('responsable');
-        $fcompromiso = $this->input->get_post('fcompromiso');
-        if(count($acuerdo)>0 && is_array($acuerdo)){
-            if($codigodetalle!=""){
-                foreach($acuerdo as $item=>$value){
-                    $data = array(
-                                "PROP_Codigo"              => $responsable[$item],
-                                "ACTADETC_Observacion"     => $acuerdo[$item],
-                                "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
-                            );
-                    $this->actadetalle_model->modificar($codigodetalle,$data); 
-                } 
-            }
-            else{
-                foreach($acuerdo as $item=>$value){
-                    $data = array(
-                                "PROP_Codigo"              => $responsable[$item],
-                                "ACTAP_Codigo"             => $codigo,
-                                "ACTADETC_Observacion"     => $acuerdo[$item],
-                                "ACTADETC_FechaCompromiso" => date_sql_ret($fcompromiso[$item])                    
-                            );
-                    $this->actadetalle_model->insertar($data); 
-                }        
-            }            
+        $nombre      = $this->input->get_post('nombre');
+        if(count($codigodetalle)>0 && is_array($codigodetalle)){
+            foreach($codigodetalle as $item=>$value){
+                $data = array(
+                            "ACTAP_Codigo"         => $codigo,
+                            "ACTADETC_Observacion" => $acuerdo[$item],
+                            "ACTADETC_Nombre"      => $nombre[$item]            
+                        );
+                if($codigodetalle[$item]==""){//Insertar
+                   $this->actadetalle_model->insertar($data); 
+                }
+                else{//Editar
+                   $this->actadetalle_model->modificar($codigodetalle[$item],$data); 
+                }  
+            }         
         }
         echo json_encode($resultado);
     }
@@ -201,6 +198,14 @@ class Acta extends CI_Controller {
         $this->actadetalle_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
+    } 
+    
+    public function obtenerdetalle(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $aulas  = $this->actadetalle_model->obtener($filter);
+        $resultado = json_encode($aulas);       
+        echo $resultado;        
     }    
 
     public function ver($codigo){
@@ -253,58 +258,7 @@ class Acta extends CI_Controller {
         $CI->pdf->Cell(181,5,$ordenes->ORDENC_Observacion,1,1,"L",1);
         $CI->pdf->Output();
     }
-
-    public function buscar($n=""){
-        $tipo    = $this->input->get_post('tipo');
-        $ot      = $this->input->get_post('ot');
-        $rsocial = $this->input->get_post('rsocial');
-        $filter  = new stdClass();
-        $filter->anio = date('Y',time());
-        $filter->tipo = "OT";
-        $tipoots = $this->tipoot_model->listar($filter);
-        if($tipo=='') $tipo = isset($tipoots->cod_argumento)?$tipoots->cod_argumento:"";
-        $fila   = "";
-        $filter = new stdClass();
-        $filter->tipoot = $tipo;
-        if($ot!='')      $filter->nroot      = $ot;
-        if($rsocial!='') $filter->codcliente = $rsocial;
-        if($tipo=="04")  $filter->estado     = "P";
-        $ots = $this->ot_model->listarg($filter,array('ot.nroOt'=>'asc'));         
-        $tipoOt     = form_dropdown('tipo',$this->tipoot_model->seleccionar('',''),$tipo,"id='tipo' class='comboMedio' onchange='busca_tipoOt();'");   
-        if(count($ots)>0){
-            foreach($ots as $indice=>$value){
-                $nroot  = $value->NroOt;
-                $site   = $value->DirOt;
-                $codcli = $value->CodCli;
-                $codot  = $value->CodOt; 
-                $finot  = $value->FinOt;
-                $ftermino  = $value->FteOt;
-                $razon_social = $tipo=='04'?$site:$value->razcli;
-              // quitar esto { 
-                $finot_envia = $tipo=='04'?date("d/m/Y",time()):$value->FinOt;
-              // } 
-                $fila .= "<tr   title='Fecha Termino: ".$ftermino."'     id='".$codot."' id2='".$tipo."'  id3='".$finot."' onclick='listadoot(this);'>";
-                $fila .= "<td style='width:10%;' align='center'><p class='listadoot'>".$nroot."</p></td>";
-                $fila .= "<td style='width:35%;' align='left'><p class='listadoot'>".$site."</p></td>";
-                $fila .= "<td style='width:12%;' align='left'><p class='listadoot'>".$finot."</p></td>";
-                $fila .= "<td style='width:12%;' align='left'><p class='listadoot'>".$ftermino."</p></td>";
-                $fila .= "<td style='width:31%;' align='left'><p class='listadoot'>".$razon_social."</p></td>";
-                $fila .= "</tr>";
-            }
-        }  
-        else{
-            $fila.="<tr>";
-            $fila.="<td colspan='3'>NO EXISTEN RESULTADOS</td>";
-            $fila.="</tr>";
-        }
-        $data['ot']   = $ot;
-        $data['n']    = $n;
-        $data['fila'] = $fila;
-        $data['tipoot']  = $tipoOt;
-        $data['rsocial'] = $rsocial;
-        $this->load->view(ventas."ot_buscar",$data);  
-    }
-
+    
      public function export_excel($type) {
         if($this->session->userdata('data_'.$type)){
             $result = $this->session->userdata('data_'.$type);

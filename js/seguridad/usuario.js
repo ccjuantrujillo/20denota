@@ -1,17 +1,9 @@
 jQuery(document).ready(function(){
-    
-//    $('ul li:has(ul)').hover(function(e) {
-//         $(this).find('ul').css({display: "block"});
-//     },
-//     function(e) {
-//         $(this).find('ul').css({display: "none"});
-//     });   
-     
-$(".nav li").hover(function(){
-   $(this).find('ul:first:hidden').css({visibility: "visible",display: "none"}).slideDown(600);    
- },function(){
-	 $(this).find('ul:first').slideUp(100);  
-    });      
+//$(".nav li").hover(function(){
+//   $(this).find('ul:first:hidden').css({visibility: "visible",display: "none"}).slideDown(600);    
+// },function(){
+//	 $(this).find('ul:first').slideUp(100);  
+//    });      
      
     $("#nuevo").click(function(){
         dataString = "";

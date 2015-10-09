@@ -1,10 +1,4 @@
-jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });   
+jQuery(document).ready(function(){ 
      
     $("body").on("click","#nuevo",function(){
         dataString = "";
@@ -23,73 +17,7 @@ jQuery(document).ready(function(){
         url = base_url+"index.php/almacen/curso/listar";
         location.href=url;
     });
-    
-//    $("#imagen").change(function(){
-////        file = $("#imagen")[0].files[0];
-////        filename = file.name;
-////        fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
-////        filesize = file.size;
-////        filetype = file.type;
-//    });
-    
- /*    $("body").on("click","#grabar",function(){  
-        if(window.FormData){
-            form_data = new FormData($(".formulario")[0]);
-        }
-//        else{
-//            form = document.getElementById('formProducto');
-//            var children, i, l, child,form_data = '';
-//             children = form.childNodes;
-//             for( i=0,l=children.length;i<l;i++ ){
-//                 //To prevent no-html nodes
-//                 if( typeof children[i] != 'object' ||
-//                 (children[i].tagName == null && children[i].localName == null) ){
-//                     continue;
-//                 }
-//                 child = children[i];
-//                 alert(form[i]);
-//                 //Avoid input type="file" selecting
-//                 if( child.getAttribute('name') && child.getAttribute('type') != 'file' ){
-//                     var name = child.getAttribute('name'),
-//                     value = child.value;
-//                     if( form_data != '' ) form_data += '&'
-//                     form_data += name+'='+encodeURIComponent(value);
-//                 }
-//             }
-//             alert(form_data);
-//       }
-        url  = base_url+"index.php/almacen/producto/grabar";    
-        $.ajax({
-                url:url,
-                type:"POST",
-                data:form_data,
-                cache:false,                
-                contentType:false,			                
-                processData:false,  
-                beforeSend:function(){
-                  message = $("<span>Subiendo la imagen, por favor espere...</span>");  
-                },
-                success: function(data){
-                    var obj = jQuery.parseJSON(data);
-                    if(obj.subimage==true){
-//                        file = $("#imagen")[0].files[0];
-//                        filename = file.name;
-//                        $("#fileimagen").attr("src",base_url+"/img/"+filename);
-                    }
-                    if(obj.subarchivo==true){
-//                        file = $("#archivo")[0].files[0];
-//                        filename = file.name;
-//                        $("#filearchivo").attr("src",base_url+"/img/pdf.png");
-                    }
-                    alert('Operacion realizada con exito');
-                    location.href = base_url+"index.php/almacen/producto/listar";
-                },
-                error: function(){
-                    message = $("<span class='error'>Ha ocurrido un error.</span>");
-                }                
-        });    
-    }); */
-    
+ 
     $("body").on("click","#cancelar",function(){
         url = base_url+"index.php/almacen/curso/listar";
         location.href = url;

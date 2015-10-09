@@ -1,10 +1,10 @@
 jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });
+//    $('ul li:has(ul)').hover(function(e) {
+//         $(this).find('ul').css({display: "block"});
+//     },
+//     function(e) {
+//         $(this).find('ul').css({display: "none"});
+//     });
 
     $("#nuevo").click(function(){
         dataString = "";
@@ -70,7 +70,7 @@ function eliminar(codigo){
         url = base_url+"index.php/maestros/tipoestudio/eliminar";
         $.post(url,dataString,function(data){
 //            if(data=="true"){
-                alert("El tipo de estudio se borro correctamente");
+//                alert("El tipo de estudio se borro correctamente");
                 url = base_url+"index.php/maestros/tipoestudio/listar";
                 location.href = url;
 //            }

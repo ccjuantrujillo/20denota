@@ -13,6 +13,7 @@ class Semana extends CI_Controller {
         $this->load->model(seguridad.'permiso_model');  
         $this->load->model(maestros.'ciclo_model'); 
         $this->load->model(maestros.'tipoestudio_model'); 
+        $this->load->model(maestros.'tipoestudiociclo_model'); 
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -25,7 +26,7 @@ class Semana extends CI_Controller {
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');	
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);     
         $filter     = new stdClass();
         $filter_not = new stdClass(); 
@@ -62,7 +63,7 @@ class Semana extends CI_Controller {
 
     public function editar($accion,$codigo=""){
         $ciclo       = $this->input->get_post('ciclo'); 
-        $tipoestudio = $this->input->get_post('tipoestudio'); 
+        $tipoestudiociclo = $this->input->get_post('tipoestudiociclo'); 
         $nombre      = $this->input->get_post('nombre'); 
         $descripcion = $this->input->get_post('descripcion'); 
         $finicio     = $this->input->get_post('finicio'); 
@@ -77,7 +78,7 @@ class Semana extends CI_Controller {
             $lista->finicio     = $finicio!=""?$finicio:date_sql($semanas->PRODATRIB_FechaInicio);
             $lista->ffin        = $ffin!=""?$ffin:date_sql($semanas->PRODATRIB_FechaFin);
             $lista->ciclo       = $ciclo!=""?$ciclo:$semanas->CICLOP_Codigo; 
-            $lista->tipoestudio = $tipoestudio!=""?$tipoestudio:$semanas->TIPP_Codigo; 
+            $lista->tipoestudiociclo = $tipoestudiociclo!=""?$tipoestudiociclo:$semanas->TIPCICLOP_Codigo; 
         }
         elseif($accion == "n"){
             $lista->nombre       = $nombre;
@@ -85,7 +86,7 @@ class Semana extends CI_Controller {
             $lista->finicio      = $finicio;
             $lista->ffin         = $ffin;
             $lista->ciclo        = $ciclo;
-            $lista->tipoestudio  = $tipoestudio;
+            $lista->tipoestudiociclo  = $tipoestudiociclo;
         }
         $filter           = new stdClass();
         $filter->ciclo    = $lista->ciclo;
@@ -97,8 +98,8 @@ class Semana extends CI_Controller {
         $data['lista']	     = $lista;
         $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboGrande'");
         $filter              = new stdClass();
-        $filter->tipociclo   = $lista->tipociclo;
-        $data['seltipoestudio'] = form_dropdown('tipoestudio',$this->tipoestudio_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboGrande'");
+        $filter->ciclo       = $lista->ciclo;
+        $data['seltipoestudio'] = form_dropdown('tipoestudiociclo',$this->tipoestudiociclo_model->seleccionar('0',$filter),$lista->tipoestudiociclo,"id='tipoestudiociclo' class='comboGrande'");
         $data['oculto']         = form_hidden(array('accion'=>$accion,'codigo'=>$codigo));
         $this->load->view('almacen/semana_nuevo',$data);
     }  
@@ -107,10 +108,10 @@ class Semana extends CI_Controller {
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "PRODATRIB_Nombre"      => ($this->input->post('nombre')),
-                        "PRODATRIB_Descripcion" => ($this->input->post('descripcion')),
+                        "PRODATRIB_Nombre"      => $this->input->post('nombre'),
+                        "PRODATRIB_Descripcion" => $this->input->post('descripcion'),
                         "CICLOP_Codigo"         => $this->input->post('ciclo'),
-                        "TIPP_Codigo"           => $this->input->post('tipoestudio'),
+                        "TIPCICLOP_Codigo"      => $this->input->post('tipoestudiociclo'),
                         "PRODATRIB_FechaInicio" => date_sql_ret($this->input->post('finicio')),
                         "PRODATRIB_FechaFin"    => date_sql_ret($this->input->post('ffin'))
                        );
@@ -125,7 +126,7 @@ class Semana extends CI_Controller {
     public function eliminar(){
         $codigo = $this->input->post('codigo');
         $filter = new stdClass();
-        $filter->productoatributo = $codigo;
+        $filter->semana = $codigo;
         $preguntas = $this->tema_model->listar($filter);
         $resultado = false;
         if(count($preguntas)==0){

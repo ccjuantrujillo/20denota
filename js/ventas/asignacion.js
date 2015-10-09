@@ -1,11 +1,4 @@
 jQuery(document).ready(function(){
-    $('ul li:has(ul)').hover(function(e) {
-         $(this).find('ul').css({display: "block"});
-     },
-     function(e) {
-         $(this).find('ul').css({display: "none"});
-     });       
-     
    $("body").on("click","#buscar",function(){
         $("#form_busqueda").submit();
     });
@@ -31,21 +24,27 @@ jQuery(document).ready(function(){
     });    
     
     $("body").on('click',"#agregar",function(){
-        n      = $("#tabla_detalle tr").length;
-        fila   = "<tr>";
-        fila  += "<td align='center'>"+n+"</td>";
-        fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><select class='comboMinimo' name='tipoestudio["+n+"]' id='tipoestudio["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+")'><option value='0'>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-        fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
-        fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
-        fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
-        fila  += "</tr>";
-        $("#tabla_detalle").append(fila);
-        selectDia(n);
-        selectTipoEstudio(n);
-        selectLocal(n);
+        profesor = $("#profesor").val();
+        if(profesor!=""){
+            n      = $("#tabla_detalle tr").length - 1;
+            fila   = "<tr>";
+            fila  += "<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
+            fila  += "<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><select class='comboMinimo' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+",this.value)'><option value='0'>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>";
+            fila  += "<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>";        
+            fila  += "<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
+            fila  += "</tr>";
+            $("#tabla_detalle").append(fila);
+            selectDia(n);
+            selectTipoEstudio(n);
+            selectLocal(n);   
+        }
+        else{
+            alert("Primero debe seleccionar un profesor.");
+        }
     });       
     
     $("body").on('click',"#ver_profesor",function(){
@@ -53,15 +52,15 @@ jQuery(document).ready(function(){
         window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
     });    
     
-   $("body").on('change',"#local",function(){
-       accion      = $("#accion").val();
-       codigo      = $("#codigo").val();
-       dataString  = $('#frmPersona').serialize();
-       url = base_url+"index.php/ventas/asignacion/editar/"+accion+"/"+codigo;
-       $.post(url,dataString,function(data){
-           $('#mensaje').html(data);
-       });             
-   });       
+//   $("body").on('change',"#local",function(){
+//       accion      = $("#accion").val();
+//       codigo      = $("#codigo").val();
+//       dataString  = $('#frmPersona').serialize();
+//       url = base_url+"index.php/ventas/asignacion/editar/"+accion+"/"+codigo;
+//       $.post(url,dataString,function(data){
+//           $('#mensaje').html(data);
+//       });             
+//   });       
    
     $("body").on('change',"#ciclo",function(){
        accion      = $("#accion").val();
@@ -115,6 +114,8 @@ jQuery(document).ready(function(){
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/asignacion/grabar";
         clave      = $("#clave").val();
+        $('#estado').removeAttr('disabled');
+        $('#ciclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){
@@ -156,19 +157,31 @@ jQuery(document).ready(function(){
     });   
     
     $("body").on("click",".editardetalle",function(){  
-        codigodetalle = $(this).parent().parent().attr("id");
-        if(typeof(codigodetalle)!="undefined"){
-            codigo = $("#codigo").val();
-            dataString = "";    
-            url = base_url+"index.php/ventas/asignacion/editar/e/"+codigo+"/"+codigodetalle;
-            $.post(url,dataString,function(data){
-                $('#basic-modal-content').modal();
-                $('#mensaje').html(data);
-            }); 
-        }
-        else{
-            alert("Para editar este registro primero debe grabarse");
-        }
+       tr = $(this).parent().parent();  
+       n  = tr.children("td")[0].innerHTML - 1;        
+       codigodetalle = $(this).parent().parent().attr("id"); 
+       url = base_url+"index.php/ventas/asignacion/obtenerdetalle";
+       objRes = new Object();
+       objRes.asignaciondetalle = codigodetalle;
+       dataString   = {objeto: JSON.stringify(objRes)};       
+       $.post(url,dataString,function(data){
+            data = json = $.parseJSON(data); 
+            tr.empty();
+            tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
+            tr.append("<td align='center' valgin='top'><select class='comboMinimo' name='dia["+n+"]' id='dia["+n+"]'><option value=''>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><select class='comboMinimo' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><select class='comboMedio' name='local["+n+"]' id='local["+n+"]' onchange='selectAula("+n+",this.value)'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><select class='comboMinimo' name='aula["+n+"]' id='aula["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
+            tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='desde["+n+"]' id='desde["+n+"]' value='00:00'></td>");
+            tr.append("<td align='center'><input type='time' maxlength='5' class='cajaReducida' name='hasta["+n+"]' id='hasta["+n+"]' value='00:00'></td>");
+            tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");       
+            selectDia(n,data["ASIGDETC_Dia"]);
+            selectTipoEstudio(n,data["TIPCICLOP_Codigo"]);
+            selectLocal(n,data["LOCP_Codigo"]); 
+            selectAula(n,data["LOCP_Codigo"],data["AULAP_Codigo"]);
+            document.getElementById("desde["+n+"]").value=data["ASIGDETC_Desde"];
+            document.getElementById("hasta["+n+"]").value=data["ASIGDETC_Hasta"];
+       });
      });   
     
     $("body").on('focus',"#fecha",function(){
@@ -190,26 +203,29 @@ function selecciona_profesor(codigo){
             nomper = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
             $("#profesor").val(value.PROP_Codigo);
             $("#nombres").val(nomper);
-            $("#cursos").val(value.PROD_Codigo);            
+            $("#cursos").val(value.PROD_Nombre);            
         });
     },"json");
 }
 
-function selectDia(n){
+function selectDia(n,valor){
+    valor = (valor) ? valor : null;
     a      = "dia["+n+"]";
     select = document.getElementById(a);
     dias   = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
     $.each(dias, function(item,value){
         opt       = document.createElement('option');
         opt.value = item;
+        if(valor==item){opt.selected=true;}
         opt.appendChild(document.createTextNode(value));
         select.appendChild(opt);
     });
 }
 
-function selectTipoEstudio(n){
-    a      = "tipoestudio["+n+"]";
-    url    = base_url+"index.php/maestros/tipoestudio/obtener";
+function selectTipoEstudio(n,valor){
+    valor = (valor) ? valor : null;
+    a      = "tipoestudiociclo["+n+"]";
+    url    = base_url+"index.php/maestros/tipoestudiociclo/obtener";
     selecttipo = document.getElementById(a);
     objRes = new Object();
     objRes.ciclo = $("#ciclo").val();
@@ -217,14 +233,16 @@ function selectTipoEstudio(n){
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
-            opt.value = value.TIPP_Codigo;
+            opt.value = value.TIPCICLOP_Codigo;
+            if(valor==value.TIPCICLOP_Codigo){opt.selected=true;}
             opt.appendChild(document.createTextNode(value.TIPC_Nombre));
             selecttipo.appendChild(opt);
         });
     },"json");
 }
 
-function selectLocal(n){
+function selectLocal(n,valor){
+    valor = (valor) ? valor : null;
     a      = "local["+n+"]";
     url    = base_url+"index.php/maestros/local/obtener";
     selectloc = document.getElementById(a);
@@ -234,20 +252,23 @@ function selectLocal(n){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.LOCP_Codigo;
+            if(valor==value.LOCP_Codigo){opt.selected=true;}
             opt.appendChild(document.createTextNode(value.LOCC_Nombre));
             selectloc.appendChild(opt);
         });
     },"json");
 }
 
-function selectAula(n){
+function selectAula(n,idlocal,valor){
+    valor = (valor) ? valor : null;
+    idlocal = (idlocal) ? idlocal : null;
     a      = "aula["+n+"]";
     b      = "local["+n+"]";
     url    = base_url+"index.php/maestros/aula/obtener";
     selectaula = document.getElementById(a);
     selectaula.options.length=0;
     objRes = new Object();
-    objRes.local = document.getElementById(b).value;
+    objRes.local = idlocal;
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         opt       = document.createElement('option');
@@ -257,6 +278,7 @@ function selectAula(n){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.AULAP_Codigo;
+            if(valor==value.AULAP_Codigo){opt.selected=true;}
             opt.appendChild(document.createTextNode(value.AULAC_Nombre));
             selectaula.appendChild(opt);
         });

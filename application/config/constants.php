@@ -42,10 +42,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('titulo',':::Administrador del sistema 20denota20denota :::');
 define('pie','2015 Administrador del aula virtual');
-define('css',"http://localhost/20denota/css/");
-define('img',"http://localhost/20denota/img/");
-define('files',"http://localhost/20denota/files/");
-define('js',"http://localhost/20denota/js/");
+define('css',"http://localhost:81/20denota/css/");
+define('img',"http://localhost:81/20denota/img/");
+define('files',"http://localhost:81/20denota/files/");
+define('js',"http://localhost:81/20denota/js/");
 define('almacen',"almacen/");
 define('compras',"compras/");
 define('finanzas',"finanzas/");

@@ -18,8 +18,8 @@
         <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
         <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
     </div>
-    <div class="zonebody">
-        <ul id="nav"><?php echo $menu;?></ul>
+    <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
+<!--    <div class="zonebody">-->
         <ul class="body_section">
             <li>                 
                 <span class="caja_contenidos">
@@ -82,7 +82,7 @@
                  </span>
             </li>
         </ul>
-    </div>
+<!--    </div>-->
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
 </body>

@@ -21,7 +21,7 @@ class Profesor extends Persona
     public function listar($j=0){
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');
-        $filter->order_by = array("p.MENU_Codigo"=>"asc");
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter); 
         $filter     = new stdClass();
         $filter_not = new stdClass();
@@ -181,6 +181,7 @@ class Profesor extends Persona
                 $lista[$indice]->profesor = $value->PROP_Codigo;
                 $lista[$indice]->estado   = $value->PROC_FlagEstado;
                 $lista[$indice]->fechareg = $value->fechareg;
+                $lista[$indice]->curso    = $value->PROD_Nombre;
             }
         }
         $configuracion = $this->configuracion;
@@ -195,7 +196,7 @@ class Profesor extends Persona
         $this->load->view("ventas/profesor_buscar",$data);
     }
 
-    public function obtener($codigo=""){
+    public function obtener(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
         $profesores  = $this->profesor_model->listar($filter);

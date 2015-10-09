@@ -5,6 +5,7 @@ class Semana_model extends CI_Model{
         parent::__construct();
         $this->table     = "semana";
         $this->table_tipoestudio = "tipoestudio";
+        $this->table_tipoestudiociclo = "tipoestudiociclo";
         $this->table_ciclo   = "ciclo";
     }
 	
@@ -22,10 +23,11 @@ class Semana_model extends CI_Model{
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $this->db->select('*,DATE_FORMAT(c.PRODATRIB_FechaRegistro,"%d/%m/%Y") AS fechareg',FALSE);
         $this->db->from($this->table.' as c');
-        $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=c.TIPP_Codigo','inner');
+        $this->db->join($this->table_tipoestudiociclo.' as d','d.TIPCICLOP_Codigo=c.TIPCICLOP_Codigo','inner');
+        $this->db->join($this->table_tipoestudio.' as e','e.TIPP_Codigo=d.TIPP_Codigo','inner');
         $this->db->join($this->table_ciclo.' as f','f.CICLOP_Codigo=c.CICLOP_Codigo','inner');
         if(isset($filter->semana) && $filter->semana!='')           $this->db->where(array("c.PRODATRIB_Codigo"=>$filter->semana));		
-        if(isset($filter->tipoestudio) && $filter->tipoestudio!='') $this->db->where(array("c.TIPP_Codigo"=>$filter->tipoestudio));	
+        if(isset($filter->tipoestudiociclo) && $filter->tipoestudiociclo!='') $this->db->where(array("c.TIPCICLOP_Codigo"=>$filter->tipoestudiociclo));	
         if(isset($filter->ciclo) && $filter->ciclo!='')             $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));        
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){

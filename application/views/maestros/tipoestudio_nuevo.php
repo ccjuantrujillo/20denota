@@ -7,11 +7,6 @@
     <title><?php echo titulo;?></title>
     <link href="<?php echo css;?>estructura.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />
-<!--    <script type="text/javascript" src="<?php echo js;?>constants.js"></script> -->
-<!--    <script type="text/javascript" src="< ?php echo js;?>jquery.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>jquery-ui.min.js"></script>        -->
-<!--    <script type="text/javascript" src="< ?php echo js;?>jquery.simplemodal.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>ventas/cliente.js"></script>	    -->
 </head>
 <body>
 <div class="contenido">
@@ -22,18 +17,14 @@
             <tr>
               <td width="50%" bgcolor="#d5e2f2">Codigo:</td>
               <td class="formss"><input name="codigo" id="codigo" type="text" value="<?php echo $lista->codigo;?>" readonly="readonly" class="cajaMinima" style="background-color: #E6E6E6"/></td>
-            </tr>
-            <tr>
-              <td width="50%" bgcolor="#d5e2f2">Tipo de ciclo:</td>
-              <td class="formss"><?php echo $seltipociclo;?></td>
-            </tr>            
+            </tr>      
             <tr>
               <td bgcolor="#d5e2f2">Nombre:</td>
               <td class="formss"><input name="nombre" id="nombre" type="text" value="<?php echo $lista->nombre;?>" class="cajaGrande" onkeydown=""/></td>
             </tr>
             <tr>
               <td bgcolor="#d5e2f2">Descripcion:</td>
-              <td class="formss"><input name="descripcion" id="descripcion" type="text" value="<?php echo $lista->descripcion;?>" class="cajaGrande"/></td>
+              <td class="formss"><input name="descripcion" id="descripcion" type="text" value="<?php echo $lista->descripcion;?>" class="cajaSuperGrande"/></td>
             </tr>
         </table>
         <?php echo $oculto;?>
