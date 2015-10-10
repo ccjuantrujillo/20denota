@@ -1,16 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Actaprofesor_model extends CI_Model{
+class Tardanza_model extends CI_Model{
     var $usuario;
     var $table;
     
     public function __construct(){
         parent::__construct();
         $this->usuario     = $this->session->userdata('codusu');
-        $this->table_acta  = "acta";
-        $this->table_actaprofe  = "actaprofesor";
+        $this->table       = "tareo";
         $this->table_profe = "profesor";
         $this->table_pers  = "persona";
-        $this->table_curso = "curso";
+        $this->table_tipoasis  = "tipoasistencia";
+        $this->table_aula  = "aula";
     }
 	
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -24,30 +24,23 @@ class Actaprofesor_model extends CI_Model{
     }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $this->db->select('*,c.PROP_Codigo as codprofesor');
-        $this->db->from($this->table_profe." as c");
-        if(isset($filter->acta) && $filter->acta!=''){
-            $this->db->join($this->table_actaprofe.' as d','d.PROP_Codigo=c.PROP_Codigo and d.ACTAP_Codigo="'.$filter->acta.'"','left');    
-        }
-        else{
-            $this->db->join($this->table_actaprofe.' as d','d.PROP_Codigo=c.PROP_Codigo','left');
-        }
-        if(isset($filter->acta) && $filter->acta!=''){
-            $this->db->join($this->table_acta.' as e','e.ACTAP_Codigo=d.ACTAP_Codigo and d.ACTAP_Codigo="'.$filter->acta.'"','left');    
-        }
-        $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=c.PERSP_Codigo','inner');
-        $this->db->join($this->table_curso.' as g','g.PROD_Codigo=c.PROD_Codigo','inner');
-        if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
-        if(isset($filter->curso))                             $this->db->where(array("g.PROD_Codigo"=>$filter->curso));
-        //if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));        
+        $this->db->select('*');
+        $this->db->from($this->table." as p");
+        $this->db->join($this->table_profe.' as e','e.PROP_Codigo=p.PROP_Codigo','inner');
+        $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
+        $this->db->join($this->table_tipoasis.' as g','g.TIPOASISP_Codigo=p.TAREOC_Tipo','left');
+        $this->db->join($this->table_aula.' as h','h.AULAP_Codigo=p.AULAP_Codigo');
+        if(isset($filter->tareo) && $filter->tareo!='')       $this->db->where(array("p.TAREOP_Codigo"=>$filter->tareo));
+        if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("p.PROP_Codigo"=>$filter->profesor));
+        if(isset($filter->aula) && !is_null($filter->aula))   $this->db->where(array("p.AULAP_Codigo"=>$filter->aula));
+        if(isset($filter->fecha) && !is_null($filter->fecha)) $this->db->where(array("p.TAREOC_Fecha"=>date_sql_ret($filter->fecha)));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
             }
-        }           
+        }     
         $this->db->limit($number_items, $offset); 
         $query = $this->db->get();
-        //echo $this->db->last_query();
         $resultado = array();
         if($query->num_rows>0){
             $resultado = $query->result();
@@ -65,17 +58,18 @@ class Actaprofesor_model extends CI_Model{
     }
 
     public function insertar($data){
-       $this->db->insert($this->table_actaprofe,$data);
+       $data['USUA_Codigo'] = $this->usuario; 
+       $this->db->insert($this->table,$data);
        return $this->db->insert_id();
     }    
     
     public function modificar($codigo,$data){
-        $this->db->where("ACTAPROFP_Codigo",$codigo);
-        $this->db->update($this->table_actaprofe,$data);
+        $this->db->where("TAREOP_Codigo",$codigo);
+        $this->db->update($this->table,$data);
     }
 	
     public function eliminar($codigo){
-        $this->db->delete($this->table_actaprofe,array('ACTAPROFP_Codigo' => $codigo));        
+        $this->db->delete($this->table,array('TAREOP_Codigo'=>$codigo));        
     }
 }
 ?>

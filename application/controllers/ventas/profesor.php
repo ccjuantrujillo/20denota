@@ -196,6 +196,43 @@ class Profesor extends Persona
         $this->load->view("ventas/profesor_buscar",$data);
     }
 
+    public function buscar2($j=0){
+        $filter     = new stdClass();
+        $filter_not = new stdClass();
+        $filter_not->profesor = "0";
+        $filter->order_by    = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
+        $registros = count($this->profesor_model->listar($filter,$filter_not));
+        $profesores = $this->profesor_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $item       = 1;
+        $lista      = array();
+        if(count($profesores)>0){
+            foreach($profesores as $indice => $value){
+                $lista[$indice]             = new stdClass();
+                $lista[$indice]->numero   = $value->PERSC_NumeroDocIdentidad;
+                $lista[$indice]->nombres  = $value->PERSC_Nombre;
+                $lista[$indice]->paterno  = $value->PERSC_ApellidoPaterno;
+                $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
+                $lista[$indice]->telefono = $value->PERSC_Telefono;
+                $lista[$indice]->movil    = $value->PERSC_Movil;
+                $lista[$indice]->codigo   = $value->PROP_Codigo;
+                $lista[$indice]->profesor = $value->PROP_Codigo;
+                $lista[$indice]->estado   = $value->PROC_FlagEstado;
+                $lista[$indice]->fechareg = $value->fechareg;
+                $lista[$indice]->curso    = $value->PROD_Nombre;
+            }
+        }
+        $configuracion = $this->configuracion;
+        $configuracion['base_url']    = base_url()."index.php/ventas/profesor/listar";
+        $configuracion['total_rows']  = $registros;
+        $this->pagination->initialize($configuracion);
+        /*Enviamos los datos a la vista*/
+        $data['lista']           = $lista;
+        $data['j']               = $j;
+        $data['registros']       = $registros;
+        $data['paginacion']      = $this->pagination->create_links();
+        $this->load->view("ventas/profesor_buscar2",$data);
+    }    
+    
     public function obtener(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);

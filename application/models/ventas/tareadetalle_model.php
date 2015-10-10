@@ -26,7 +26,7 @@ class Tareadetalle_model extends CI_Model{
 //    }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $this->db->select('*');
+        $this->db->select("*,DATE_FORMAT( d.TAREADETC_FechaEntrega,'%d/%m/%Y' ) AS fentrega",FALSE);
         $this->db->from($this->table." as d");
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=d.PROP_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
@@ -67,7 +67,7 @@ class Tareadetalle_model extends CI_Model{
     }    
     
     public function modificar($codigo,$data){
-        $this->db->where("TAREAP_Codigo",$codigo);
+        $this->db->where("TAREADETP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }
 	

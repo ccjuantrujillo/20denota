@@ -10,7 +10,7 @@ class Tipoasistencia_model extends CI_Model{
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
        foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor){
-            $arreglo[$valor->TIPDOCP_Codigo] = $valor->TIPOCC_Inciales;
+            $arreglo[$valor->TIPOASISP_Codigo] = $valor->TIPOASISC_Nombre;
        }
        return $arreglo;
     }

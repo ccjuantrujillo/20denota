@@ -92,3 +92,7 @@ function selecciona_profesor(codigo){
     window.close();
 }
 
+function selecciona_profesor2(codigo){
+    window.opener.selecciona_profesor2(codigo); 
+    window.close();
+}

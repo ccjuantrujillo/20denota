@@ -15,30 +15,13 @@
         <table  style="background-color: #f4f7ff">
             <tr>
                 <td  width='18%' align="right">Codigo:</td>
-                <td width='20%' colspan="3" class="formss">
-                    <input type='text' name="codigo" id="codigo" value="<?php echo $lista->tarea;?>" class="cajaReducida" onkeydown="return numbersonly(this,event,'.');" readonly="readonly"/>
-                    &nbsp;&nbsp;&nbsp;Tipo de tarea:<?php echo $seltipotarea;?>
-                </td>
+                <td width='20%' colspan="3" class="formss"><input type='text' name="codigo" id="codigo" value="<?php echo $lista->vigilancia;?>" class="cajaReducida" onkeydown="return numbersonly(this,event,'.');" readonly="readonly"/></td>
                 <td align="right">Fecha&nbsp;</td>
                 <td width='29%' class="formss"><input type="text" name="fecha" id="fecha" style="width:60px" readonly value="<?php echo $lista->fecha;?>" class="cajaMinima" maxlength="10"></td>
-            </tr>
-            <tr>
-                <td align="right">Ciclo:</td>
-                <td align="left" colspan="3" class="formss"><?php echo $selciclo;?></td>
-                <td align="right">Fecha Compromiso:</td>
-                <td align="left" class="formss"><input type="text" name="fechaentrega" id="fechaentrega" style="width:60px" readonly value="<?php echo $lista->fechaentrega;?>" class="cajaMinima" maxlength="10"></td>                
-            </tr>             
-            <tr>
-                <td align="right">Plana: </td>
-                <td align="left" colspan="3" class="formss"><span><?php echo $selcurso;?></span></td>
-                <td align="right">Elaborado por:</td>
-                <td align="left" class="formss"><span><?php echo $selprofesor;?></span></td>
-            </tr>
+            </tr>          
             <tr>
                 <td align="right">Nombre: </td>
-                <td align="left" class="formss" colspan="3"><input type='text' name="nombre" id="nombre" value="<?php echo $lista->nombre;?>" class="cajaSuperGrande"></td>
-                <td align="right">Numero:</td>
-                <td align="left" class="formss"><input type="text" name="numero" id="numero" style="width:60px" value="<?php echo $lista->numero;?>" class="cajaMinima" maxlength="10"></td>
+                <td align="left" class="formss" colspan="5"><input type='text' name="nombre" id="nombre" value="<?php echo $lista->nombre;?>" class="cajaSuperGrande"></td>
             </tr>  
             <tr>
                 <td valign="top" align="right">Descripcion: </td>
@@ -53,17 +36,14 @@
         <table width="100%" id="tabla_detalle">
             <tr>
                 <th width="3%" align="center">No</th>
-                <th width="10%" align="center">Tipo estudio</th>
-                <th width="30%" align="center">Tema</th>
-                <th width="30%" align="center">Profesor</th>
-                <th align="center">Cantidad</th>
-                <th align="center">F.Entrega</th>
+                <th width="15%" align="center">Plana</th>
+                <th width="50%" align="center">Profesor</th>
                 <th align="center">Acciones</th>
             </tr>
             <?php
-            if(count($lista->tareadetalle)>0){
-                foreach($lista->tareadetalle as $item => $value){
-                    if($codigodetalle==$value->TAREADETP_Codigo){
+            if(count($lista->vigilanciadetalle)>0){
+                foreach($lista->vigilanciadetalle as $item => $value){
+                    if($codigodetalle==$value->VIGILADETP_Codigo){
                     $optResponsable = "";
                     foreach ($responsable as $item2 => $value2){
                         $optResponsable.= "<option value='".$item2."' ".($item2==$value->PROP_Codigo?"selected='selected'":"").">".$value2."</option>";

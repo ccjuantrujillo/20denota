@@ -1,22 +1,11 @@
 <?php header("Content-type: text/html; charset=utf-8"); 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tarea extends CI_Controller {
+class Vigilancia extends CI_Controller {
     public function __construct(){
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
-        $this->load->model(ventas.'tarea_model');
-        $this->load->model(ventas.'tareadetalle_model');
-        $this->load->model(ventas.'profesor_model');
-        $this->load->model(maestros.'persona_model');        
-        $this->load->model(seguridad.'permiso_model');          
-        $this->load->model(almacen.'curso_model');  
-        $this->load->model(maestros.'ciclo_model');  
-        $this->load->model(maestros.'aula_model'); 
-        $this->load->model(maestros.'tipoestudio_model'); 
-        $this->load->model(maestros.'tipoestudiociclo_model'); 
-        $this->load->model(maestros.'local_model'); 
-        $this->load->model(maestros.'tipotarea_model'); 
+        $this->load->model(ventas.'vigilancia_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -33,25 +22,19 @@ class Tarea extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
-        $filter->order_by = array("p.TAREAC_Fecha"=>"desc","p.TAREAC_Numero"=>"desc");
+        $filter->order_by = array("p.VIGILAC_Fecha"=>"desc");
         $filter_not = new stdClass(); 
-        $registros = count($this->tarea_model->listar($filter,$filter_not));
-        $matricula   = $this->tarea_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
+        $registros = count($this->vigilancia_model->listar($filter,$filter_not));
+        $vigilancia = $this->vigilancia_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
         $item      = 1;
         $lista     = array();
-        if(count($matricula)>0){
-            foreach($matricula as $indice => $value){
+        if(count($vigilancia)>0){
+            foreach($vigilancia as $indice => $value){
                 $lista[$indice]           = new stdClass();
-                $lista[$indice]->codigo   = $value->TAREAP_Codigo;
-                $lista[$indice]->fecha    = date_sql($value->TAREAC_Fecha);
-                $lista[$indice]->fechaentrega = date_sql($value->TAREAC_FechaEntrega);
-                $lista[$indice]->numero   = $value->TAREAC_Numero;
-                $lista[$indice]->tipo     = $value->TIPOTAREAC_Nombre;
-                $lista[$indice]->ciclo    = $value->COMPC_Nombre;
-                $filter        = new stdClass();
-                $filter->curso = $value->PROD_Codigo;
-                $curso = $this->curso_model->obtener($filter);
-                $lista[$indice]->curso    = $curso->PROD_Nombre;
+                $lista[$indice]->codigo   = $value->VIGILAP_Codigo;
+                $lista[$indice]->fecha    = date_sql($value->VIGILAC_Fecha);
+                $lista[$indice]->nombre   = $value->VIGILAC_Nombre;
+                $lista[$indice]->descripcion = $value->VIGILAC_Descripcion;
             }
         }
         $configuracion = $this->configuracion;
@@ -60,74 +43,41 @@ class Tarea extends CI_Controller {
         $this->pagination->initialize($configuracion);
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
-        $data['titulo']       = "Tareas asignadas";
+        $data['titulo']       = "Vigilancia de Examenes";
         $data['menu']         = $menu;       
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
-        $this->load->view("ventas/tarea_index",$data);
+        $this->load->view("ventas/vigilancia_index",$data);
     }
 
-    public function editar($accion,$codigo="",$codigodetalle=""){
-        $ciclo   = $this->input->get_post('ciclo'); 
-        $tipoestudio = $this->input->get_post('tipoestudio'); 
-        $curso   = $this->input->get_post('curso'); 
-        $nombre  = $this->input->get_post('nombre'); 
-        $descripcion = $this->input->get_post('descripcion'); 
-        $fecha   = $this->input->get_post('fecha'); 
-        $fechaentrega = $this->input->get_post('fechaentrega'); 
-        $numero  = $this->input->get_post('numero');
+    public function editar($accion,$codigo=""){
         $lista   = new stdClass();
         if($accion == "e"){
             $filter             = new stdClass();
-            $filter->tarea      = $codigo;
-            $tarea              = $this->tarea_model->obtener($filter);
-            $lista->profesor    = $tarea->PROP_Codigo;  
-            $lista->numero      = $numero!=""?$numero:$tarea->TAREAC_Numero;  
-            $lista->fecha       = $fecha!=""?$fecha:date_sql($tarea->TAREAC_Fecha);  
-            $lista->fechaentrega = $fechaentrega!=""?$fechaentrega:date_sql($tarea->TAREAC_FechaEntrega); 
-            $lista->tarea       = $tarea->TAREAP_Codigo;
-            $lista->tipotarea   = $tarea->TIPOTAREAP_Codigo;
-            $lista->nombre      = $nombre!=""?$nombre:$tarea->TAREAC_Nombre;
-            $lista->descripcion = $descripcion!=""?$descripcion:$tarea->TAREAC_Descripcion;
-            $lista->curso       = $curso!=""?$curso:$tarea->PROD_Codigo;
-            $lista->ciclo       = $ciclo!=""?$ciclo:$tarea->CICLOP_Codigo;
+            $filter->vigilancia = $codigo;
+            $vigilancia         = $this->vigilancia_model->obtener($filter);
+            $lista->vigilancia  = $vigilancia->PROP_Codigo;  
+            $lista->fecha       = date_sql($vigilancia->VIGILAC_Fecha);  
+            $lista->nombre      = $tarea->VIGILAC_Nombre;
+            $lista->descripcion = $tarea->VIGILAC_Descripcion;
             $filter             = new stdClass();
-            $filter->tarea       = $codigo;
-            $lista->tareadetalle = $this->tareadetalle_model->listar($filter);            
+            $filter->vigilancia = $codigo;
+            $lista->vigilanciadetalle = $this->vigilancia_model->listar($filter);            
         }
         elseif($accion == "n"){ 
-            $lista->profesor    = "";  
+            $lista->vigilancia    = "";  
             $lista->fecha       = date("d/m/Y",time());
-            $lista->fechaentrega = "__/__/__";
-            $lista->numero      = $numero; 
-            $lista->tarea       = "";
-            $lista->tipotarea   = 1;
-            $lista->nombre      = $nombre;
-            $lista->descripcion = $descripcion;
-            $lista->curso       = $curso;
-            $lista->ciclo       = $ciclo;
-            $lista->tareadetalle = array();
+            $lista->nombre      = ""; 
+            $lista->descripcion = "";
+            $lista->vigilanciadetalle = array();
         } 
-        $arrEstado             = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']        = $accion=="e"?"Editar Tarea":"Nueva Tarea"; 
         $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
-        $data['accion']	       = $accion;               
-        $data['codigodetalle'] = $codigodetalle;  
-        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
-        $filter = new stdClass();
-        $filter->ciclo         = $lista->ciclo;
-        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
-        $data['seltipotarea']  = form_dropdown('tipotarea',$this->tipotarea_model->seleccionar('0'),$lista->tipotarea,"id='tipotarea' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
-        $filter = new stdClass();
-        $filter->curso = $lista->curso;
-        $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
-        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
-        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
-        $this->load->view("ventas/tarea_nuevo",$data);
+        $this->load->view("ventas/vigilancia_nuevo",$data);
     }
 
     public function grabar(){

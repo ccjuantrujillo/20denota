@@ -50,17 +50,7 @@ jQuery(document).ready(function(){
     $("body").on('click',"#ver_profesor",function(){
         url = base_url+"index.php/ventas/profesor/buscar";
         window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
-    });    
-    
-//   $("body").on('change',"#local",function(){
-//       accion      = $("#accion").val();
-//       codigo      = $("#codigo").val();
-//       dataString  = $('#frmPersona').serialize();
-//       url = base_url+"index.php/ventas/asignacion/editar/"+accion+"/"+codigo;
-//       $.post(url,dataString,function(data){
-//           $('#mensaje').html(data);
-//       });             
-//   });       
+    });       
    
     $("body").on('change',"#ciclo",function(){
        accion      = $("#accion").val();
@@ -203,7 +193,6 @@ function selecciona_profesor(codigo){
             nomper = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
             $("#profesor").val(value.PROP_Codigo);
             $("#nombres").val(nomper);
-            $("#cursos").val(value.PROD_Nombre);            
         });
     },"json");
 }
