@@ -46,6 +46,7 @@ class Tipoestudiociclo extends CI_Controller
         /*Enviamos los datos a la vista*/
         $data['lista']           = $lista;
         $data['menu']            = $menu;
+        $data['header']          = get_header();        
         $data['j']               = $j;
         $data['registros']       = $registros;
         $data['paginacion']      = $this->pagination->create_links();

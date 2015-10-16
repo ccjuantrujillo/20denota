@@ -9,6 +9,7 @@ class Inicio extends CI_Controller {
         $this->load->model(seguridad.'permiso_model');  
         $this->load->model(seguridad.'menu_model');
         $this->load->model(maestros.'ciclo_model');
+        $this->load->model(ventas.'profesor_model');
         $this->load->helper('menu');
     }
 
@@ -38,6 +39,15 @@ class Inicio extends CI_Controller {
                             'codper'   => $usuarios->PERSP_Codigo,
                             'estado'   => $usuarios->USUA_FlagEstado
                              );
+                $filter = new stdClass();
+                $filter->persona = $usuarios->PERSP_Codigo;
+                $objProfesor = $this->profesor_model->obtener($filter);
+                $data["codprofesor"] = 0;
+                $data["codcurso"]    = 0;
+                if(isset($objProfesor->PROP_Codigo)){
+                    $data["codprofesor"] = $objProfesor->PROP_Codigo;
+                    $data["codcurso"]    = $objProfesor->PROD_Codigo;
+                }
                 $this->session->set_userdata($data);
                 redirect("inicio/principal");                
             }
@@ -69,6 +79,7 @@ class Inicio extends CI_Controller {
         $total = 0;
         $data['fecha']  = $fecha;
         $data['menu']   = $menu;
+        $data['header'] = get_header();
         $data['oculto'] = form_hidden(array("serie"=>"","numero"=>"","codot"=>""));
         $this->load->view("seguridad/principal",$data);    
     }

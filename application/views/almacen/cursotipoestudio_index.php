@@ -14,11 +14,7 @@
 </head>
 <body>
 <div class="contenido" > 
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear curso por tipo estudio" id="nuevo"/>

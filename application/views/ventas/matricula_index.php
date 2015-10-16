@@ -15,11 +15,7 @@
 </head>
 <body>
 <div class="contenido" > 
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2014</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulotabla">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva matricula" id="nuevo"/>            

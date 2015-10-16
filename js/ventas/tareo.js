@@ -127,7 +127,7 @@ function selectProfesor(n,valor){
     url    = base_url+"index.php/ventas/profesor/obtener";
     select_a = document.getElementById(a);
     objRes = new Object();
-    //objRes.curso = $("#curso").val();
+    objRes.curso = $("#curso").val();
     dataString   = {objeto: JSON.stringify(objRes)};
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){

@@ -31,8 +31,9 @@ class Tardanza extends CI_Controller
         $filter           = new stdClass();
         $filter->rol      = $this->session->userdata('rolusu');		
         $filter->order_by = array("m.MENU_Orden"=>"asc");
-        $menu       = get_menu($filter);  
+        $menu       = get_menu($filter);    
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];
         $filter->order_by = array("p.TAREOC_Fecha"=>"desc","h.AULAC_Nombre"=>"asc");
         $registros = count($this->tardanza_model->listar($filter));
         $tardanzas = $this->tardanza_model->listar($filter,"",$this->configuracion['per_page'],$j);
@@ -50,6 +51,7 @@ class Tardanza extends CI_Controller
                 $lista[$indice]->hinicio  = substr($value->TAREOC_Hinicio,0,5);
                 $lista[$indice]->hfin     = substr($value->TAREOC_Hfin,0,5);
                 $lista[$indice]->tipo     = $value->TIPOASISC_Nombre; 
+                $lista[$indice]->curso    = $value->PROD_Nombre; 
                 $filter = new stdClass();
                 $filter->profesor  = $value->TAREOC_ProfesorReemplazado;                  
                 $reemplazo = $this->profesor_model->obtener($filter);
@@ -66,6 +68,7 @@ class Tardanza extends CI_Controller
         $data['lista']           = $lista;
         $data['titulo']          = "Tardanzas y Reemplazos";
         $data['menu']            = $menu;
+        $data['header']          = get_header();
         $data['j']               = $j;
         $data['registros']       = $registros;
         $data['paginacion']      = $this->pagination->create_links();

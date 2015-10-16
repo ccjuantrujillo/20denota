@@ -9,9 +9,9 @@ class Ciclo_model extends CI_Model{
         $this->table_tipociclo = "tipociclo";
     }
 	
-    public function seleccionar($default=""){
+    public function seleccionar($default="",$filter="",$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
-        foreach($this->listar() as $indice=>$valor)
+        foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor)
         {
             $indice1   = $valor->CICLOP_Codigo;
             $valor1    = $valor->COMPC_Nombre;
@@ -25,6 +25,7 @@ class Ciclo_model extends CI_Model{
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_tipociclo.' as d','d.TIPOCICLOP_Codigo=c.TIPOCICLOP_Codigo','inner');
         if(isset($filter->ciclo) && $filter->ciclo!='')    $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));  
+        if(isset($filter->estado) && $filter->estado!='')  $this->db->where(array("c.COMPC_FlagEstado"=>$filter->estado));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){

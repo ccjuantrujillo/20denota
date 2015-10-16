@@ -33,6 +33,7 @@ class Tarea extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];         
         $filter->order_by = array("p.TAREAC_Fecha"=>"desc","p.TAREAC_Numero"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->tarea_model->listar($filter,$filter_not));
@@ -61,7 +62,8 @@ class Tarea extends CI_Controller {
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
         $data['titulo']       = "Tareas asignadas";
-        $data['menu']         = $menu;       
+        $data['menu']         = $menu;  
+        $data['header']       = get_header();
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
@@ -115,11 +117,14 @@ class Tarea extends CI_Controller {
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
         $data['accion']	       = $accion;               
-        $data['codigodetalle'] = $codigodetalle;  
-        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['codigodetalle'] = $codigodetalle;
         $filter = new stdClass();
-        $filter->ciclo         = $lista->ciclo;
-        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
+        $filter->estado = 1;
+        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0',$filter),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $filter = new stdClass();
+        //$filter->ciclo         = $lista->ciclo;
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];
+        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $data['seltipotarea']  = form_dropdown('tipotarea',$this->tipotarea_model->seleccionar('0'),$lista->tipotarea,"id='tipotarea' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;

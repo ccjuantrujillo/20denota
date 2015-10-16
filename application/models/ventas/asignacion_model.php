@@ -34,6 +34,7 @@ class Asignacion_model extends CI_Model
 	$this->db->join($this->table_curso.' as i','i.PROD_Codigo=d.PROD_Codigo','inner');
         $this->db->join($this->table_ciclo.' as h','h.CICLOP_Codigo=c.CICLOP_Codigo','inner');
         if(isset($filter->ciclo) && $filter->ciclo!='')            $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->curso) && $filter->curso!='')            $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
         if(isset($filter->asignacion) && $filter->asignacion!='')  $this->db->where(array("c.ASIGP_Codigo"=>$filter->asignacion));
         if(isset($filter->profesor) && $filter->profesor!='')      $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
         if(isset($filter_not->persona) && $filter_not->persona!=''){

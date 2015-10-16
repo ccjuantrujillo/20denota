@@ -6,10 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Language" content="es"> 
     <link href="<?php echo css;?>estructura.css" rel="stylesheet" type="text/css" />      
-<!--    <script type="text/javascript" src="< ?php echo js;?>constants.js"></script> 
-    <script type="text/javascript" src="< ?php echo js;?>jquery.js"></script>
-    <script type="text/javascript" src="< ?php echo js;?>jquery.simplemodal.js"></script>           
-    <script type="text/javascript" src="< ?php echo js;?>almacen/producto.js"></script>-->
 </head>
 <body>
 <div class="contenido">

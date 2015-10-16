@@ -244,6 +244,7 @@ class Persona extends CI_Controller{
                 $lista[$indice]->codigo   = $value->PROP_Codigo;
                 $lista[$indice]->estado   = $value->PROC_FlagEstado;
                 $lista[$indice]->fechareg = $value->PERSC_FechaRegistro;
+                $lista[$indice]->curso    = $value->PROD_Codigo;
             }
         }
         $configuracion = $this->configuracion;

@@ -11,6 +11,7 @@ class Tardanza_model extends CI_Model{
         $this->table_pers  = "persona";
         $this->table_tipoasis  = "tipoasistencia";
         $this->table_aula  = "aula";
+        $this->table_curso  = "curso";
     }
 	
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -28,10 +29,12 @@ class Tardanza_model extends CI_Model{
         $this->db->from($this->table." as p");
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=p.PROP_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
+        $this->db->join($this->table_curso.' as i','i.PROD_Codigo=e.PROD_Codigo','inner');
         $this->db->join($this->table_tipoasis.' as g','g.TIPOASISP_Codigo=p.TAREOC_Tipo','left');
         $this->db->join($this->table_aula.' as h','h.AULAP_Codigo=p.AULAP_Codigo');
         if(isset($filter->tareo) && $filter->tareo!='')       $this->db->where(array("p.TAREOP_Codigo"=>$filter->tareo));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("p.PROP_Codigo"=>$filter->profesor));
+        if(isset($filter->curso) && $filter->curso!='')       $this->db->where(array("i.PROD_Codigo"=>$filter->curso));
         if(isset($filter->aula) && !is_null($filter->aula))   $this->db->where(array("p.AULAP_Codigo"=>$filter->aula));
         if(isset($filter->fecha) && !is_null($filter->fecha)) $this->db->where(array("p.TAREOC_Fecha"=>date_sql_ret($filter->fecha)));
         if(isset($filter->order_by) && count($filter->order_by)>0){

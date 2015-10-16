@@ -6,6 +6,7 @@ class Vigilancia extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'vigilancia_model');
+        $this->load->model(ventas.'profesor_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -22,6 +23,7 @@ class Vigilancia extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
+        if(isset($_SESSION["codprofesor"]))  $filter->profesor = $_SESSION["codprofesor"];  
         $filter->order_by = array("p.VIGILAC_Fecha"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->vigilancia_model->listar($filter,$filter_not));
@@ -35,6 +37,7 @@ class Vigilancia extends CI_Controller {
                 $lista[$indice]->fecha    = date_sql($value->VIGILAC_Fecha);
                 $lista[$indice]->nombre   = $value->VIGILAC_Nombre;
                 $lista[$indice]->descripcion = $value->VIGILAC_Descripcion;
+                $lista[$indice]->coordinador = $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;
             }
         }
         $configuracion = $this->configuracion;
@@ -45,6 +48,7 @@ class Vigilancia extends CI_Controller {
         $data['lista']        = $lista;
         $data['titulo']       = "Vigilancia de Examenes";
         $data['menu']         = $menu;       
+        $data['header']       = get_header();  
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
@@ -63,6 +67,7 @@ class Vigilancia extends CI_Controller {
             $lista->descripcion = $tarea->VIGILAC_Descripcion;
             $filter             = new stdClass();
             $filter->vigilancia = $codigo;
+            $lista->profesor    = "";
             $lista->vigilanciadetalle = $this->vigilancia_model->listar($filter);            
         }
         elseif($accion == "n"){ 
@@ -70,11 +75,13 @@ class Vigilancia extends CI_Controller {
             $lista->fecha       = date("d/m/Y",time());
             $lista->nombre      = ""; 
             $lista->descripcion = "";
+            $lista->profesor    = "";
             $lista->vigilanciadetalle = array();
         } 
-        $data['titulo']        = $accion=="e"?"Editar Tarea":"Nueva Tarea"; 
+        $data['titulo']        = $accion=="e"?"Editar Vigilancia":"Nueva Vigilancia"; 
         $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close']    = form_close();         
+        $data['form_close']    = form_close(); 
+        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',new stdClass()),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
         $data['lista']	       = $lista;   
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/vigilancia_nuevo",$data);

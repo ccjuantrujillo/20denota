@@ -62,6 +62,7 @@ class Tareo extends CI_Controller {
         $data['lista']        = $lista;
         $data['titulo']       = "Actas de reunion";
         $data['menu']         = $menu;
+        $data['header']          = get_header();
         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']   = form_close();         
         $data['j']            = $j;

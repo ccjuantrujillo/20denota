@@ -14,11 +14,7 @@
 </head>
 <body>
 <div class="contenido" > 
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2014</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva vigilancia" id="nuevo"/>            
@@ -30,6 +26,7 @@
           <tr class="list1">
             <td width="30">No</td>
             <td width="60">Fecha</td>
+            <td width="160">Elaborado por</td>
             <td width="50">Nombre</td>
             <td width="90">Descripcion</td>
             <td width="50">Ver</td>
@@ -44,6 +41,7 @@
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$j;?></td>
                 <td><?php echo $value->fecha;?></td>
+                <td><?php echo $value->coordinador;?></td>
                 <td><?php echo $value->nombre;?></td>                
                 <td><?php echo $value->descripcion;?></td>
                 <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>

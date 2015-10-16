@@ -33,6 +33,7 @@ class Asignacion extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);             
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"]; 
         $filter->order_by = array("c.CICLOP_Codigo"=>"desc","e.PERSC_ApellidoPaterno"=>"asc","e.PERSC_ApellidoMaterno"=>"asc");
         $filter_not = new stdClass(); 
         $registros = count($this->asignacion_model->listar($filter,$filter_not));
@@ -49,6 +50,7 @@ class Asignacion extends CI_Controller {
 		$lista[$indice]->ciclo    = $value->COMPC_Nombre;
                 $lista[$indice]->estado   = $value->ASIGC_FlagEstado;
                 $lista[$indice]->fecha    = $value->fecha;
+                $lista[$indice]->curso    = $value->PROD_Nombre;
             }
         }
         $configuracion = $this->configuracion;
@@ -58,6 +60,7 @@ class Asignacion extends CI_Controller {
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
         $data['menu']         = $menu;
+        $data['header']       = get_header();
         $data['titulo']       = "Cargas de trabajo";
         $data['nuevo']        = "Crear una nueva carga de trabajo";
         $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     

@@ -35,6 +35,7 @@ class Ciclo extends CI_Controller
                 $lista[$indice]->fecha_fin    = date_sql(substr($value->CICC_FECHA_FIN,0,10));
                 $lista[$indice]->descripcion  = $value->CICC_DESCRIPCION;
                 $lista[$indice]->tipociclo    = $value->TIPOCICLOC_Descripcion;
+                $lista[$indice]->estado       = $value->COMPC_FlagEstado;
             }
         }
         $configuracion = $this->configuracion;
@@ -44,6 +45,7 @@ class Ciclo extends CI_Controller
         /*Enviamos los datos a la vista*/
         $data['lista']           = $lista;
         $data['menu']            = $menu;
+        $data['header']          = get_header();
         $data['j']               = $j;
         $data['registros']       = $registros;
         $data['paginacion']      = $this->pagination->create_links();

@@ -15,11 +15,7 @@
 </head>
 <body>
 <div class="contenido" >
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Nuevo Tardanza / Reemplazo" id="nuevo"/>
@@ -33,6 +29,7 @@
             <td width="100">Fecha</td>
             <td width="100">Aula</td>
             <td width="100">Tipo</td>            
+            <td width="100">Plana</td>
             <td width="300">Profesor</td>
             <td width="50">H.Inicio</td>
             <td width="50">H.Fin</td>
@@ -49,7 +46,8 @@
                 <td><?php echo ++$item;?></td>
                 <td align="center"><?php echo date_sql($value->fecha);?></td>
                 <td align="center"><?php echo $value->aula;?></td>
-                <td align="center"><?php echo $value->tipo;?></td>               
+                <td align="center"><?php echo $value->tipo;?></td>   
+                <td align="center"><?php echo $value->curso;?></td>   
                 <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                 <td align="center"><?php echo $value->hinicio;?></td>
                 <td align="center"><?php echo $value->hfin;?></td>

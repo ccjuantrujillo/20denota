@@ -15,11 +15,7 @@
 </head>
 <body>
 <div class="contenido" >
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo ciclo" id="nuevo"/>
@@ -30,28 +26,30 @@
         <table>
           <tr class="list1">
             <td width="10">No</td>
-            <td width="10">Codigo</td>
             <td width="60">Nombre</td>
             <td width="70">Tipo de ciclo</td>
             <td width="30">Fecha de Inicio</td>
             <td width="30">Fecha de Fin</td>
             <td width="100">Descripcion</td>
+            <td width="100">Situacion</td>
             <td width="10">Editar</td>
             <td width="10">Eliminar</td>
           </tr>
           <?php
           if(count($lista)>0){
             foreach($lista as $item => $value){
+                $flgestado = $value->estado;
+                $estado = $flgestado==1?"<font style='color:#009900'>Abierto</font>":"<font style='color:#ff0033'>Cerrado</font>";                
                 $clase = ($item%2)==0?"list_a":"list_b";
                ?>
               <tr class="<?php echo $clase;?>">
                 <td><?php echo ++$j;?></td>
-                <td align="center"><?php echo $value->codigo;?></td>
                 <td align="center"><?php echo $value->nombre;?></td>
                 <td align="center"><?php echo $value->tipociclo;?></td>
                 <td align="center"><?php echo $value->fecha_inicio;?></td>
                 <td align="center"><?php echo $value->fecha_fin;?></td>
                 <td align="center"><?php echo $value->descripcion;?></td>
+                <td><?php echo $estado;?></td>
                 <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
               </tr>

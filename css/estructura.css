@@ -35,9 +35,10 @@ blockquote, q {quotes: "" "";}
 
 .contenido{width: 98%;margin:0 auto;border:0px solid #000;height: 545px;}
 .header{float:left;width: 100%;}
-.header img{padding: 15px 0;float: left;}
+.header a:hover{font-weight: bold;}
+.header #logo{padding: 15px 0;float: left;}
 .header h2{float:left;font-size: 12px;padding-top: 12px;padding-left: 3px;}
-.header h3{float: right;font-size: 12px;padding-top: 12px;padding-right: 3px;text-decoration: none;}
+.header span{float: right;font-size: 12px;text-decoration: none;text-align: right;vertical-align: middle;font-size: 12px;padding-top: 5px;padding-right: 3px;}
 .menu{float: left;width: 100%;}
 .titulo{float: left;border-bottom: 1px solid #ccc;padding: 5px 0;width: 100%;margin-bottom: 10px;margin-top: 5px;}
 .titulo h1{font-size: 35px;text-align: center;font-family:"Times New Roman","Times","serif";}

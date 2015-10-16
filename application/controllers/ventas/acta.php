@@ -34,6 +34,7 @@ class Acta extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"]; 
         $filter->order_by = array("p.ACTAP_Codigo"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->acta_model->listar($filter,$filter_not));
@@ -66,7 +67,8 @@ class Acta extends CI_Controller {
         $data['lista']        = $lista;
         $data['titulo']       = "Reuniones de plana";
         $data['btnNuevo']     = "Crear una nueva reunion";
-        $data['menu']         = $menu;       
+        $data['menu']         = $menu;    
+        $data['header']       = get_header();
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
@@ -121,12 +123,16 @@ class Acta extends CI_Controller {
         $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
-        $data['accion']	       = $accion;               
-        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0'),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['accion']	       = $accion;     
+        $filter = new stdClass();
+        $filter->estado = 1;
+        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0',$filter),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
         $filter = new stdClass();
         $filter->ciclo         = $lista->ciclo;
         $data['seltipoestudio']= form_dropdown('tipoestudio',$this->tipoestudiociclo_model->seleccionar('0',$filter),$lista->tipoestudio,"id='tipoestudio' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
-        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
+        $filter = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];
+        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
