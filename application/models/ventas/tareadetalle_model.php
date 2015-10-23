@@ -30,7 +30,7 @@ class Tareadetalle_model extends CI_Model{
         $this->db->from($this->table." as d");
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=d.PROP_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
-        $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','inner');
+        $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','left');
         $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','inner');
         $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=h.TIPCICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as j','j.TIPP_Codigo=i.TIPP_Codigo','inner');

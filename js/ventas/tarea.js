@@ -34,20 +34,21 @@ jQuery(document).ready(function(){
         }
     });       
     
-   $("body").on('change',"#ciclo",function(){
-       accion      = $("#accion").val();
-       codigo      = $("#codigo").val();
-       dataString  = $('#frmPersona').serialize();
-       url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
-       $.post(url,dataString,function(data){
-           $('#mensaje').html(data);
-       });             
-   });     
+//   $("body").on('change',"#ciclo",function(){
+//       accion      = $("#accion").val();
+//       codigo      = $("#codigo").val();
+//       dataString  = $('#frmPersona').serialize();
+//       url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
+//       $.post(url,dataString,function(data){
+//           $('#mensaje').html(data);
+//       });             
+//   });     
    
      $("body").on('change',"#curso",function(){
         url    = base_url+"index.php/ventas/profesor/obtener/";
         objRes = new Object();
         objRes.curso = $("#curso").val();
+        objRes.flgcoordinador = 1;
         dataString   = {objeto: JSON.stringify(objRes)};
         $("#profesor").children().remove().end().append("<option value='0'>:: Seleccione ::</option>");
        $.post(url,dataString,function(data){

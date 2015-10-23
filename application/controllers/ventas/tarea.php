@@ -128,8 +128,9 @@ class Tarea extends CI_Controller {
         $data['seltipotarea']  = form_dropdown('tipotarea',$this->tipotarea_model->seleccionar('0'),$lista->tipotarea,"id='tipotarea' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;
+        $filter->flgcoordinador = 1;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
-        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
+//        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/tarea_nuevo",$data);
@@ -164,7 +165,6 @@ class Tarea extends CI_Controller {
         $responsable = $this->input->get_post('responsable');
         $fentrega    = $this->input->get_post('fentrega');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
-            print_r($codigodetalle);
             foreach($codigodetalle as $item=>$value){
                 $data = array(
                             "TAREAP_Codigo"          => $codigo,
