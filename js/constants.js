@@ -1,4 +1,4 @@
-var base_url  = "http://localhost:81/20denota/";
+var base_url  = "http://localhost/20denota/";
 jQuery(document).ready(function(){
    $("#cerrar").click(function(){
        url = base_url+"index.php/inicio/index";
