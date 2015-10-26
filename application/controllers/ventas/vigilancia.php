@@ -6,6 +6,7 @@ class Vigilancia extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'vigilancia_model');
+        $this->load->model(ventas.'vigilanciadetalle_model');
         $this->load->model(ventas.'profesor_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
@@ -63,12 +64,12 @@ class Vigilancia extends CI_Controller {
             $vigilancia         = $this->vigilancia_model->obtener($filter);
             $lista->vigilancia  = $vigilancia->PROP_Codigo;  
             $lista->fecha       = date_sql($vigilancia->VIGILAC_Fecha);  
-            $lista->nombre      = $tarea->VIGILAC_Nombre;
-            $lista->descripcion = $tarea->VIGILAC_Descripcion;
+            $lista->nombre      = $vigilancia->VIGILAC_Nombre;
+            $lista->descripcion = $vigilancia->VIGILAC_Descripcion;
+            $lista->profesor    = "";
             $filter             = new stdClass();
             $filter->vigilancia = $codigo;
-            $lista->profesor    = "";
-            $lista->vigilanciadetalle = $this->vigilancia_model->listar($filter);            
+            $lista->vigilanciadetalle = $this->vigilanciadetalle_model->listar($filter);            
         }
         elseif($accion == "n"){ 
             $lista->vigilancia    = "";  
@@ -81,7 +82,9 @@ class Vigilancia extends CI_Controller {
         $data['titulo']        = $accion=="e"?"Editar Vigilancia":"Nueva Vigilancia"; 
         $data['form_open']     = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']    = form_close(); 
-        $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',new stdClass()),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
+        $filter = new stdClass();
+        $filter->flgcoordinador = 1;
+        $data['selprofesor']  = form_dropdown('responsable',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='responsable' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
         $data['lista']	       = $lista;   
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/vigilancia_nuevo",$data);
@@ -92,44 +95,35 @@ class Vigilancia extends CI_Controller {
         $codigo = $this->input->get_post('codigo');
         $codigodetalle = $this->input->get_post('codigodetalle');
         $data   = array(
-                        "PROP_Codigo"         => $this->input->post('profesor'),
-                        "CICLOP_Codigo"       => $this->input->post('ciclo'),
-                        "TIPOTAREAP_Codigo"   => $this->input->post('tipotarea'),            
-                        "TAREAC_Nombre"       => $this->input->post('nombre'),
-                        "TAREAC_Descripcion"  => $this->input->post('descripcion'),
-			"TAREAC_Fecha"        => date_sql_ret($this->input->post('fecha')),
-                        "TAREAC_FechaEntrega" => date_sql_ret($this->input->post('fechaentrega')),            
-                        "TAREAC_Numero"       => $this->input->post('numero')
+                        "PROP_Codigo"         => $this->input->post('responsable'),          
+                        "VIGILAC_Nombre"      => $this->input->post('nombre'),
+                        "VIGILAC_Descripcion" => $this->input->post('descripcion'),
+			"VIGILAC_Fecha"       => date_sql_ret($this->input->post('fecha'))
                        );
         $resultado = false;
         if($accion == "n"){
             $resultado = true;
-            $codigo = $this->tarea_model->insertar($data);                      
+            $codigo = $this->vigilancia_model->insertar($data);                      
         }
         elseif($accion == "e"){
             $resultado = true;
-            $this->tarea_model->modificar($codigo,$data);                                
+            $this->vigilancia_model->modificar($codigo,$data);                                
         }  
         /*GRABAR DETALLE*/
-        $cantidad    = $this->input->get_post('cantidad');
-        $tema        = $this->input->get_post('tema');
-        $responsable = $this->input->get_post('responsable');
-        $fentrega    = $this->input->get_post('fentrega');
+        $curso    = $this->input->get_post('curso');
+        $profesor = $this->input->get_post('profesor');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
-            print_r($codigodetalle);
             foreach($codigodetalle as $item=>$value){
                 $data = array(
-                            "TAREAP_Codigo"          => $codigo,
-                            "PROP_Codigo"            => $responsable[$item],
-                            "PRODATRIBDET_Codigo"    => $tema[$item],        
-                            "TAREADETC_FechaEntrega" => date_sql_ret($fentrega[$item]),
-                            "TAREADETC_Cantidad"     => $cantidad[$item]                
+                            "VIGILAP_Codigo" => $codigo,
+                            "PROD_Codigo"    => $curso[$item],
+                            "PROP_Codigo"    => $profesor[$item]          
                         );
                 if(trim($codigodetalle[$item])==""){//Insertar
-                   $this->tareadetalle_model->insertar($data); 
+                   $this->vigilanciadetalle_model->insertar($data); 
                 }
                 else{//Editar
-                   $this->tareadetalle_model->modificar($codigodetalle[$item],$data); 
+                   $this->vigilanciadetalle_model->modificar($codigodetalle[$item],$data); 
                 }  
             }          
         }
@@ -140,9 +134,9 @@ class Vigilancia extends CI_Controller {
         $codigo = $this->input->post('codigo');
         $resultado = false;
         $filter = new stdClass();
-        $filter->acta = $codigo;
-        $this->actadetalle_model->eliminar($filter);
-        $this->acta_model->eliminar($codigo);
+        $filter->vigilancia = $codigo;
+        $this->vigilanciadetalle_model->eliminar($filter);
+        $this->vigilancia_model->eliminar($codigo);
         $resultado = true;
         echo json_encode($resultado);
     }
@@ -150,9 +144,9 @@ class Vigilancia extends CI_Controller {
     public function eliminardetalle(){
         $codigo = $this->input->post('codigo');
         $filter = new stdClass();
-        $filter->actadetalle = $codigo;
+        $filter->vigilanciadetalle = $codigo;
         $resultado = false;
-        $this->actadetalle_model->eliminar($filter);
+        $this->vigilanciadetalle_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
     }    
@@ -160,7 +154,7 @@ class Vigilancia extends CI_Controller {
     public function obtenerdetalle(){
         $obj    = $this->input->post('objeto');
         $filter = json_decode($obj);
-        $aulas  = $this->tareadetalle_model->obtener($filter);
+        $aulas  = $this->vigilanciadetalle_model->obtener($filter);
         $resultado = json_encode($aulas);       
         echo $resultado;        
     } 

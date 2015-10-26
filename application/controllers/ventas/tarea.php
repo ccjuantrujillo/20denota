@@ -47,6 +47,7 @@ class Tarea extends CI_Controller {
                 $lista[$indice]->fecha    = date_sql($value->TAREAC_Fecha);
                 $lista[$indice]->fechaentrega = date_sql($value->TAREAC_FechaEntrega);
                 $lista[$indice]->numero   = $value->TAREAC_Numero;
+                $lista[$indice]->nombre   = $value->TAREAC_Nombre;
                 $lista[$indice]->tipo     = $value->TIPOTAREAC_Nombre;
                 $lista[$indice]->ciclo    = $value->COMPC_Nombre;
                 $filter        = new stdClass();
@@ -164,6 +165,7 @@ class Tarea extends CI_Controller {
         $tema        = $this->input->get_post('tema');
         $responsable = $this->input->get_post('responsable');
         $fentrega    = $this->input->get_post('fentrega');
+        $tipoestudio = $this->input->get_post('tipoestudiociclo');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
             foreach($codigodetalle as $item=>$value){
                 $data = array(
@@ -171,7 +173,8 @@ class Tarea extends CI_Controller {
                             "PROP_Codigo"            => $responsable[$item],
                             "PRODATRIBDET_Codigo"    => $tema[$item],        
                             "TAREADETC_FechaEntrega" => date_sql_ret($fentrega[$item]),
-                            "TAREADETC_Cantidad"     => $cantidad[$item]                
+                            "TAREADETC_Cantidad"     => $cantidad[$item],
+                            "TIPCICLOP_Codigo"       => $tipoestudio[$item]
                         );
                 if(trim($codigodetalle[$item])==""){//Insertar
                    $this->tareadetalle_model->insertar($data); 

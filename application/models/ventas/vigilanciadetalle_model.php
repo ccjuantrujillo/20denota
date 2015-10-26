@@ -1,18 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Tareadetalle_model extends CI_Model{
+class Vigilanciadetalle_model extends CI_Model{
     var $compania;
     var $table;
     
     public function __construct(){
         parent::__construct();
         $this->usuario     = $this->session->userdata('codusu');
-        $this->table       = "tareadetalle";
+        $this->table   = "vigilanciadetalle";
+        $this->table_vigilancia = "vigilancia";        
         $this->table_profe = "profesor";
         $this->table_pers  = "persona";
-        $this->table_tema  = "tema";
-        $this->table_semana = "semana";
-        $this->table_tipoestudiociclo = "tipoestudiociclo";
-        $this->table_tipoestudio = "tipoestudio";
+        $this->table_curso = "curso";
     }
 	
 //    public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -26,18 +24,16 @@ class Tareadetalle_model extends CI_Model{
 //    }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $this->db->select("*,DATE_FORMAT( d.TAREADETC_FechaEntrega,'%d/%m/%Y' ) AS fentrega",FALSE);
+        $this->db->select();
         $this->db->from($this->table." as d");
-        $this->db->join($this->table_profe.' as e','e.PROP_Codigo=d.PROP_Codigo','inner');
-        $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
-        $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','left');
-        $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','left');
-        $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=d.TIPCICLOP_Codigo','inner');
-        $this->db->join($this->table_tipoestudio.' as j','j.TIPP_Codigo=i.TIPP_Codigo','inner');
-        if(isset($filter->tarea) && $filter->tarea!='')       $this->db->where(array("d.TAREAP_Codigo"=>$filter->tarea));
-        if(isset($filter->tareadetalle) && $filter->tareadetalle!='')       $this->db->where(array("d.TAREADETP_Codigo"=>$filter->tareadetalle));
+        $this->db->join($this->table_vigilancia.' as e','e.VIGILAP_Codigo=d.VIGILAP_Codigo','inner');
+        $this->db->join($this->table_profe.' as f','f.PROP_Codigo=d.PROP_Codigo','inner');
+        $this->db->join($this->table_pers.' as g','g.PERSP_Codigo=f.PERSP_Codigo','inner');
+        $this->db->join($this->table_curso.' as h','h.PROD_Codigo=d.PROD_Codigo','inner');
+        if(isset($filter->vigilancia) && $filter->vigilancia!='')                $this->db->where(array("d.VIGILAP_Codigo"=>$filter->vigilancia));
+        if(isset($filter->vigilanciadetalle) && $filter->vigilanciadetalle!='')  $this->db->where(array("d.VIGILADETP_Codigo"=>$filter->vigilanciadetalle));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("d.PROP_Codigo"=>$filter->profesor));
-        if(isset($filter->ciclo) && $filter->ciclo!='')       $this->db->where(array("h.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->curso) && $filter->curso!='')       $this->db->where(array("d.PROD_Codigo"=>$filter->curso));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -67,13 +63,13 @@ class Tareadetalle_model extends CI_Model{
     }    
     
     public function modificar($codigo,$data){
-        $this->db->where("TAREADETP_Codigo",$codigo);
+        $this->db->where("VIGILADETP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }
 	
     public function eliminar($filter){
-        if(isset($filter->tarea) && $filter->tarea!='')               $this->db->where(array("TAREAP_Codigo"=>$filter->tarea));
-        if(isset($filter->tareadetalle) && $filter->tareadetalle!='') $this->db->where(array("TAREADETP_Codigo"=>$filter->tareadetalle));
+        if(isset($filter->vigilancia) && $filter->vigilancia!='')               $this->db->where(array("VIGILAP_Codigo"=>$filter->tarea));
+        if(isset($filter->vigilanciadetalle) && $filter->vigilanciadetalle!='') $this->db->where(array("VIGILADETP_Codigo"=>$filter->tareadetalle));
         $this->db->delete($this->table);        
     }
 }

@@ -26,10 +26,10 @@
           <tr class="list1">
             <td width="30">No</td>
             <td width="60">Fecha</td>
-            <td width="50">Numero</td>
             <td width="90">Ciclo</td>
             <td width="80">Plana</td>
             <td width="50">Tipo</td>
+            <td width="100">Nombre</td>            
             <td width="120">F.Compromiso</td>
             <td width="50">Ver</td>
             <td width="50">Editar</td>
@@ -42,11 +42,11 @@
                ?>
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$j;?></td>
-                <td><?php echo $value->fecha;?></td>
-                <td><?php echo $value->numero;?></td>                
+                <td><?php echo $value->fecha;?></td>            
                 <td><?php echo $value->ciclo;?></td>
                 <td><?php echo $value->curso;?></td>
                 <td><?php echo $value->tipo;?></td>
+                <td><?php echo $value->nombre;?></td>                    
                 <td><?php echo ($value->fechaentrega);?></td>
                 <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>

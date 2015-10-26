@@ -9,10 +9,10 @@
     <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<div class="contenido">
-    <div class="contenidotabla" >
-        <h1><?php echo $titulo;?> </h1>
-        <?php echo $form_open;?>
+<div class="contenidotabla" >
+    <h1><?php echo $titulo;?> </h1>
+    <?php echo $form_open;?>
+    <div id="cabecera" style="height: 450px;">
         <table style="background-color: #f4f7ff">
             <tr>
               <td width="50%" bgcolor="#d5e2f2">Codigo:</td>
@@ -58,16 +58,14 @@
                 <input id="ver_reemplazo" name="ver_reemplazo" type="button" class="aceptarlog2" alt="Buscar reemplazo" title="Buscar reemplazo" value="Buscar">                                              
             </td>
           </tr>             
-        </table>
-        <?php echo $oculto;?>
-        <?php echo $form_close;?>
+        </table> 
     </div>
     <div class="frmboton">
-       <div class="frmboton_login">
-           <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
-           <input id="grabar" class="botones" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
-       </div>
-    </div>      
+        <input id="cancelar" class="botones" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>
+        <input id="grabar" class="botones" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>   
+    </div>
+    <?php echo $oculto;?>
+    <?php echo $form_close;?>
 </div>
 </body>
 </html>
