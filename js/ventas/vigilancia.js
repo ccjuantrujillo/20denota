@@ -16,13 +16,12 @@ jQuery(document).ready(function(){
         n      = $("#tabla_detalle tr").length - 1;
         fila   = "<tr>";
         fila  += "<td align='center'><input type='hidden'  value='' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]'>"+(parseInt(n)+1)+"</td>";
-        fila  += "<td align='center'><select class='comboMedio' name='curso["+n+"]' id='curso["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>";
+        fila  += "<td align='center'><select class='comboMedio' name='curso["+n+"]' id='curso["+n+"]' onchange='selectProfesor("+n+");'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><select class='comboGrande' name='profesor["+n+"]' id='profesor["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
         fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
         fila  += "</tr>";
         $("#tabla_detalle").append(fila);
-        selectCurso(n);  
-        selectProfesor(n);           
+        selectCurso(n);            
     });       
     
    $("body").on('change',"#ciclo",function(){
@@ -65,9 +64,7 @@ jQuery(document).ready(function(){
     $("body").on('click',"#grabar",function(){
         url        = base_url+"index.php/ventas/vigilancia/grabar";
         clave      = $("#clave").val();
-        $('#profesor').removeAttr('disabled');
-        $('#ciclo').removeAttr('disabled');
-        $('#tipotarea').removeAttr('disabled');
+        $('#responsable').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){
@@ -119,15 +116,11 @@ jQuery(document).ready(function(){
     $.post(url,dataString,function(data){
         tr.empty();              
         tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
-        tr.append("<td align='center'><select class='comboMedio' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>");
-        tr.append("<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
-        tr.append("<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
-        tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value='"+data["TAREADETC_Cantidad"]+"'></td>");                
-        tr.append("<td align='left'><input type='text' class='cajaMinima' maxlength='10' name='fentrega["+n+"]' id='fentrega["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='"+data["fentrega"]+"'></td>");        
+        tr.append("<td align='center'><select class='comboMedio' name='curso["+n+"]' id='curso["+n+"]' onchange='selectProfesor("+n+");'><option value='0'>::Seleccione::</option></select></td>");
+        tr.append("<td align='center'><select class='comboGrande' name='profesor["+n+"]' id='profesor["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
         tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
-        selectTipoestudiociclo(n,data["TIPCICLOP_Codigo"]);  
-        selectTema(n,data["TIPCICLOP_Codigo"],data["PRODATRIBDET_Codigo"]);  
-        selectResponsable(n,data["PROP_Codigo"]);  
+        selectCurso(n,data);    
+        selectProfesor(n,data);
      },"json");              
      });    
     
@@ -177,27 +170,35 @@ jQuery(document).ready(function(){
 });
 
 function selectProfesor(n,valor){
-    valor = (valor) ? valor : null;
-    a      = "profesor["+n+"]";
-    url    = base_url+"index.php/ventas/profesor/obtener";
+    a = "profesor["+n+"]";
+    b = "curso["+n+"]";    
+    val_profe = ($.isPlainObject(valor)) ? valor["PROP_Codigo"] : null;
+    val_curso = ($.isPlainObject(valor)) ? valor["PROD_Codigo"] : document.getElementById(b).value;
     select_a = document.getElementById(a);
+    select_a.options.length=0;
+    opt_a       = document.createElement('option');
+    opt_a.value = "0";
+    opt_a.appendChild(document.createTextNode("::Seleccione::"));
+    select_a.appendChild(opt_a);  
+    //Leo la lista de profesores
     objRes = new Object();
-    //objRes.curso = $("#curso").val();
+    objRes.curso = val_curso;
     dataString   = {objeto: JSON.stringify(objRes)};
+    url    = base_url+"index.php/ventas/profesor/obtener";
     $.post(url,dataString,function(data){
         $.each(data, function(item,value){
-            opt       = document.createElement('option');
-            opt.value = value.PROP_Codigo;
-            if(valor==value.PROP_Codigo){opt.selected=true;}
+            opt_a       = document.createElement('option');
+            opt_a.value = value.PROP_Codigo;
+            if(val_profe==value.PROP_Codigo){opt_a.selected=true;}
             texto     = value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre;
-            opt.appendChild(document.createTextNode(texto));
-            select_a.appendChild(opt);
+            opt_a.appendChild(document.createTextNode(texto));
+            select_a.appendChild(opt_a);
         });
     },"json");
 }
 
 function selectCurso(n,valor){
-    valor = (valor) ? valor : null;
+    val_curso = ($.isPlainObject(valor)) ? valor["PROD_Codigo"] : null;
     b      = "curso["+n+"]";
     url    = base_url+"index.php/almacen/curso/obtener";
     select_b = document.getElementById(b);
@@ -207,7 +208,7 @@ function selectCurso(n,valor){
         $.each(data, function(item,value){
             opt       = document.createElement('option');
             opt.value = value.PROD_Codigo;
-            if(valor==value.PROD_Codigo){opt.selected=true;}
+            if(val_curso==value.PROD_Codigo){opt.selected=true;}
             texto     = value.PROD_Nombre;
             opt.appendChild(document.createTextNode(texto));
             select_b.appendChild(opt);

@@ -164,7 +164,6 @@ class Tarea extends CI_Controller {
         $cantidad    = $this->input->get_post('cantidad');
         $tema        = $this->input->get_post('tema');
         $responsable = $this->input->get_post('responsable');
-        $fentrega    = $this->input->get_post('fentrega');
         $tipoestudio = $this->input->get_post('tipoestudiociclo');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
             foreach($codigodetalle as $item=>$value){
@@ -172,7 +171,6 @@ class Tarea extends CI_Controller {
                             "TAREAP_Codigo"          => $codigo,
                             "PROP_Codigo"            => $responsable[$item],
                             "PRODATRIBDET_Codigo"    => $tema[$item],        
-                            "TAREADETC_FechaEntrega" => date_sql_ret($fentrega[$item]),
                             "TAREADETC_Cantidad"     => $cantidad[$item],
                             "TIPCICLOP_Codigo"       => $tipoestudio[$item]
                         );

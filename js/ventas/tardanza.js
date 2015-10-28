@@ -88,33 +88,6 @@ jQuery(document).ready(function(){
        }        
     });        
 });
-//
-//function editar(codigo){
-//    dataString = "codigo="+codigo;
-//    url = base_url+"index.php/ventas/tardanza/editar/e/"+codigo;
-//    $.post(url,dataString,function(data){
-//        $('#basic-modal-content').modal();
-//        $('#mensaje').html(data);
-//    });
-//}
-//
-//function eliminar(codigo){
-//    if(confirm('Esta seguro desea eliminar este ciclo?')){
-//        dataString = "codigo="+codigo;
-//        url = base_url+"index.php/ventas/tardanza/eliminar";
-//        $.post(url,dataString,function(data){
-////            if(data=="true"){
-//                alert("El ciclo se borro correctamente");
-//                url = base_url+"index.php/ventas/tardanza/listar";
-//                location.href = url;
-////            }
-////            else{
-////                alert("No es posible eliminar a este alumno,\n esta matriculado en al menos 1 curso");
-////            }
-//        });
-//    }
-//}
-
 function abrir_formulario_ubigeo(){
 	ubigeo = $("#cboNacimiento").val();
 	url = base_url+"index.php/maestros/ubigeo/formulario_ubigeo/"+ubigeo;

@@ -7,9 +7,12 @@ class Profesor extends Persona
         parent::__construct();
         $this->load->model(ventas.'matricula_model');
         $this->load->model(ventas.'profesor_model');
+        $this->load->model(ventas.'estudios_model');
         $this->load->model(seguridad.'rol_model');
         $this->load->model(almacen.'curso_model');
         $this->load->model(maestros.'tipodocumento_model');
+        $this->load->model(maestros.'grado_model');
+        $this->load->model(maestros.'universidad_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
     }
@@ -84,7 +87,7 @@ class Profesor extends Persona
              $lista->estado     = $profesores->PROC_FlagEstado;
              $lista->curso      = $profesores->PROD_Codigo;
              $lista->tipodoc    = $profesores->TIPDOCP_Codigo; 
-             $lista->coordinador = $profesores->PROC_FlagCoordinador; 
+             $lista->coordinador = $profesores->PROC_FlagCoordinador;        
          }
          elseif($accion == "n"){
              $lista->numerodoc  = "";
@@ -110,6 +113,9 @@ class Profesor extends Persona
          $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
          $arrCoord           = array("0"=>"::Seleccione::","1"=>"Coordinador","2"=>"Profesor");
+         $arrMes             = array("0"=>"Mes","1"=>"Enero","2"=>"Febrero","3"=>"Marzo","4"=>"Abril","5"=>"Mayo","6"=>"Junio","7"=>"Julio","8"=>"Agosto","9"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno             = range(1950,2020);
+         array_unshift($arrAno,"Año");
          $data['titulo']     = $accion=="e"?"Editar Profesor":"Crear Profesor";
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
@@ -120,9 +126,123 @@ class Profesor extends Persona
          $data['selcoord']   = form_dropdown('coordinador',$arrCoord,$lista->coordinador,"id='coordinador' class='comboMedio'");
          $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); ;
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
+         $data['experiencia'] = $this->editar_experiencia($accion,$codigo);
+         $data['educacion']   = $this->editar_educacion($accion,$codigo);
+         $data['idiomas']     = $this->editar_idiomas($accion,$codigo);
+         $data['conferencias']= $this->editar_conferencias($accion,$codigo);
+         $data['sociedades']  = $this->editar_sociedades($accion,$codigo);
+         $data['empresa']     = $this->editar_empresa($accion,$codigo);
+         $data['principal']   = $this->load->view("ventas/profesor_nuevo_principal",$data,true);
          $this->load->view("ventas/profesor_nuevo",$data);
      }
 
+     public function editar_experiencia($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }
+         $arrMes             = array("0"=>"Mes","1"=>"Enero","2"=>"Febrero","3"=>"Marzo","4"=>"Abril","5"=>"Mayo","6"=>"Junio","7"=>"Julio","8"=>"Agosto","9"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno             = range(1950,2020);
+         array_unshift($arrAno,"Año");        
+         $data['arrmes']     = $arrMes;
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");         
+         $data['lista']          = $lista;
+         $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),0,"id='universidad' class='comboGrande'");
+         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");         
+         return $this->load->view("ventas/profesor_nuevo_experiencia",$data,true);
+     }
+     
+     public function editar_educacion($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }         
+         return $this->load->view("ventas/profesor_nuevo_educacion",$lista,true);
+     } 
+     
+     public function editar_idiomas($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }         
+         return $this->load->view("ventas/profesor_nuevo_idiomas",$lista,true);
+     }  
+     
+     public function editar_conferencias($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }         
+         return $this->load->view("ventas/profesor_nuevo_conferencias",$lista,true);
+     }  
+     
+     public function editar_sociedades($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }         
+         return $this->load->view("ventas/profesor_nuevo_sociedades",$lista,true);
+     }      
+     
+     public function editar_empresa($accion,$codigo=""){
+         $lista = new stdClass();
+         if($accion == "e"){
+             $filter            = new stdClass();
+             $filter->profesor  = $codigo;
+             $profesores        = $this->profesor_model->obtener($filter);
+             $filter = new stdClass();
+             $filter->profesor = $codigo;
+             $lista->estudios = $this->estudios_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->estudios   = array();  
+         }         
+         return $this->load->view("ventas/profesor_nuevo_empresa",$lista,true);
+     }           
+     
     public function grabar(){
         parent::grabar();
         $accion       = $this->input->get_post('accion');

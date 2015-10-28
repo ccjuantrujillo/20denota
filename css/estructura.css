@@ -66,6 +66,9 @@ blockquote, q {quotes: "" "";}
 .aceptarlog2{ background-color:#EB1C24; color:#FFF; border:none; font-size:11px;padding:3px 18px; cursor:pointer;}
 .aceptarlog2:hover{ background-color:#F00;}
 
+.aceptarlog3{ background-color:#a7a7a7; color:#FFF; border:none; font-size:11px;padding:3px 18px; cursor:pointer;}
+.aceptarlog3:hover{ background-color:#00a0dc;}
+
 .lista_botones{float: left;left:55%;list-style-type:none;padding: 0px;margin: 0px 3px;position: relative;cursor: pointer}
 .lista_botones li{background-position: 2px 2px;background-color:#EB1C24; color:#FFF; border:none; font-size:11px;padding:4px 4px 4px 28px;background-repeat: no-repeat;border:0px solid #000;margin:0px;position: relative;}
 .lista_botones li:hover{background-color:#F00;cursor: pointer;}

@@ -23,7 +23,7 @@
                 <td align="right">Nombre: </td>
                 <td align="left" class="formss" colspan="3"><input type='text' name="nombre" id="nombre" value="<?php echo $lista->nombre;?>" class="cajaSuperGrande"></td>
                 <td align="right">Elaborado por:</td>
-                <td width='29%' class="formss"><?php echo $selprofesor;?></td>                
+                <td width='29%' class="formss"><?php echo $selresponsable;?></td>                
             </tr>  
             <tr>
                 <td valign="top" align="right">Descripcion: </td>

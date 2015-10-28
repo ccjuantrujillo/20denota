@@ -57,7 +57,6 @@
                 <th width="30%" align="center">Tema</th>
                 <th width="30%" align="center">Profesor</th>
                 <th align="center">Cantidad</th>
-                <th align="center">F.Entrega</th>
                 <th align="center">Acciones</th>
             </tr>
             <?php
@@ -70,7 +69,6 @@
                         <td align="center"><?php echo $value->TEMAC_Descripcion;?></td>
                         <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
                         <td align="center"><?php echo $value->TAREADETC_Cantidad;?></td>
-                        <td align="center"><?php echo date_sql($value->TAREADETC_FechaEntrega);?></td>
                         <td align="center">
                             <a href="#" class="editardetalle">Editar</a>
                             <a href="#" class="eliminardetalle">Eliminar</a>

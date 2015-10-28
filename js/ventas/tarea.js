@@ -21,7 +21,6 @@ jQuery(document).ready(function(){
             fila  += "<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>";
-            fila  += "<td align='center'><input type='text' class='cajaMinima' maxlength='10' name='fentrega["+n+"]' id='fentrega["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='__/__/__'></td>";            
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
             fila  += "</tr>";
             $("#tabla_detalle").append(fila);
@@ -133,7 +132,6 @@ jQuery(document).ready(function(){
         tr.append("<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
         tr.append("<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
         tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value='"+data["TAREADETC_Cantidad"]+"'></td>");                
-        tr.append("<td align='left'><input type='text' class='cajaMinima' maxlength='10' name='fentrega["+n+"]' id='fentrega["+n+"]' onmousedown='$(this).datepicker({dateFormat: \"dd/mm/yy\",changeYear: true,yearRange: \"1945:2025\"});' value='"+data["fentrega"]+"'></td>");        
         tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
         selectTipoestudiociclo(n,data["TIPCICLOP_Codigo"]);  
         selectTema(n,data["TIPCICLOP_Codigo"],data["PRODATRIBDET_Codigo"]);  
@@ -251,34 +249,3 @@ function selectResponsable(n,valor){
         });
     },"json");
 }
-//
-//function addToList(id1,id2) {
-//    var comp = document.getElementById(id1);
-//    var comp2 = document.getElementById(id2);
-//    var value = comp.options[comp.selectedIndex].value;
-//    var text = comp.options[comp.selectedIndex].text;
-//    var selectedOption = comp.options[comp.selectedIndex];
-//    var optn = document.createElement("option");
-//    optn.text = text;
-//    optn.value = value;
-//    comp2.options.add(optn);
-//    selectedOption.parentNode.removeChild(selectedOption);
-//}
-//
-//function removeFromList(combo2,combo1) {
-//    var comp2 = document.getElementById(combo2); //combo1
-//    var comp1 = document.getElementById(combo1); //combo2
-//    var value = comp2.options[comp2.selectedIndex].value;
-//    var text = comp2.options[comp2.selectedIndex].text;
-//    var selectedOption = comp2.options[comp2.selectedIndex];
-////    window.alert(value + ", " + text);
-////    return;
-////    var pos = comp2.options[comp.selectedIndex].id;
-//    var optn = document.createElement("option");
-//    optn.text = text;
-//    optn.value = value;
-//    
-////    comp.options[index] = new Option(myobject[index], index);
-//    comp1.appendChild(optn);
-//    selectedOption.parentNode.removeChild(selectedOption);
-//}
