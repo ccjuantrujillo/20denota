@@ -5,15 +5,15 @@
        <table style="width: 100%;background-color: #f4f7ff">
            <tr>
                <td class="formss" bgcolor="#d5e2f2">Institucion</td>
-               <td class="formss"><?php echo $seluniversidad;?></td>
+               <td class="formss"><input type="text" id="empresa" name="empresa" class="cajaGrande" maxlength="100"></td>
            </tr>
            <tr>
                <td class="formss" bgcolor="#d5e2f2">Cargo desempeñado</td>
-               <td class="formss"><?php echo $selgrado;?></td>
+               <td class="formss"><input type="text" id="cargo" name="cargo" class="cajaGrande" maxlength="100"></td>
            </tr>  
            <tr>
                <td class="formss" bgcolor="#d5e2f2">Curso</td>
-               <td class="formss"><input type="text" id="universidad" name="universidad" class="cajaSuperGrande" maxlength="100"></td>
+               <td class="formss"><input type="text" id="curso" name="curso" class="cajaGrande" maxlength="100"></td>
            </tr>   
            <tr>
                <td class="formss" bgcolor="#d5e2f2">Periodo</td>

@@ -84,7 +84,7 @@
     width: 50%;
 }
 
-#content-2 .tab_estudios,.tab_empresa,.tab_idiomas,.tab_sociedades,.tab_experiencia{
+#content-2 .tab_estudios,.tab_empresa,.tab_idiomas,.tab_sociedades,.tab_experiencia,.tab_conferencia{
     float: clear;
     display: none;
     align:left;

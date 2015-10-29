@@ -1,5 +1,5 @@
 <div class="contenidotabla" >        
-    <?php echo $form_open;?>   Hola
+    <?php echo $form_open;?>
     <h2><?php echo $titulo;?></h2>   
     <div id="container">     
         <input id="tab-1" type="radio" name="tab-group" checked="checked" />

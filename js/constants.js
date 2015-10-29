@@ -1,4 +1,4 @@
-var base_url  = "https://0denota-ccjuantrujillo.c9.io/";
+var base_url  = "http://localhost/20denota/";
 jQuery(document).ready(function(){
    $("#cerrar").click(function(){
        url = base_url+"index.php/inicio/index";
