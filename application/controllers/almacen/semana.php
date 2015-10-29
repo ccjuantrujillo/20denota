@@ -54,7 +54,8 @@ class Semana extends CI_Controller {
         $this->pagination->initialize($configuracion);        
         /*Datos para la vista*/ 
         $data['lista']      = $lista;
-        $data['menu']       = $menu;       
+        $data['menu']       = $menu;  
+        $data['header']          = get_header();        
         $data['registros']  = $registros;
         $data['j']          = $j;
         $data['paginacion'] = $this->pagination->create_links();        

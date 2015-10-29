@@ -14,11 +14,7 @@
 </head>
 <body>
 <div class="contenido" > 
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2014</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nueva tarea" id="nuevo"/>            
@@ -33,8 +29,8 @@
             <td width="90">Ciclo</td>
             <td width="80">Plana</td>
             <td width="50">Tipo</td>
-            <td width="50">Numero</td>
-            <td width="120">F.Entrega</td>
+            <td width="100">Nombre</td>            
+            <td width="120">F.Compromiso</td>
             <td width="50">Ver</td>
             <td width="50">Editar</td>
             <td width="50">Eliminar</td>
@@ -46,12 +42,12 @@
                ?>
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$j;?></td>
-                <td><?php echo $value->fecha;?></td>
+                <td><?php echo $value->fecha;?></td>            
                 <td><?php echo $value->ciclo;?></td>
                 <td><?php echo $value->curso;?></td>
                 <td><?php echo $value->tipo;?></td>
-                <td><?php echo $value->numero;?></td>                
-                <td><?php echo $value->fechaentrega;?></td>
+                <td><?php echo $value->nombre;?></td>                    
+                <td><?php echo ($value->fechaentrega);?></td>
                 <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>

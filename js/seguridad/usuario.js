@@ -79,8 +79,13 @@ jQuery(document).ready(function(){
    }); 
    
     $("body").on('click',"#ver_profesor",function(){
-        url = base_url+"index.php/maestros/persona/buscar_profesor";
-        window.open(url,"_blank","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+        dataString = "flgcoordinador=1";
+        url = base_url+"index.php/ventas/profesor/buscar/";   
+        window.open("","popup","width=700,height=400,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0");          
+        $("#form1").attr("target","popup");
+        $("#form1").attr("method","post");
+        $("#form1").attr("action",url);
+        $("#form1").submit();
     });      
 });
 
@@ -94,10 +99,11 @@ function selecciona_profesor(codigo){
             $("#paterno").val(value.PERSC_ApellidoPaterno);
             $("#materno").val(value.PERSC_ApellidoMaterno);
             $("#nombres").val(value.PERSC_Nombre);            
+            $("#codigo").val(value.PERSP_Codigo); 
             $("#login").val('');  
             $("#clave").val('');  
-            $("#rol").val(0); 
-            $("#codigo").val(value.PERSP_Codigo); 
+            $("#rol").val(6); 
+            
         });
     },"json");
 }

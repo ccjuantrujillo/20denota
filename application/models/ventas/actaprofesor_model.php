@@ -26,7 +26,12 @@ class Actaprofesor_model extends CI_Model{
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $this->db->select('*,c.PROP_Codigo as codprofesor');
         $this->db->from($this->table_profe." as c");
-        $this->db->join($this->table_actaprofe.' as d','d.PROP_Codigo=c.PROP_Codigo','left');
+        if(isset($filter->acta) && $filter->acta!=''){
+            $this->db->join($this->table_actaprofe.' as d','d.PROP_Codigo=c.PROP_Codigo and d.ACTAP_Codigo="'.$filter->acta.'"','left');    
+        }
+        else{
+            $this->db->join($this->table_actaprofe.' as d','d.PROP_Codigo=c.PROP_Codigo','left');
+        }
         if(isset($filter->acta) && $filter->acta!=''){
             $this->db->join($this->table_acta.' as e','e.ACTAP_Codigo=d.ACTAP_Codigo and d.ACTAP_Codigo="'.$filter->acta.'"','left');    
         }
@@ -34,6 +39,7 @@ class Actaprofesor_model extends CI_Model{
         $this->db->join($this->table_curso.' as g','g.PROD_Codigo=c.PROD_Codigo','inner');
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->curso))                             $this->db->where(array("g.PROD_Codigo"=>$filter->curso));
+        //if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));        
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);
@@ -41,6 +47,7 @@ class Actaprofesor_model extends CI_Model{
         }           
         $this->db->limit($number_items, $offset); 
         $query = $this->db->get();
+        //echo $this->db->last_query();
         $resultado = array();
         if($query->num_rows>0){
             $resultado = $query->result();

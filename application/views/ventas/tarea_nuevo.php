@@ -25,7 +25,7 @@
             <tr>
                 <td align="right">Ciclo:</td>
                 <td align="left" colspan="3" class="formss"><?php echo $selciclo;?></td>
-                <td align="right">Fecha Entrega:</td>
+                <td align="right">Fecha Compromiso:</td>
                 <td align="left" class="formss"><input type="text" name="fechaentrega" id="fechaentrega" style="width:60px" readonly value="<?php echo $lista->fechaentrega;?>" class="cajaMinima" maxlength="10"></td>                
             </tr>             
             <tr>
@@ -62,40 +62,18 @@
             <?php
             if(count($lista->tareadetalle)>0){
                 foreach($lista->tareadetalle as $item => $value){
-                    if($codigodetalle==$value->TAREADETP_Codigo){
-                    $optResponsable = "";
-                    foreach ($responsable as $item2 => $value2){
-                        $optResponsable.= "<option value='".$item2."' ".($item2==$value->PROP_Codigo?"selected='selected'":"").">".$value2."</option>";
-                    }
                     ?>
                     <tr id="<?php echo $value->TAREADETP_Codigo;?>">
-                        <td width="3%" align="center"><?php echo $item+1;?></td>
-                        <td width="3%" align="center"><input type="text" class="cajaMedia" name="nombre[<?php echo $item;?>]" id="nombre[<?php echo $item;?>]" value="<?php echo $value->ACTADETC_Nombre;?>"></td>                        
-                        <td align="left" valign="top"><textarea name="acuerdo[<?php echo $item;?>]" id="acuerdo[<?php echo $item;?>]" placeholder='Acuerdos de la reunion' cols='53' rows='1'><?php echo $value->ACTADETC_Observacion;?></textarea></td>
-                        <td align="center"><select class="comboGrande" name="responsable[<?php echo $item;?>]" id="responsable[<?php echo $item;?>]"><?php echo $optResponsable;?></select></td>
+                        <td align="center"><?php echo $item+1;?></td>
+                        <td align="center"><?php echo $value->TIPC_Nombre;?></td>
+                        <td align="center"><?php echo $value->TEMAC_Descripcion;?></td>
+                        <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
+                        <td align="center"><?php echo $value->TAREADETC_Cantidad;?></td>
                         <td align="center">
                             <a href="#" class="editardetalle">Editar</a>
                             <a href="#" class="eliminardetalle">Eliminar</a>
                         </td>
-                    </tr>
-                    <?php                            
-                    }
-                    else{
-                        ?>
-                        <tr id="<?php echo $value->TAREADETP_Codigo;?>">
-                            <td align="center"><?php echo $item+1;?></td>
-                            <td align="center"><?php echo $value->TIPC_Nombre;?></td>
-                            <td align="center"><?php echo $value->TEMAC_Descripcion;?></td>
-                            <td align="center"><?php echo $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;?></td>
-                            <td align="center"><?php echo $value->TAREADETC_Cantidad;?></td>
-                            <td align="center">
-                                <a href="#" class="editardetalle">Editar</a>
-                                <a href="#" class="eliminardetalle">Eliminar</a>
-                            </td>
-                        </tr>                            
-                        <?php
-                    }
-                ?>
+                    </tr>                            
                 <?php                                
                 }
             }

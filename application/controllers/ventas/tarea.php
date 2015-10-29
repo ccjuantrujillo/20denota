@@ -33,7 +33,8 @@ class Tarea extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);                
         $filter     = new stdClass();
-        $filter->order_by = array("p.TAREAC_Numero"=>"desc");
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];         
+        $filter->order_by = array("p.TAREAC_Fecha"=>"desc","p.TAREAC_Numero"=>"desc");
         $filter_not = new stdClass(); 
         $registros = count($this->tarea_model->listar($filter,$filter_not));
         $matricula   = $this->tarea_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
@@ -46,6 +47,7 @@ class Tarea extends CI_Controller {
                 $lista[$indice]->fecha    = date_sql($value->TAREAC_Fecha);
                 $lista[$indice]->fechaentrega = date_sql($value->TAREAC_FechaEntrega);
                 $lista[$indice]->numero   = $value->TAREAC_Numero;
+                $lista[$indice]->nombre   = $value->TAREAC_Nombre;
                 $lista[$indice]->tipo     = $value->TIPOTAREAC_Nombre;
                 $lista[$indice]->ciclo    = $value->COMPC_Nombre;
                 $filter        = new stdClass();
@@ -61,7 +63,8 @@ class Tarea extends CI_Controller {
         /*Enviamos los datos a la vista*/
         $data['lista']        = $lista;
         $data['titulo']       = "Tareas asignadas";
-        $data['menu']         = $menu;       
+        $data['menu']         = $menu;  
+        $data['header']       = get_header();
         $data['j']            = $j;
         $data['registros']    = $registros;
         $data['paginacion']   = $this->pagination->create_links();
@@ -115,16 +118,20 @@ class Tarea extends CI_Controller {
         $data['form_close']    = form_close();         
         $data['lista']	       = $lista;   
         $data['accion']	       = $accion;               
-        $data['codigodetalle'] = $codigodetalle;  
-        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $data['codigodetalle'] = $codigodetalle;
         $filter = new stdClass();
-        $filter->ciclo         = $lista->ciclo;
-        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0'),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
+        $filter->estado = 1;
+        $data['selciclo']      = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0',$filter),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
+        $filter = new stdClass();
+        //$filter->ciclo         = $lista->ciclo;
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];
+        $data['selcurso']      = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),$lista->curso,"id='curso' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $data['seltipotarea']  = form_dropdown('tipotarea',$this->tipotarea_model->seleccionar('0'),$lista->tipotarea,"id='tipotarea' class='comboMedio' ".($accion=="e"?"disabled":"").""); 
         $filter = new stdClass();
         $filter->curso = $lista->curso;
+        $filter->flgcoordinador = 1;
         $filter->order_by = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc");
-        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
+//        $data['responsable']  = $this->profesor_model->seleccionar('0',$filter);
         $data['selprofesor']  = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),$lista->profesor,"id='profesor' class='comboGrande' ".($accion=="e"?"disabled":"").""); 
         $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/tarea_nuevo",$data);
@@ -157,15 +164,17 @@ class Tarea extends CI_Controller {
         $cantidad    = $this->input->get_post('cantidad');
         $tema        = $this->input->get_post('tema');
         $responsable = $this->input->get_post('responsable');
+        $tipoestudio = $this->input->get_post('tipoestudiociclo');
         if(count($codigodetalle)>0 && is_array($codigodetalle)){
             foreach($codigodetalle as $item=>$value){
                 $data = array(
-                            "TAREAP_Codigo"       => $codigo,
-                            "PROP_Codigo"         => $responsable[$item],
-                            "PRODATRIBDET_Codigo" => $tema[$item],
-                            "TAREADETC_Cantidad"  => $cantidad[$item]                
+                            "TAREAP_Codigo"          => $codigo,
+                            "PROP_Codigo"            => $responsable[$item],
+                            "PRODATRIBDET_Codigo"    => $tema[$item],        
+                            "TAREADETC_Cantidad"     => $cantidad[$item],
+                            "TIPCICLOP_Codigo"       => $tipoestudio[$item]
                         );
-                if($codigodetalle[$item]==""){//Insertar
+                if(trim($codigodetalle[$item])==""){//Insertar
                    $this->tareadetalle_model->insertar($data); 
                 }
                 else{//Editar

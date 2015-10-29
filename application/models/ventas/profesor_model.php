@@ -23,8 +23,10 @@ class Profesor_model extends CI_Model{
         $this->db->from($this->table." as c",$number_items,$offset);
         $this->db->join($this->table_det.' as d','d.PERSP_Codigo=c.PERSP_Codigo','inner');
         $this->db->join($this->table_det2.' as e','e.PROD_Codigo=c.PROD_Codigo','inner');
-        if(isset($filter->profesor))     $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
-        if(isset($filter->curso))        $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->profesor))        $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
+        if(isset($filter->persona))         $this->db->where(array("c.PERSP_Codigo"=>$filter->persona));
+        if(isset($filter->curso))           $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->flgcoordinador))  $this->db->where(array("c.PROC_FlagCoordinador"=>$filter->flgcoordinador));
         if(isset($filter_not->profesor) && $filter_not->profesor!=''){
             if(is_array($filter_not->profesor) && count($filter_not->profesor)>0){
                 $this->db->where_not_in('c.PROP_Codigo',$filter_not->profesor);

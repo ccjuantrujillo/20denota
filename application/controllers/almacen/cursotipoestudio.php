@@ -56,6 +56,7 @@ class Cursotipoestudio extends CI_Controller {
         $data['titulo']     = "Listar Cursos por Tipo Estudio";
         $data['lista']      = $lista;
         $data['menu']       = $menu;
+        $data['header']          = get_header();        
         $data['registros']  = $registros;
         $data['j']          = $j;
         $data['paginacion'] = $this->pagination->create_links();

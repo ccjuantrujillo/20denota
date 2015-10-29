@@ -47,32 +47,73 @@
  min-height: 35em; /* Alto del contenido */
  position: relative;
  width: 100%;
- z-index: 5;
 }
 #content div {
  opacity: 0;
  padding: 1.5em;
  position: absolute;
- z-index: -100;
 }
 #content-1 {
  clear: both;
  margin-bottom: 0em;
  width: 95%;
 }
-/*#content-1 p {
+
+#content-2{
  clear: both;
- margin-bottom: 1em;
- width: 100%;
-}*/
-/*#content-1 p.left img {
- float: left;
- margin-right: 1em;
+ margin-bottom: 0em;
+ width: 95%;
+ height: 380px;
 }
-#content-1 p.last {
- margin-bottom: 0;
-}*/
-#content-2 p {
+
+#content-2 span.subtitulo{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    text-align:left;
+    float:left;
+    width: 50%;
+    color:#A0A0A0;
+    margin-top: 10px;
+}
+
+#content-2 span.btn_agregar{
+     margin-top: 10px;
+    float: right;
+    width: 50%;
+}
+
+#content-2 .tab_estudios,.tab_empresa,.tab_idiomas,.tab_sociedades,.tab_experiencia{
+    float: clear;
+    display: none;
+    align:left;
+}
+
+#content-2 .lst_estudios{
+    align:left;
+    height: auto;
+}
+
+#content-2 span h2{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    text-align:left;
+    margin-top: 5px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    height: 15px;
+    align:left;
+}
+
+#content-2 span h3{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    text-align:left;
+    padding-left: 0px;
+    color:#000;
+}
+
+/*#content-2 p {
  float: left;
  width: 48.5%;
 }
@@ -82,7 +123,7 @@
 #content-2 p img {
  display: block;
  margin: 0 auto 1em auto;
-}
+}*/
 #content-3 p,
 #content-3 ul {
  margin-bottom: 1em;
@@ -94,5 +135,4 @@
 #container input#tab-2:checked ~ #content #content-2,
 #container input#tab-3:checked ~ #content #content-3 {
  opacity: 1;
- z-index: 100;
 }

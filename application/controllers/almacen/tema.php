@@ -31,6 +31,7 @@ class Tema extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);        
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];       
         $filter_not = new stdClass(); 
         $filter->order_by    = array("e.COMPC_Nombre"=>"desc","g.TIPC_Nombre"=>"asc","h.PROD_Nombre"=>"asc","i.PRODATRIB_Nombre"=>"asc");
         $registros = count($this->tema_model->listar($filter,$filter_not));
@@ -55,7 +56,8 @@ class Tema extends CI_Controller {
         /*Datos para la vista*/
         $data['titulo_tabla'] = "Listado de preguntas";
         $data['lista']        = $lista;
-        $data['menu']         = $menu;      
+        $data['menu']         = $menu;   
+        $data['header']          = get_header();        
         $data['registros']    = $registros;
         $data['j']            = $j;        
         $data['paginacion']   = $this->pagination->create_links();        

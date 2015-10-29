@@ -35,6 +35,7 @@ class Curso extends CI_Controller {
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];       
         $filter_not = new stdClass(); 
         $filter->order_by    = array("p.PROD_Nombre"=>"asc");
         $registros = count($this->curso_model->listar($filter,$filter_not));
@@ -61,6 +62,7 @@ class Curso extends CI_Controller {
         /*Enviamos los datos a la vista*/       
         $data['lista']      = $lista;
         $data['menu']       = $menu;
+        $data['header']     = get_header();        
         $data['registros']  = $registros;
         $data['j']          = $j;
         $data['paginacion'] = $this->pagination->create_links();
@@ -71,10 +73,10 @@ class Curso extends CI_Controller {
         $lista = new stdClass();
         if($accion == "e"){
             $filter                = new stdClass();
-            $filter->curso      = $codigo;
+            $filter->curso         = $codigo;
             $productos             = $this->curso_model->obtener($filter);
             $filter                = new stdClass();
-            $filter->curso      = $codigo;
+            $filter->curso         = $codigo;
             $productoatributo      = $this->semana_model->listar($filter);
             $lista->producto       = $codigo;
             $lista->tipo           = $productos->TIPPROD_Codigo;
@@ -113,7 +115,7 @@ class Curso extends CI_Controller {
         }
         $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
         $data['titulo']     = $accion=="e"?"Modificar Curso":"Nuevo Curso";
-        $data['form_open']  = form_open(base_url()."index.php/almacen/curso/grabar",array("name"=>"formProducto","id"=>"formProducto","class"=>"formulario","enctype"=>"multipart/form-data"));
+        $data['form_open']  = form_open(base_url()."index.php/almacen/curso/grabar",array("name"=>"frmBusqueda","id"=>"frmBusqueda","class"=>"formulario","enctype"=>"multipart/form-data"));
         $data['form_close'] = form_close();    
         $data['lista']	    = $lista;
         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
@@ -129,17 +131,17 @@ class Curso extends CI_Controller {
         $accion = $this->input->get_post('accion');
         $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "PROD_Nombre"            => strtoupper($this->input->post('nombre')),
-                        "PROD_DescripcionBreve"  => strtoupper($this->input->post('descripcion')),
-                        "PROD_EspecificacionPDF" => strtoupper($this->input->post('pdf')),
-                        "PROD_Comentario"        => strtoupper($this->input->post('comentario')),
-                        "PROD_Cantidad"          => strtoupper($this->input->post('cantidad')),
-                        "PROD_Intentos"          => strtoupper($this->input->post('intentos')),
-                        "PROD_Tiempo"            => strtoupper($this->input->post('tiempo')),
-                        "PROD_Puntaje"           => strtoupper($this->input->post('puntaje')),
-                        "TIPPROD_Codigo"         => strtoupper($this->input->post('tipoprod')),
-                        "PROD_FlagEstado"        => strtoupper($this->input->post('estado')),
-                        "PROD_TiempoExamen"      => strtoupper($this->input->post('tiempoprueba'))
+                        "PROD_Nombre"            => ($this->input->post('nombre')),
+                        "PROD_DescripcionBreve"  => ($this->input->post('descripcion')),
+                        "PROD_EspecificacionPDF" => ($this->input->post('pdf')),
+                        "PROD_Comentario"        => ($this->input->post('comentario')),
+                        "PROD_Cantidad"          => ($this->input->post('cantidad')),
+                        "PROD_Intentos"          => ($this->input->post('intentos')),
+                        "PROD_Tiempo"            => ($this->input->post('tiempo')),
+                        "PROD_Puntaje"           => ($this->input->post('puntaje')),
+                        "TIPPROD_Codigo"         => ($this->input->post('tipoprod')),
+                        "PROD_FlagEstado"        => ($this->input->post('estado')),
+                        "PROD_TiempoExamen"      => ($this->input->post('tiempoprueba'))
                        );     
         /*Subimos imagen*/
         if(isset($_FILES['imagen']['name']) && trim($_FILES['imagen']['name'])!=""){
@@ -190,6 +192,14 @@ class Curso extends CI_Controller {
         echo json_encode($resultado);
     } 
 
+    public function obtener(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);
+        $profesores  = $this->curso_model->listar($filter);
+        $resultado = json_encode($profesores);
+        echo $resultado;
+    }    
+    
     public function export_excel($type){
             if($this->session->userdata('data_'.$type)){
                 $result = $this->session->userdata('data_'.$type);

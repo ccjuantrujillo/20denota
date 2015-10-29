@@ -6,6 +6,8 @@
     <title><?php echo titulo;?></title>
     <link rel="stylesheet" href="<?php echo css;?>estructura.css" type="text/css" />     
     <link rel="stylesheet" href="<?php echo css;?>menu.css" type="text/css" /> 
+    <link rel="stylesheet" href="<?php echo css;?>tabs.css" type="text/css" />
+    <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />    
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>
@@ -14,11 +16,7 @@
 </head>
 <body>
 <div class="contenido" >
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>20denota<br>2015</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="Crear un nuevo profesor" id="nuevo"/>
@@ -28,7 +26,8 @@
     <div class="tabla">
         <table>
           <tr class="list1">
-            <td width="43">No</td>
+            <td width="43">Item</td>
+            <td width="50">Codigo</td>
             <td width="193">Apellidos y Nombres</td>
             <td width="20">Curso</td>
             <td width="20">Cargo</td>
@@ -46,6 +45,7 @@
                ?>
               <tr class="<?php echo $clase;?>">
                 <td><?php echo ++$j;?></td>
+                <td align="center"><?php echo $value->codigo;?></td>
                 <td align="left"><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                 <td align="center"><?php echo $value->curso;?></td>
                 <td align="center"><?php echo ($value->coordinador==1)?"Coordinador":"Profesor";?></td>
@@ -65,7 +65,7 @@
           ?>
         </table>
     </div>
-    <div class="mensajetabla"><?php echo $paginacion;?></div>
+    <div class="mensaje"><?php echo $paginacion;?></div>
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
 <div id="basic-modal-content"><div id="mensaje">&nbsp;</div></div>

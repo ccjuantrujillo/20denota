@@ -14,11 +14,7 @@
 </head>
 <body>
 <div class="contenido" > 
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2014</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
     <div class="titulo">
         <input name="" type="button" class="aceptarlog2" alt="Aceptar" title="Aceptar" value="<?php echo $nuevo;?>" id="nuevo"/>            
@@ -30,6 +26,7 @@
            <tr class="list1">
              <td width="43">No</td>
              <td width="193">Ciclo</td>
+             <td width="100">Plana</td>
              <td width="193">Apellidos y Nombres</td>
              <td width="86">Fecha</td>
              <td width="63">Estado</td>
@@ -47,6 +44,7 @@
                <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                  <td><?php echo ++$j;?></td>
                  <td><?php echo $value->ciclo;?></td>
+                 <td><?php echo $value->curso;?></td>
                  <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                  <td><?php echo $value->fecha;?></td>
                  <td><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>

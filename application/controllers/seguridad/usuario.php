@@ -53,6 +53,7 @@ class Usuario extends Persona{
         $data['titulo_tabla']    = "RELACIÓN DE USUARIOS";      
         $data['titulo_busqueda'] = "BUSCAR USUARIO";
          $data['menu']            = $menu;
+        $data['header']          = get_header();         
         $data['registros']       = $registros;
         $data['form_open']       = form_open('',array("name"=>"form1","id"=>"form1","onsubmit"=>"return valida_guiain();"));     
         $data['form_close']      = form_close();
@@ -100,7 +101,7 @@ class Usuario extends Persona{
         $filter             = new stdClass();
         $filter->order_by   = array("p.PROD_Nombre"=>"asc");
         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar('0'),$lista->rol,"id='rol' class='comboMedio'");        
-        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo_padre'=>$codigo,'codigo'=>$lista->persona));
+        $data['oculto']     = form_hidden(array('accion'=>$accion,'codigo_padre'=>$codigo,'codigo'=>$lista->persona,'flgcoordinador'=>1));
         $this->load->view('seguridad/usuario_nuevo',$data);
     }
 

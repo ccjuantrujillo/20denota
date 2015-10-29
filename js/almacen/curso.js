@@ -12,6 +12,10 @@ jQuery(document).ready(function(){
     $("body").on("click","#buscar",function(){
 	$("#frmBusqueda").submit();
     });	
+    
+    $("body").on("click","#grabar",function(){
+	$("#frmBusqueda").submit();
+    });	    
 
     $("body").on("click","#limpiar",function(){
         url = base_url+"index.php/almacen/curso/listar";

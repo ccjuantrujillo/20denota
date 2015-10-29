@@ -23,7 +23,7 @@ class Cursociclo_model extends CI_Model{
         $this->db->from($this->table." as c");
         $this->db->join($this->table_curso.' as d','d.PROD_Codigo=c.PROD_Codigo','inner');
         $this->db->join($this->table_ciclo.' as e','e.CICLOP_Codigo=c.CICLOP_Codigo','inner');
-        if(isset($filter->curso) && $filter->curso!='')           $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
+        if(isset($filter->curso))           $this->db->where(array("c.PROD_Codigo"=>$filter->curso));
         if(isset($filter->ciclo))           $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));
         if(isset($filter->cursociclo) && $filter->cursociclo!='') $this->db->where(array("c.CURSOCIP_Codigo"=>$filter->cursociclo));
         if(isset($filter->order_by) && count($filter->order_by)>0){

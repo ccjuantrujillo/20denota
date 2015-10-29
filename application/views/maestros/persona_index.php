@@ -12,11 +12,7 @@
 </head>
 <body>
 <div class="wrapper" > 
-    <div class="headerlogo">
-        <a href="#" id="logo"><img src="<?php echo img;?>logopuertosaber.jpg"/></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2014</h2>
-        <h3><a href="#" id="cerrar">Cerrar Sesi&oacute;n</a></h3>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="zonebody_esika patbotom">
         <ul class="nav">
             <?php foreach($menu as $item => $value):;?>

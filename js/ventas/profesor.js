@@ -1,11 +1,4 @@
 jQuery(document).ready(function(){
-//    $('ul li:has(ul)').hover(function(e) {
-//         $(this).find('ul').css({display: "block"});
-//     },
-//     function(e) {
-//         $(this).find('ul').css({display: "none"});
-//     });   
-
     $("#nuevo").click(function(){
         dataString = "";
         url = base_url+"index.php/ventas/profesor/editar/n";
@@ -38,6 +31,15 @@ jQuery(document).ready(function(){
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
             location.href = base_url+"index.php/ventas/profesor/listar";
+        });
+    });
+
+    $("body").on('click',"#anadir_estudio",function(){
+        url = base_url+"index.php/ventas/estudios/grabar";
+        dataString  = $('#frm_formacion').serialize();
+        $.post(url,dataString,function(data){
+            alert('Operacion realizada con exito');
+            //location.href = base_url+"index.php/ventas/profesor/listar";
         });
     });
 
@@ -92,3 +94,7 @@ function selecciona_profesor(codigo){
     window.close();
 }
 
+function selecciona_profesor2(codigo){
+    window.opener.selecciona_profesor2(codigo); 
+    window.close();
+}

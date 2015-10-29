@@ -49,8 +49,6 @@ class Rol extends Controller{
             $this->pagination->initialize($conf);
             $data['paginacion']      = $this->pagination->create_links();
             $this->layout->view('seguridad/rol_index',$data);
-	
-        
         }
 
      public function nuevo(){

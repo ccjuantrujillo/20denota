@@ -24,11 +24,12 @@ class Cursociclo extends CI_Controller {
     }
     
     public function listar($j=0){
-        $filter           = new stdClass();
+        $filter           = new stdClass();    
         $filter->rol      = $this->session->userdata('rolusu');	
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu       = get_menu($filter);
         $filter     = new stdClass();
+        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];      
         $filter_not = new stdClass(); 
         $filter->order_by    = array("e.COMPC_Nombre"=>"desc","d.PROD_Nombre"=>"asc");
         $registros = count($this->cursociclo_model->listar($filter,$filter_not));
@@ -53,6 +54,7 @@ class Cursociclo extends CI_Controller {
         $data['titulo']     = "Listar Cursos por Ciclo";
         $data['lista']      = $lista;
         $data['menu']       = $menu;
+        $data['header']          = get_header();        
         $data['registros']  = $registros;
         $data['j']          = $j;
         $data['paginacion'] = $this->pagination->create_links();

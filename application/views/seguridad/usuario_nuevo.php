@@ -30,15 +30,15 @@
                     </tr>                    
                     <tr>
                       <td width="50%" bgcolor="#d5e2f2">Apellido Paterno</td>
-                      <td class="formss"><input type="text" class="cajaMedia" name="paterno" id="paterno" value="<?php echo $lista->paterno;?>"></td>
+                      <td class="formss"><input type="text" class="cajaMedia" name="paterno" id="paterno" value="<?php echo $lista->paterno;?>" readonly="readonly"></td>
                     </tr>
                     <tr>
                       <td width="50%" bgcolor="#d5e2f2">Apellido Materno</td>
-                      <td class="formss"><input type="text" class="cajaMedia" name="materno" id="materno" value="<?php echo $lista->materno;?>"></td>
+                      <td class="formss"><input type="text" class="cajaMedia" name="materno" id="materno" value="<?php echo $lista->materno;?>" readonly="readonly"></td>
                     </tr>                    
                     <tr>
                       <td width="50%" bgcolor="#d5e2f2">Nombres</td>
-                      <td class="formss"><input type="text" class="cajaMedia" name="nombres" id="nombres" value="<?php echo $lista->nombres;?>"></td>
+                      <td class="formss"><input type="text" class="cajaMedia" name="nombres" id="nombres" value="<?php echo $lista->nombres;?>" readonly="readonly"></td>
                     </tr>
                     <tr>
                       <td width="50%" bgcolor="#d5e2f2">Usuario</td>

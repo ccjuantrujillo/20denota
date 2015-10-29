@@ -33,6 +33,7 @@ class Acta_model extends CI_Model{
         $this->db->join($this->table_tipoestudio.' as h','h.TIPP_Codigo=g.TIPP_Codigo','inner');
         $this->db->join($this->table_ciclo.' as i','i.CICLOP_Codigo=g.CICLOP_Codigo','inner');
         if(isset($filter->acta) && $filter->acta!='')         $this->db->where(array("p.ACTAP_Codigo"=>$filter->acta));
+        if(isset($filter->curso) && $filter->curso!='')       $this->db->where(array("e.PROD_Codigo"=>$filter->curso));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("p.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){

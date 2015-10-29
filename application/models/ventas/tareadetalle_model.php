@@ -26,13 +26,13 @@ class Tareadetalle_model extends CI_Model{
 //    }
     
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
-        $this->db->select('*');
+        $this->db->select("*,DATE_FORMAT( d.TAREADETC_FechaEntrega,'%d/%m/%Y' ) AS fentrega",FALSE);
         $this->db->from($this->table." as d");
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=d.PROP_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
-        $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','inner');
-        $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','inner');
-        $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=h.TIPCICLOP_Codigo','inner');
+        $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','left');
+        $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','left');
+        $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=d.TIPCICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as j','j.TIPP_Codigo=i.TIPP_Codigo','inner');
         if(isset($filter->tarea) && $filter->tarea!='')       $this->db->where(array("d.TAREAP_Codigo"=>$filter->tarea));
         if(isset($filter->tareadetalle) && $filter->tareadetalle!='')       $this->db->where(array("d.TAREADETP_Codigo"=>$filter->tareadetalle));
@@ -67,7 +67,7 @@ class Tareadetalle_model extends CI_Model{
     }    
     
     public function modificar($codigo,$data){
-        $this->db->where("TAREAP_Codigo",$codigo);
+        $this->db->where("TAREADETP_Codigo",$codigo);
         $this->db->update($this->table,$data);
     }
 	

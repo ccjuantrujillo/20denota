@@ -16,11 +16,11 @@ jQuery(document).ready(function(){
         n      = $("#tabla_detalle tr").length - 1;
         if($('#curso').val()!=0){
             fila   = "<tr>";
-            fila  += "<td align='center'><input type='text' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value=''>"+(parseInt(n)+1)+"</td>";
-            fila  += "<td align='center'><select class='comboGrande' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>";
+            fila  += "<td align='center'><input type='hidden'  value='' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]'>"+(parseInt(n)+1)+"</td>";
+            fila  += "<td align='center'><select class='comboMedio' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
             fila  += "<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>";
-            fila  += "<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>";
+            fila  += "<td align='center'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>";
             fila  += "<td align='center'><a href='#'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>";
             fila  += "</tr>";
             $("#tabla_detalle").append(fila);
@@ -33,15 +33,32 @@ jQuery(document).ready(function(){
         }
     });       
     
-   $("body").on('change',"#curso,#ciclo",function(){
-       accion      = $("#accion").val();
-       codigo      = $("#codigo").val();
-       dataString  = $('#frmPersona').serialize();
-       url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
+//   $("body").on('change',"#ciclo",function(){
+//       accion      = $("#accion").val();
+//       codigo      = $("#codigo").val();
+//       dataString  = $('#frmPersona').serialize();
+//       url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
+//       $.post(url,dataString,function(data){
+//           $('#mensaje').html(data);
+//       });             
+//   });     
+   
+     $("body").on('change',"#curso",function(){
+        url    = base_url+"index.php/ventas/profesor/obtener/";
+        objRes = new Object();
+        objRes.curso = $("#curso").val();
+        objRes.flgcoordinador = 1;
+        dataString   = {objeto: JSON.stringify(objRes)};
+        $("#profesor").children().remove().end().append("<option value='0'>:: Seleccione ::</option>");
        $.post(url,dataString,function(data){
-           $('#mensaje').html(data);
-       });             
-   });       
+            $.each(data, function(item,value){
+               opt       = document.createElement('option');
+               opt.value = value.PROP_Codigo;
+               opt.appendChild(document.createTextNode(value.PERSC_ApellidoPaterno+' '+value.PERSC_ApellidoMaterno+' '+value.PERSC_Nombre));
+               $('#profesor').append(opt);
+           });
+       },"json");             
+   });    
     
     $("body").on('click',"#imprimir",function(){
         codigo   = $("#codigo").val();
@@ -110,14 +127,14 @@ jQuery(document).ready(function(){
     dataString   = {objeto: JSON.stringify(objRes)}; 
     $.post(url,dataString,function(data){
         tr.empty();              
-        tr.append("<td align='center'><input type='text' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
-        tr.append("<td align='center'><select class='comboGrande' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>");
+        tr.append("<td align='center'><input type='hidden' id='codigodetalle["+n+"]' name='codigodetalle["+n+"]' value='"+codigodetalle+"'>"+(parseInt(n)+1)+"</td>");
+        tr.append("<td align='center'><select class='comboMedio' name='tipoestudiociclo["+n+"]' id='tipoestudiociclo["+n+"]' onchange='selectTema("+n+");'><option value='0'>::Seleccione::</option></select></td>");
         tr.append("<td align='center'><select class='comboGrande' name='tema["+n+"]' id='tema["+n+"]'><option value='0'>::Seleccione::</option></select></td>");
         tr.append("<td align='center'><select class='comboGrande' name='responsable["+n+"]' id='responsable["+n+"]'><option value='0'>::Seleccione::</option></select></td>");        
-        tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value=''></td>");        
+        tr.append("<td align='left'><input type='text' class='cajaMinima' name='cantidad["+n+"]' id='cantidad["+n+"]' value='"+data["TAREADETC_Cantidad"]+"'></td>");                
         tr.append("<td align='center'><a href='#' class='editardetalle'>Editar</a>&nbsp;<a href='#' class='eliminardetalle'>Eliminar</a></td>");
         selectTipoestudiociclo(n,data["TIPCICLOP_Codigo"]);  
-        selectTema(n,data["PRODATRIBDET_Codigo"]);  
+        selectTema(n,data["TIPCICLOP_Codigo"],data["PRODATRIBDET_Codigo"]);  
         selectResponsable(n,data["PROP_Codigo"]);  
      },"json");              
      });    
@@ -186,7 +203,7 @@ function selectTipoestudiociclo(n,valor){
     },"json");
 }
 
-function selectTema(n,valor){
+function selectTema(n,tipoestudio,valor){
     valor = (valor) ? valor : null;
     b      = "tema["+n+"]";
     d      = "tipoestudiociclo["+n+"]";
@@ -195,7 +212,8 @@ function selectTema(n,valor){
     opt.value = "0";
     opt.appendChild(document.createTextNode("::Seleccione::"));
     document.getElementById(b).appendChild(opt);
-    tipoestudiociclo = document.getElementById(d).value;
+    tipoestudiociclo = (tipoestudio) ? tipoestudio : document.getElementById(d).value;
+    //tipoestudiociclo = document.getElementById(d).value;
     url    = base_url+"index.php/almacen/tema/obtener";
     objRes = new Object();
     objRes.tipoestudiociclo = tipoestudiociclo;
@@ -231,34 +249,3 @@ function selectResponsable(n,valor){
         });
     },"json");
 }
-//
-//function addToList(id1,id2) {
-//    var comp = document.getElementById(id1);
-//    var comp2 = document.getElementById(id2);
-//    var value = comp.options[comp.selectedIndex].value;
-//    var text = comp.options[comp.selectedIndex].text;
-//    var selectedOption = comp.options[comp.selectedIndex];
-//    var optn = document.createElement("option");
-//    optn.text = text;
-//    optn.value = value;
-//    comp2.options.add(optn);
-//    selectedOption.parentNode.removeChild(selectedOption);
-//}
-//
-//function removeFromList(combo2,combo1) {
-//    var comp2 = document.getElementById(combo2); //combo1
-//    var comp1 = document.getElementById(combo1); //combo2
-//    var value = comp2.options[comp2.selectedIndex].value;
-//    var text = comp2.options[comp2.selectedIndex].text;
-//    var selectedOption = comp2.options[comp2.selectedIndex];
-////    window.alert(value + ", " + text);
-////    return;
-////    var pos = comp2.options[comp.selectedIndex].id;
-//    var optn = document.createElement("option");
-//    optn.text = text;
-//    optn.value = value;
-//    
-////    comp.options[index] = new Option(myobject[index], index);
-//    comp1.appendChild(optn);
-//    selectedOption.parentNode.removeChild(selectedOption);
-//}
