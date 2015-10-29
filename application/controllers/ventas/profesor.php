@@ -127,7 +127,7 @@ class Profesor extends Persona
          $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); ;
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
          $data['experiencia'] = $this->editar_experiencia($accion,$codigo);
-         $data['educacion']   = $this->editar_educacion($accion,$codigo);
+         $data['estudios']    = $this->editar_estudios($accion,$codigo);
          $data['idiomas']     = $this->editar_idiomas($accion,$codigo);
          $data['conferencias']= $this->editar_conferencias($accion,$codigo);
          $data['sociedades']  = $this->editar_sociedades($accion,$codigo);
@@ -163,7 +163,7 @@ class Profesor extends Persona
          return $this->load->view("ventas/profesor_nuevo_experiencia",$data,true);
      }
      
-     public function editar_educacion($accion,$codigo=""){
+     public function editar_estudios($accion,$codigo=""){
          $lista = new stdClass();
          if($accion == "e"){
              $filter            = new stdClass();
@@ -176,7 +176,7 @@ class Profesor extends Persona
          elseif($accion == "n"){
              $lista->estudios   = array();  
          }         
-         return $this->load->view("ventas/profesor_nuevo_educacion",$lista,true);
+         return $this->load->view("ventas/profesor_nuevo_estudios",$lista,true);
      } 
      
      public function editar_idiomas($accion,$codigo=""){

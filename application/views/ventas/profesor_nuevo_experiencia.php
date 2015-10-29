@@ -41,7 +41,7 @@
             ?>
            <h2><?php echo $value->UNIVC_Nombre;?></h2>
            <h3><?php echo $value->GRADOC_Descripcion;?>,&nbsp;<?php echo $value->ESTUDIOC_Descripcion;?></h3>
-           <h3><?php echo $arrmes[$value->ESTUDIOC_MesInicio];?>-<?php echo $value->ESTUDIOC_AnoInicio;?>&nbsp;-&nbsp;<?php echo $arrmes[$value->ESTUDIOC_MesFin];?>-<?php echo $value->ESTUDIOC_AnoFin;?></h3>
+           <h3><?php echo $arrmes[0];?>-<?php echo 1;?>&nbsp;-&nbsp;<?php echo $arrmes[0];?>-<?php echo 1;?></h3>
             <?php
         }
     }

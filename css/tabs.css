@@ -49,14 +49,14 @@
  width: 100%;
 }
 #content div {
- opacity: 0;
  padding: 1.5em;
- position: absolute;
 }
 #content-1 {
  clear: both;
  margin-bottom: 0em;
  width: 95%;
+ opacity: 0;
+ position: absolute; 
 }
 
 #content-2{
@@ -64,6 +64,8 @@
  margin-bottom: 0em;
  width: 95%;
  height: 380px;
+ opacity: 0; 
+ position: absolute; 
 }
 
 #content-2 span.subtitulo{

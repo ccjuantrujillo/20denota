@@ -8,15 +8,15 @@
         <label for="tab-2">Datos Secundarios</label>
         <div id="content">   
             <div id="content-1">
-                <span id="principal"><?php echo $principal;?></span>
+                <div id="principal"><?php echo $principal;?></div>
             </div>
             <div id="content-2">
-                <span id="experiencia"><?php echo $experiencia;?></span>
-                <span id="educacion"><?php echo $educacion;?></span>
-                <span id="idiomas"><?php echo $idiomas;?></span>
-                <span id="conferencias"><?php echo $conferencias;?></span>
-                <span id="sociedades"><?php echo $sociedades;?></span>
-                <span id="empresa"><?php echo $empresa;?></span>
+                <div id="experiencia"><?php echo $experiencia;?></div>
+                <div id="estudios"><?php echo $estudios;?></div>
+                <div id="idiomas"><?php echo $idiomas;?></div>
+                <div id="conferencias"><?php echo $conferencias;?></div>
+                <div id="sociedades"><?php echo $sociedades;?></div>
+                <div id="empresa"><?php echo $empresa;?></div>
             </div>
         </div>        
     </div>
