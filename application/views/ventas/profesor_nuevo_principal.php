@@ -1,3 +1,4 @@
+<?php echo $form_open;?>
 <input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10" readonly="readonly">
 <table width="100%" style="background-color: #f4f7ff">
     <tr>
@@ -60,3 +61,5 @@
       <td bgcolor="#d5e2f2">&nbsp;</td>                          
     </tr>   
 </table>
+<?php echo $oculto;?>
+<?php echo $form_close;?>  

@@ -1,5 +1,5 @@
 <span class="subtitulo">Experiencia:</span>
-<span class="btn_agregar"><input type="button" id="anadir_experiencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir" onclick="$('.tab_experiencia').show();"></span>                
+<span class="btn_agregar"><input type="button" id="anadir_experiencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
 <span class="tab_experiencia">
    <form id="frm_experiencia">
        <table style="width: 100%;background-color: #f4f7ff">
@@ -27,20 +27,21 @@
          </tr>  
          <tr>
            <td>
-               <input type="button" id="anadir_experiencia" class="aceptarlog3" value="Guardar">&nbsp;
+               <input type="button" id="grabar_experiencia" class="aceptarlog3" value="Guardar">&nbsp;
                <input type="button" id="cancelar_experiencia" class="aceptarlog3" value="Cancelar" onclick="$('.tab_experiencia').hide();">
            </td>
          </tr>
-         </table>                          
+         </table>   
+       <?php echo $oculto_exp?>
    </form>
 </span>  
 <span class="lst_esperiencia">
     <?php
-    if(count($lista->estudios)>0){
-        foreach($lista->estudios as $indice=>$value){
+    if(count($lista->experiencia)>0){
+        foreach($lista->experiencia as $indice=>$value){
             ?>
-           <h2><?php echo $value->UNIVC_Nombre;?></h2>
-           <h3><?php echo $value->GRADOC_Descripcion;?>,&nbsp;<?php echo $value->ESTUDIOC_Descripcion;?></h3>
+           <h2><?php echo $value->EXPERPC_Cargo;?></h2>
+           <h3><?php echo $value->EXPERPC_Empresa;?>,&nbsp;<?php echo $value->EXPERPC_Empresa;?></h3>
            <h3><?php echo $arrmes[0];?>-<?php echo 1;?>&nbsp;-&nbsp;<?php echo $arrmes[0];?>-<?php echo 1;?></h3>
             <?php
         }

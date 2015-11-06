@@ -1,5 +1,4 @@
 <div class="contenidotabla" >        
-    <?php echo $form_open;?>
     <h2><?php echo $titulo;?></h2>   
     <div id="container">     
         <input id="tab-1" type="radio" name="tab-group" checked="checked" />
@@ -8,7 +7,7 @@
         <label for="tab-2">Datos Secundarios</label>
         <div id="content">   
             <div id="content-1">
-                <div id="principal"><?php echo $principal;?></div>
+                <?php echo $principal;?>
             </div>
             <div id="content-2">
                 <div id="experiencia"><?php echo $experiencia;?></div>
@@ -24,6 +23,4 @@
         <input class="botones" id="cancelar" type="button" alt="Cancelar" title="Cancelar" value="Cancelar"/>                                                     
         <input class="botones" id="grabar" type="button" alt="Aceptar" title="Aceptar" value="Aceptar"/>
     </div>         
-    <?php echo $oculto;?>
-    <?php echo $form_close;?>  
 </div>

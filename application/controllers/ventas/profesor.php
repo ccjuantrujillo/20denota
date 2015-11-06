@@ -8,6 +8,11 @@ class Profesor extends Persona
         $this->load->model(ventas.'matricula_model');
         $this->load->model(ventas.'profesor_model');
         $this->load->model(ventas.'estudios_model');
+        $this->load->model(ventas.'estudiosidiomas_model');
+        $this->load->model(ventas.'experiencia_model');
+        $this->load->model(ventas.'conferencia_model');
+        $this->load->model(ventas.'trabajo_model');
+        $this->load->model(ventas.'profesorsociedad_model');
         $this->load->model(seguridad.'rol_model');
         $this->load->model(almacen.'curso_model');
         $this->load->model(maestros.'tipodocumento_model');
@@ -125,7 +130,7 @@ class Profesor extends Persona
          $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
          $data['selcoord']   = form_dropdown('coordinador',$arrCoord,$lista->coordinador,"id='coordinador' class='comboMedio'");
          $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); ;
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
+         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo));
          $data['experiencia'] = $this->editar_experiencia($accion,$codigo);
          $data['estudios']    = $this->editar_estudios($accion,$codigo);
          $data['idiomas']     = $this->editar_idiomas($accion,$codigo);
@@ -138,26 +143,25 @@ class Profesor extends Persona
 
      public function editar_experiencia($accion,$codigo=""){
          $lista = new stdClass();
+         $data  = array();
          if($accion == "e"){
-             $filter            = new stdClass();
-             $filter->profesor  = $codigo;
-             $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $lista->experiencia = $this->experiencia_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
+             $lista->experiencia   = array();  
          }
-         $arrMes             = array("0"=>"Mes","1"=>"Enero","2"=>"Febrero","3"=>"Marzo","4"=>"Abril","5"=>"Mayo","6"=>"Junio","7"=>"Julio","8"=>"Agosto","9"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
-         $arrAno             = range(1950,2020);
-         array_unshift($arrAno,"Año");        
+         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno[0]="Año";
+         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
          $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
          $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
          $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
          $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");         
-         $data['lista']          = $lista;
+         $data['lista']      = $lista;
+         $data['oculto_exp']     = form_hidden(array("accion_exp"=>$accion,"codigo_exp"=>$lista->codigo));
          $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),0,"id='universidad' class='comboGrande'");
          $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");         
          return $this->load->view("ventas/profesor_nuevo_experiencia",$data,true);
@@ -165,6 +169,7 @@ class Profesor extends Persona
      
      public function editar_estudios($accion,$codigo=""){
          $lista = new stdClass();
+         $data  = array();
          if($accion == "e"){
              $filter            = new stdClass();
              $filter->profesor  = $codigo;
@@ -175,56 +180,63 @@ class Profesor extends Persona
          }
          elseif($accion == "n"){
              $lista->estudios   = array();  
-         }         
-         return $this->load->view("ventas/profesor_nuevo_estudios",$lista,true);
+         } 
+         $data['lista']          = $lista;
+         return $this->load->view("ventas/profesor_nuevo_estudios",$data,true);
      } 
      
      public function editar_idiomas($accion,$codigo=""){
          $lista = new stdClass();
+         $data  = array();
          if($accion == "e"){
              $filter            = new stdClass();
              $filter->profesor  = $codigo;
              $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $lista->estudiosidiomas = $this->estudiosidiomas_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
-         }         
-         return $this->load->view("ventas/profesor_nuevo_idiomas",$lista,true);
+             $lista->estudiosidiomas   = array();  
+         }      
+         $data['lista']          = $lista;
+         return $this->load->view("ventas/profesor_nuevo_idiomas",$data,true);
      }  
      
      public function editar_conferencias($accion,$codigo=""){
          $lista = new stdClass();
+         $data  = array();
          if($accion == "e"){
              $filter            = new stdClass();
              $filter->profesor  = $codigo;
              $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $lista->conferencias = $this->conferencia_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
-         }         
-         return $this->load->view("ventas/profesor_nuevo_conferencias",$lista,true);
+             $lista->conferencias   = array();  
+         }    
+         $data['lista']          = $lista;
+         return $this->load->view("ventas/profesor_nuevo_conferencias",$data,true);
      }  
      
      public function editar_sociedades($accion,$codigo=""){
          $lista = new stdClass();
+         $data  = array();
          if($accion == "e"){
              $filter            = new stdClass();
              $filter->profesor  = $codigo;
              $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $lista->sociedades = $this->profesorsociedad_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
-         }         
-         return $this->load->view("ventas/profesor_nuevo_sociedades",$lista,true);
+             $lista->sociedades   = array();  
+         }     
+         $data['lista']          = $lista;
+         return $this->load->view("ventas/profesor_nuevo_sociedades",$data,true);
      }      
      
      public function editar_empresa($accion,$codigo=""){
@@ -235,12 +247,13 @@ class Profesor extends Persona
              $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $lista->trabajos = $this->trabajo_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
+             $lista->trabajos   = array();  
          }         
-         return $this->load->view("ventas/profesor_nuevo_empresa",$lista,true);
+          $data['lista']          = $lista;
+         return $this->load->view("ventas/profesor_nuevo_empresa",$data,true);
      }           
      
     public function grabar(){

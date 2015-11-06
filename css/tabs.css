@@ -49,7 +49,7 @@
  width: 100%;
 }
 #content div {
- padding: 1.5em;
+ padding: 1em;
 }
 #content-1 {
  clear: both;
@@ -66,6 +66,7 @@
  height: 380px;
  opacity: 0; 
  position: absolute; 
+ overflow: auto;
 }
 
 #content-2 span.subtitulo{
@@ -75,17 +76,18 @@
     float:left;
     width: 50%;
     color:#A0A0A0;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #content-2 span.btn_agregar{
-     margin-top: 10px;
     float: right;
     width: 50%;
+    margin-top: 5px;
 }
 
-#content-2 .tab_estudios,.tab_empresa,.tab_idiomas,.tab_sociedades,.tab_experiencia,.tab_conferencia{
+#content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedades,span.tab_experiencia,span.tab_conferencia{
     float: clear;
+    float: left;
     display: none;
     align:left;
 }
@@ -99,20 +101,22 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11pt;
     text-align:left;
+    float:left;
+    width: 100%;
     margin-top: 5px;
-    padding-left: 0px;
-    padding-bottom: 0px;
-    padding-top: 0px;
-    height: 15px;
-    align:left;
+    margin-left: 5px;
+    padding: 0px;
+    list-style:circle;
 }
 
 #content-2 span h3{
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
+    font-size: 11pt;
     text-align:left;
-    padding-left: 0px;
-    color:#000;
+    width: 100%;
+    float:left;
+    padding: 0px;
+    margin-left: 5px;
 }
 
 /*#content-2 p {

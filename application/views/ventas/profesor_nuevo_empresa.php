@@ -36,12 +36,12 @@
 </span>                 
 <span class="lst_empresa">
     <?php
-    if(count($lista->estudios)>0){
-        foreach($lista->estudios as $indice=>$value){
+    if(count($lista->trabajos)>0){
+        foreach($lista->trabajos as $indice=>$value){
             ?>
-           <h2><?php echo $value->UNIVC_Nombre;?></h2>
-           <h3><?php echo $value->GRADOC_Descripcion;?>,&nbsp;<?php echo $value->ESTUDIOC_Descripcion;?></h3>
-           <h3><?php echo $arrmes[$value->ESTUDIOC_MesInicio];?>-<?php echo $value->ESTUDIOC_AnoInicio;?>&nbsp;-&nbsp;<?php echo $arrmes[$value->ESTUDIOC_MesFin];?>-<?php echo $value->ESTUDIOC_AnoFin;?></h3>
+           <h2><?php echo $value->TRABAJC_Descripcion;?></h2>
+           <h3><?php echo $value->TRABAJC_Descripcion;?>,&nbsp;<?php echo $value->TRABAJC_Descripcion;?></h3>
+           <h3></h3>
             <?php
         }
     }

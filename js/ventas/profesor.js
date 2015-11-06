@@ -9,21 +9,16 @@ jQuery(document).ready(function(){
 
     });
 
-//    $("#imprimir").click(function(){
-//        codigo   = $("#codigo").val();
-//        url = base_url+"index.php/ventas/cliente/ver/"+codigo;
-//        window.open(url, this.target, 'width=800,height=400,top=150,left=200');
-//    });
-
     $('body').on('click',"#cancelar",function(){
         url = base_url+"index.php/ventas/profesor/listar";
         location.href = url;
     });
 
-//    $("#cerrar").click(function(){
-//        url = base_url+"index.php/inicio/index";
-//        location.href = url;
-//    });
+    $("body").on('click',"#anadir_experiencia",function(){
+        $("#accion_exp").val("n");
+        $('.tab_experiencia').show();
+        
+    });
 
     $("body").on('click',"#grabar",function(){
         url = base_url+"index.php/ventas/profesor/grabar";
@@ -34,7 +29,19 @@ jQuery(document).ready(function(){
         });
     });
 
-    $("body").on('click',"#anadir_estudio",function(){
+    $("body").on('click',"#grabar_experiencia",function(){
+        url = base_url+"index.php/ventas/experiencia/grabar";
+        profesor = $("#codigo").val();
+        dataString  = $('#frm_experiencia').serialize();
+        dataString  = dataString+"&profesor="+profesor;
+        alert(dataString);
+        $.post(url,dataString,function(data){
+            alert('Operacion realizada con exito');
+            //location.href = base_url+"index.php/ventas/experiencia/listar";
+        });
+    });
+
+    $("body").on('click',"#grabar_estudio",function(){
         url = base_url+"index.php/ventas/estudios/grabar";
         dataString  = $('#frm_formacion').serialize();
         $.post(url,dataString,function(data){
