@@ -1,5 +1,5 @@
 <span class="subtitulo">Conferencias</span>
-<span class="btn_agregar"><input type="button" id="anadir" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir" onclick="$('.tab_conferencia').show();"></span>                
+<span class="btn_agregar"><input type="button" id="editar_conferencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
 <span class="tab_conferencia">
    <form id="frm_conferencia">
        <table style="width: 100%;background-color: #f4f7ff">

@@ -1,6 +1,6 @@
 <span class="subtitulo">Sociedades Cientificas</span>
-<span class="btn_agregar"><input type="button" id="anadir" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir" onclick="$('.tab_sociedades').show();"></span>                                
-<span class="tab_sociedades">
+<span class="btn_agregar"><input type="button" id="editar_sociedad" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                                
+<span class="tab_sociedad">
     <form id="frm_sociedades">
         <table style="width: 100%;background-color: #f4f7ff">
             <tr>
@@ -14,7 +14,7 @@
           <tr>
             <td>
                 <input type="button" id="anadir_sociedades" class="aceptarlog3" value="Guardar">&nbsp;
-                <input type="button" id="cancelar_sociedades" class="aceptarlog3" value="Cancelar" onclick="$('.tab_sociedades').hide();">
+                <input type="button" id="cancelar_sociedades" class="aceptarlog3" value="Cancelar" onclick="$('.tab_sociedad').hide();">
             </td>
           </tr>
           </table>                          

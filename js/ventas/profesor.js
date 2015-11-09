@@ -9,23 +9,83 @@ jQuery(document).ready(function(){
 
     });
 
+    /*Ediciones*/
+   $("body").on("click",".editar",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "";    
+        url = base_url+"index.php/ventas/profesor/editar/e/"+codigo;
+        $.post(url,dataString,function(data){
+            $('#basic-modal-content').modal();
+            $('#mensaje').html(data);
+        });  
+    });       
+    
+    $("body").on('click',"#editar_experiencia",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/experiencia/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_experiencia').show();
+            $('.tab_experiencia').html(data);
+        });
+    });
+    
+    $("body").on('click',"#editar_estudios",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/estudio/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_estudios').show();
+            $('.tab_estudios').html(data);
+        });
+    });    
+    
+    $("body").on('click',"#editar_idiomas",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/idiomas/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_idiomas').show();
+            $('.tab_idiomas').html(data);
+        });
+    });       
+    
+    $("body").on('click',"#editar_conferencia",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/conferencia/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_conferencia').show();
+            $('.tab_conferencia').html(data);
+        });
+    });    
+    
+    $("body").on('click',"#editar_sociedad",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/sociedad/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_sociedad').show();
+            $('.tab_sociedad').html(data);
+        });
+    });      
+    
+    $("body").on('click',"#editar_empresa",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/empresa/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_empresa').show();
+            $('.tab_empresa').html(data);
+        });
+    });         
+    
     $('body').on('click',"#cancelar",function(){
         url = base_url+"index.php/ventas/profesor/listar";
         location.href = url;
     });
 
-    $("body").on('click',"#anadir_experiencia",function(){
-        $("#accion_exp").val("n");
-        $('.tab_experiencia').show();
-        
-    });
-
+    /*Grabaciones*/
     $("body").on('click',"#grabar",function(){
         url = base_url+"index.php/ventas/profesor/grabar";
         dataString  = $('#frmPersona').serialize();
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
-            location.href = base_url+"index.php/ventas/profesor/listar";
+            location.href = base_url+"index.php/ventas/profesor/listar/";  
         });
     });
 
@@ -34,21 +94,61 @@ jQuery(document).ready(function(){
         profesor = $("#codigo").val();
         dataString  = $('#frm_experiencia').serialize();
         dataString  = dataString+"&profesor="+profesor;
-        alert(dataString);
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
-            //location.href = base_url+"index.php/ventas/experiencia/listar";
+            url2 = base_url+"index.php/ventas/experiencia/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#experiencia').html(data2); 
+            });
         });
     });
 
     $("body").on('click',"#grabar_estudio",function(){
-        url = base_url+"index.php/ventas/estudios/grabar";
+        url = base_url+"index.php/ventas/estudio/grabar";
+        profesor = $("#codigo").val();
         dataString  = $('#frm_formacion').serialize();
+        dataString  = dataString+"&profesor="+profesor;
         $.post(url,dataString,function(data){
             alert('Operacion realizada con exito');
-            //location.href = base_url+"index.php/ventas/profesor/listar";
+            url2 = base_url+"index.php/ventas/estudio/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#estudios').html(data2); 
+            });
         });
     });
+
+    $("body").on('click',"#grabar_idioma",function(){
+        url = base_url+"index.php/ventas/idiomas/grabar";
+        profesor = $("#codigo").val();
+        dataString  = $('#frm_idioma').serialize();
+        dataString  = dataString+"&profesor="+profesor;
+        $.post(url,dataString,function(data){
+            alert('Operacion realizada con exito');
+            url2 = base_url+"index.php/ventas/idiomas/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#idiomas').html(data2); 
+            });
+        });
+    });
+
+    /*Eliminar*/
+    $("body").on("click",".eliminar",function(){
+       if(confirm('Esta seguro desea eliminar este profesor?')){
+            coddetalle = $(this).parent().parent().attr("id");
+            dataString = "codigo="+coddetalle;
+            url = base_url+"index.php/ventas/profesor/eliminar";
+            $.post(url,dataString,function(data){
+    //            if(data=="true"){
+                    alert("El profesor se borro correctamente");
+                    url = base_url+"index.php/ventas/profesor/listar";
+                    location.href = url;
+    //            }
+    //            else{
+    //                alert("No es posible eliminar a este alumno,\n esta matriculado en al menos 1 curso");
+    //            }
+            });         
+       }        
+    });   
 
     $("body").on("click","#logo",function(){
         url = base_url+"index.php/inicio/principal";
@@ -63,32 +163,6 @@ jQuery(document).ready(function(){
          });
     });   
 });
-
-function editar(codigo){
-    dataString = "codigo="+codigo;
-    url = base_url+"index.php/ventas/profesor/editar/e/"+codigo;
-    $.post(url,dataString,function(data){
-        $('#basic-modal-content').modal();
-        $('#mensaje').html(data);
-    });
-}
-
-function eliminar(codigo){
-    if(confirm('Esta seguro desea eliminar este alumno?')){
-        dataString = "codigo="+codigo;
-        url = base_url+"index.php/ventas/profesor/eliminar";
-        $.post(url,dataString,function(data){
-//            if(data=="true"){
-                alert("El alumno se borro correctamente");
-                url = base_url+"index.php/ventas/profesor/listar";
-                location.href = url;
-//            }
-//            else{
-//                alert("No es posible eliminar a este alumno,\n esta matriculado en al menos 1 curso");
-//            }
-        });
-    }
-}
 
 function abrir_formulario_ubigeo(){
 	ubigeo = $("#cboNacimiento").val();

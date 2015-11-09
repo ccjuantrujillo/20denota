@@ -71,11 +71,11 @@
 
 #content-2 span.subtitulo{
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 12pt;
+    font-size: 11pt;
     text-align:left;
     float:left;
     width: 50%;
-    color:#A0A0A0;
+    color:#0000FF;
     margin-top: 5px;
 }
 
@@ -85,7 +85,7 @@
     margin-top: 5px;
 }
 
-#content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedades,span.tab_experiencia,span.tab_conferencia{
+#content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedad,span.tab_experiencia,span.tab_conferencia{
     float: clear;
     float: left;
     display: none;
@@ -104,7 +104,7 @@
     float:left;
     width: 100%;
     margin-top: 5px;
-    margin-left: 5px;
+    margin-left: 0px;
     padding: 0px;
     list-style:circle;
 }

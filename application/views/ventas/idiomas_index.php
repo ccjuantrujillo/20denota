@@ -1,5 +1,5 @@
 <span class="subtitulo">Idiomas</span>
-<span class="btn_agregar"><input type="button" id="anadir" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir" onclick="$('.tab_idiomas').show();"></span>                
+<span class="btn_agregar"><input type="button" id="editar_idiomas" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
 <span class="tab_idiomas">
     <form id="frm_idiomas">
         <table style="width: 100%;background-color: #f4f7ff">
@@ -25,8 +25,8 @@
     if(count($lista->estudiosidiomas)>0){
         foreach($lista->estudiosidiomas as $indice=>$value){
             ?>
-           <h2><?php echo $value->ESTIDIOMC_Descripcion;?></h2>
-           <h3><?php echo $value->ESTIDIOMC_Nivel;?>,&nbsp;<?php echo $value->ESTIDIOMC_Nivel;?></h3>
+           <h2>&bull;<?php echo $value->IDIOMC_Descripcion;?></h2>
+           <h3><?php echo $arrNivel[$value->ESTIDIOMC_Nivel];?></h3>
            <h3></h3>
             <?php
         }

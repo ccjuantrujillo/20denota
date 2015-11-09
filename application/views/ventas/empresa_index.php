@@ -1,5 +1,5 @@
 <span class="subtitulo">Empresa</span>
-<span class="btn_agregar"><input type="button" id="anadir_empresa" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir" onclick="$('.tab_empresa').show();"></span>                
+<span class="btn_agregar"><input type="button" id="editar_empresa" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
 <span class="tab_empresa">
     <form id="frm_empresa">
         <table style="width: 100%;background-color: #f4f7ff">

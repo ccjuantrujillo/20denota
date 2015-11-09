@@ -7,6 +7,8 @@ class Experiencia extends CI_Controller {
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'experiencia_model');
         $this->load->model(maestros.'persona_model');        
+        $this->load->model(maestros.'universidad_model');        
+        $this->load->model(maestros.'grado_model');        
         $this->load->model(seguridad.'permiso_model');          
         $this->load->model(maestros.'local_model'); 
         $this->load->helper('menu');
@@ -19,99 +21,48 @@ class Experiencia extends CI_Controller {
         $this->load->view('seguridad/inicio');	
     }
     
-   public function listar($j=0){
-        $filter           = new stdClass();
-        $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("m.MENU_Orden"=>"asc");
-        $menu       = get_menu($filter);             
-        $filter     = new stdClass();
-        if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"]; 
-        $filter->order_by = array("c.CICLOP_Codigo"=>"desc","e.PERSC_ApellidoPaterno"=>"asc","e.PERSC_ApellidoMaterno"=>"asc");
-        $filter_not = new stdClass(); 
-        $registros = count($this->asignacion_model->listar($filter,$filter_not));
-        $matricula   = $this->asignacion_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
-        $item      = 1;
-        $lista     = array();
-        if(count($matricula)>0){
-            foreach($matricula as $indice => $value){
-                $lista[$indice]           = new stdClass();
-                $lista[$indice]->codigo   = $value->ASIGP_Codigo;
-                $lista[$indice]->nombres  = $value->PERSC_Nombre;
-                $lista[$indice]->paterno  = $value->PERSC_ApellidoPaterno;
-                $lista[$indice]->materno  = $value->PERSC_ApellidoMaterno;
-		$lista[$indice]->ciclo    = $value->COMPC_Nombre;
-                $lista[$indice]->estado   = $value->ASIGC_FlagEstado;
-                $lista[$indice]->fecha    = $value->fecha;
-                $lista[$indice]->curso    = $value->PROD_Nombre;
-            }
-        }
-        $configuracion = $this->configuracion;
-        $configuracion['base_url']    = base_url()."index.php/ventas/orden/listar";
-        $configuracion['total_rows']  = $registros;
-        $this->pagination->initialize($configuracion);
-        /*Enviamos los datos a la vista*/
-        $data['lista']        = $lista;
-        $data['menu']         = $menu;
-        $data['header']       = get_header();
-        $data['titulo']       = "Cargas de trabajo";
-        $data['nuevo']        = "Crear una nueva carga de trabajo";
-        $data['form_open']    = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close']   = form_close();         
-        $data['j']            = $j;
-        $data['registros']    = $registros;
-        $data['paginacion']   = $this->pagination->create_links();
-        $this->load->view("ventas/asignacion_index",$data);
+   public function listar($codigo){
+          $lista = new stdClass();
+         $filter = new stdClass();
+         $filter->profesor = $codigo;
+         $lista->experiencia  = $this->experiencia_model->listar($filter);     
+         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno[0]="Año";
+         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
+         $data['arrmes']     = $arrMes;         
+         $data['lista']      = $lista;
+         $this->load->view("ventas/experiencia_index",$data);
     }
 
     public function editar($accion,$codigo="",$codigodetalle=""){
-        $ciclo = $this->input->get_post('ciclo'); 
-        $lista = new stdClass();
-        if($accion == "e"){
-            $filter             = new stdClass();
-            $filter->asignacion = $codigo;
-            $asignacion         = $this->asignacion_model->obtener($filter);
-            $lista->paterno     = $asignacion->PERSC_ApellidoPaterno;  
-            $lista->materno     = $asignacion->PERSC_ApellidoMaterno;  
-            $lista->nombres     = $asignacion->PERSC_Nombre;  
-            $lista->fecha       = date_sql(substr($asignacion->ASIGC_Fecha,0,10));  
-            $lista->profesor    = $asignacion->PROP_Codigo; 
-	    $lista->curso       = $asignacion->PROD_Nombre; 
-            $lista->asignacion  = $asignacion->ASIGP_Codigo;
-            $lista->estado      = $asignacion->ASIGC_FlagEstado;
-            $lista->ciclo       = $ciclo!=""?$ciclo:$asignacion->CICLOP_Codigo;
-            $filter             = new stdClass();
-            $filter->asignacion = $codigo;
-            $lista->asignaciondetalle = $this->asignaciondetalle_model->listar($filter);             
-        }
-        elseif($accion == "n"){ 
-            $lista->paterno     = "";  
-            $lista->materno     = ""; 
-            $lista->nombres     = "";  
-            $lista->fecha       = date("d/m/Y",time());
-            $lista->profesor    = ""; 
-	    $lista->curso       = ""; 
-            $lista->asignacion   = "";
-            $lista->estado      = "1";
-            $lista->ciclo       = $ciclo;
-            $lista->asignaciondetalle = array();
-        } 
-        $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-        $data['titulo']     = $accion=="e"?"Editar Carga de Trabajo":"Nueva Carga de Trabajo"; 
-        $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));     
-        $data['form_close'] = form_close();         
-        $data['lista']	    = $lista;  
-        $data['accion']	    = $accion;  
-        $data['aula']       = array();
-        $data['semana']	    = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");     
-        $data['selciclo']    = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");         
-        $data['selestado']   = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio' ".($accion=="e"?"disabled":"")."");
-        $data['oculto']      = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
-        $this->load->view("ventas/experiencia_nuevo",$data);
+         $lista = new stdClass();
+         $data  = array();
+         if($accion == "e"){
+             $filter = new stdClass();
+             $filter->experiencia = $codigo;
+             $lista->experiencia  = $this->experiencia_model->listar($filter);              
+         }
+         elseif($accion == "n"){
+             $lista->experiencia   = array();  
+         }
+         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno[0]="Año";
+         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
+         $data['arrmes']     = $arrMes;
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");         
+         $data['lista']      = $lista;
+         $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
+         $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),0,"id='universidad' class='comboGrande'");
+         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");         
+         $this->load->view("ventas/experiencia_nuevo",$data);
     }
 
     public function grabar(){
-        $accion = $this->input->get_post('accion');
-        $codigo = $this->input->get_post('codigo_exp');
+        $accion = $this->input->get_post('accion_det');
+        $codigo = $this->input->get_post('codigo_det');
         $data   = array(
                         "PROP_Codigo"         => $this->input->post('profesor'),
 			"EXPERPC_Cargo"       => $this->input->post('cargo'),
@@ -121,8 +72,6 @@ class Experiencia extends CI_Controller {
                         "EXPERPC_FechaFin"    => $this->input->post('anoi')."-".$this->input->post('mesi')."-00"
                        );
         $resultado = false;
-        print_r($data);
-        echo $accion;
         if($accion == "n"){
             $resultado = true;            
             $codigo = $this->experiencia_model->insertar($data); 
