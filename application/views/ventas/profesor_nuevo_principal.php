@@ -1,5 +1,4 @@
 <?php echo $form_open;?>
-<input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10" readonly="readonly">
 <table width="100%" style="background-color: #f4f7ff">
     <tr>
       <td width="20%" bgcolor="#d5e2f2">Codigo:</td>
@@ -15,13 +14,14 @@
       <td bgcolor="#d5e2f2">A.Materno:</td>
       <td class="formss" colspan="3"><input name="materno" id="materno" type="text" value="<?php echo $lista->materno;?>" class="cajaSuperGrande"/></td>                        
     </tr>
+     
     <tr>
       <td bgcolor="#d5e2f2">Nombres:</td>
       <td class="formss" colspan="3"><input name="nombres" id="nombres" type="text" value="<?php echo $lista->nombres;?>" class="cajaSuperGrande"/></td>                      
     </tr>
     <tr>
       <td width="20%" bgcolor="#d5e2f2">F.Nacimiento:</td>
-      <td width="20%" class="formss"><input name="fnacimiento2" id="fnacimiento2" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10" readonly="readonly"></td>
+      <td width="20%" class="formss"><input name="fnacimiento" id="fnacimiento" type="text"  value="<?php echo $lista->fnac;?>" class="cajaMinima" maxlength="10" readonly="readonly"></td>
       <td width="20%" bgcolor="#d5e2f2">Sexo:</td>
       <td width="20%" class="formss"><?php echo $selsexo;?></td>
     </tr> 

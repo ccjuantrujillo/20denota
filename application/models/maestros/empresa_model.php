@@ -3,11 +3,42 @@ class Empresa_model extends CI_Model
 {
     var $compania;
     var $table;  
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->compania = $this->session->userdata('compania');
         $this->table   = "empresa";
+        $this->table_sector   = "sector";
+    }
+    
+    public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
+        if($default!="") $arreglo = array($default=>':: Seleccione ::');
+        foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor)
+        {
+            $indice1   = $valor->EMPRP_Codigo;
+            $valor1    = $valor->EMPRC_RazonSocial;
+            $arreglo[$indice1] = $valor1;
+        }
+        return $arreglo;
+    }    
+    
+    public function listar($filter,$filter_not='',$number_items='',$offset=''){
+        $this->db->select('*');
+        $this->db->from($this->table." as p",$number_items,$offset);
+        $this->db->join($this->table_sector.' as d','d.SECTORP_Codigo=p.SECTORP_Codigo','inner');
+        if(isset($filter->empresa) && $filter->empresa!='')    $this->db->where(array("p.EMPRP_Codigo"=>$filter->empresa));        
+        if(isset($filter->sector) && $filter->sector!='')      $this->db->where(array("p.SECTORP_Codigo"=>$filter->sector));  
+        if(isset($filter->order_by) && count($filter->order_by)>0){
+            foreach($filter->order_by as $indice=>$value){
+                $this->db->order_by($indice,$value);
+            }
+        }           
+        $this->db->limit($number_items, $offset);         
+        $query = $this->db->get();
+        $resultado = array();
+        if($query->num_rows > 0){
+            $resultado = $query->result();
+        }
+        return $resultado; 
     }
     
     public function listar_sucursalesEmpresa($empresa){

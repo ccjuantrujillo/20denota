@@ -40,7 +40,7 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#editar_idiomas",function(){
         dataString = "";
-        url = base_url+"index.php/ventas/idiomas/editar/n/1/2";
+        url = base_url+"index.php/ventas/estudioidiomas/editar/n/1/2";
         $.post(url,dataString,function(data){
             $('.tab_idiomas').show();
             $('.tab_idiomas').html(data);
@@ -51,14 +51,14 @@ jQuery(document).ready(function(){
         dataString = "";
         url = base_url+"index.php/ventas/conferencia/editar/n/1/2";
         $.post(url,dataString,function(data){
-            $('.tab_conferencia').show();
-            $('.tab_conferencia').html(data);
+            $('.tab_conferencias').show();
+            $('.tab_conferencias').html(data);
         });
     });    
     
     $("body").on('click',"#editar_sociedad",function(){
         dataString = "";
-        url = base_url+"index.php/ventas/sociedad/editar/n/1/2";
+        url = base_url+"index.php/ventas/profesorsociedad/editar/n/1/2";
         $.post(url,dataString,function(data){
             $('.tab_sociedad').show();
             $('.tab_sociedad').html(data);
@@ -67,7 +67,7 @@ jQuery(document).ready(function(){
     
     $("body").on('click',"#editar_empresa",function(){
         dataString = "";
-        url = base_url+"index.php/ventas/empresa/editar/n/1/2";
+        url = base_url+"index.php/ventas/trabajo/editar/n/1/2";
         $.post(url,dataString,function(data){
             $('.tab_empresa').show();
             $('.tab_empresa').html(data);
@@ -95,7 +95,7 @@ jQuery(document).ready(function(){
         dataString  = $('#frm_experiencia').serialize();
         dataString  = dataString+"&profesor="+profesor;
         $.post(url,dataString,function(data){
-            alert('Operacion realizada con exito');
+            //alert('Operacion realizada con exito');
             url2 = base_url+"index.php/ventas/experiencia/listar/"+profesor;
             $.post(url2,"",function(data2){
                 $('#experiencia').html(data2); 
@@ -109,7 +109,7 @@ jQuery(document).ready(function(){
         dataString  = $('#frm_formacion').serialize();
         dataString  = dataString+"&profesor="+profesor;
         $.post(url,dataString,function(data){
-            alert('Operacion realizada con exito');
+            //alert('Operacion realizada con exito');
             url2 = base_url+"index.php/ventas/estudio/listar/"+profesor;
             $.post(url2,"",function(data2){
                 $('#estudios').html(data2); 
@@ -118,15 +118,57 @@ jQuery(document).ready(function(){
     });
 
     $("body").on('click',"#grabar_idioma",function(){
-        url = base_url+"index.php/ventas/idiomas/grabar";
+        url = base_url+"index.php/ventas/estudioidiomas/grabar";
         profesor = $("#codigo").val();
         dataString  = $('#frm_idioma').serialize();
         dataString  = dataString+"&profesor="+profesor;
         $.post(url,dataString,function(data){
-            alert('Operacion realizada con exito');
-            url2 = base_url+"index.php/ventas/idiomas/listar/"+profesor;
+            //alert('Operacion realizada con exito');
+            url2 = base_url+"index.php/ventas/estudioidiomas/listar/"+profesor;
             $.post(url2,"",function(data2){
                 $('#idiomas').html(data2); 
+            });
+        });
+    });
+
+    $("body").on('click',"#grabar_conferencia",function(){
+        url = base_url+"index.php/ventas/conferencia/grabar";
+        profesor = $("#codigo").val();
+        dataString  = $('#frm_conferencia').serialize();
+        dataString  = dataString+"&profesor="+profesor;
+        $.post(url,dataString,function(data){
+            //alert('Operacion realizada con exito');
+            url2 = base_url+"index.php/ventas/conferencia/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#conferencias').html(data2); 
+            });
+        });
+    });
+
+    $("body").on('click',"#grabar_sociedad",function(){
+        url = base_url+"index.php/ventas/profesorsociedad/grabar";
+        profesor = $("#codigo").val();
+        dataString  = $('#frm_sociedades').serialize();
+        dataString  = dataString+"&profesor="+profesor;
+        $.post(url,dataString,function(data){
+            //alert('Operacion realizada con exito');
+            url2 = base_url+"index.php/ventas/profesorsociedad/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#sociedades').html(data2); 
+            });
+        });
+    });
+
+    $("body").on('click',"#grabar_trabajo",function(){
+        url = base_url+"index.php/ventas/trabajo/grabar";
+        profesor = $("#codigo").val();
+        dataString  = $('#frm_empresa').serialize();
+        dataString  = dataString+"&profesor="+profesor;
+        $.post(url,dataString,function(data){
+            //alert('Operacion realizada con exito');
+            url2 = base_url+"index.php/ventas/trabajo/listar/"+profesor;
+            $.post(url2,"",function(data2){
+                $('#empresa').html(data2); 
             });
         });
     });
@@ -154,14 +196,31 @@ jQuery(document).ready(function(){
         url = base_url+"index.php/inicio/principal";
         location.href = url;
     });
-
+ 
     $("body").on('focus',"#fnacimiento",function(){
          $(this).datepicker({
           dateFormat: "dd/mm/yy",
           changeYear: true,
           yearRange: "1945:2025"
          });
+             
     });   
+    
+    $("body").on('focus',"#fconferencia",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });    
+    
+    $("body").on('focus',"#fafiliacion",function(){
+         $(this).datepicker({
+          dateFormat: "dd/mm/yy",
+          changeYear: true,
+          yearRange: "1945:2025"
+         });
+    });       
 });
 
 function abrir_formulario_ubigeo(){

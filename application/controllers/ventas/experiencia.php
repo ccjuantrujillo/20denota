@@ -65,6 +65,7 @@ class Experiencia extends CI_Controller {
         $codigo = $this->input->get_post('codigo_det');
         $data   = array(
                         "PROP_Codigo"         => $this->input->post('profesor'),
+                        "UNIVP_Codigo"        => $this->input->post('universidad'),
 			"EXPERPC_Cargo"       => $this->input->post('cargo'),
                         "EXPERPC_Empresa"     => $this->input->post('empresa'),
                         "EXPERPC_Curso"       => $this->input->post('curso'),

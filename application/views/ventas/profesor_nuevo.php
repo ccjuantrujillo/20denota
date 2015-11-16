@@ -5,7 +5,7 @@
         <label for="tab-1">Datos Principales</label>
         <input id="tab-2" type="radio" name="tab-group" />
         <label for="tab-2">Datos Secundarios</label>
-        <div id="content">   
+        <div id="content"> 
             <div id="content-1">
                 <?php echo $principal;?>
             </div>

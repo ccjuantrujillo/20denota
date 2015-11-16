@@ -42,7 +42,7 @@ function listar_idiomas($codigo){
     $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
     $data['arrNivel']   = $arrNivel;
     $data['lista']          = $lista;
-    return $CI->load->view("ventas/idiomas_index",$data,true);
+    return $CI->load->view("ventas/estudioidiomas_index",$data,true);
 }  
 
 function listar_conferencias($codigo){     
@@ -75,6 +75,6 @@ function listar_empresa($codigo){
     $filter->profesor = $codigo;
     $lista->trabajos = $trabajos->listar($filter);       
     $data['lista']          = $lista;
-    return $CI->load->view("ventas/empresa_index",$data,true);
+    return $CI->load->view("ventas/trabajo_index",$data,true);
 }  
 ?>

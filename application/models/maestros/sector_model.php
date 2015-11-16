@@ -1,20 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Experiencia_model extends CI_Model{
+class Sector_model extends CI_Model{
     var $table;
     
     public function __construct(){
         parent::__construct();
-        $this->table     = "experiencia";
-        $this->table_uni = "universidad";
+        $this->table     = "sector";
     }
 	
     public function seleccionar($default="",$filter="",$filter_not='',$number_items='',$offset=''){
         if($default!="") $arreglo = array($default=>':: Seleccione ::');
         foreach($this->listar($filter,$filter_not,$number_items,$offset) as $indice=>$valor)
         {
-            $indice1   = $valor->EXPERP_Codigo;
-            $valor1    = $valor->EXPERPC_Cargo;
+            $indice1   = $valor->SECTORP_Codigo;
+            $valor1    = $valor->SECTORC_Descripcion;
             $arreglo[$indice1] = $valor1;
         }
         return $arreglo;
@@ -23,10 +22,7 @@ class Experiencia_model extends CI_Model{
     public function listar($filter="",$filter_not='',$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset); 
-        $this->db->join($this->table_uni.' as d','d.UNIVP_Codigo=c.UNIVP_Codigo','inner');
-        if(isset($filter->experiencia) && $filter->experiencia!='') $this->db->where(array("c.EXPERP_Codigo"=>$filter->experiencia));  
-        if(isset($filter->profesor) && $filter->profesor!='')       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
-        if(isset($filter->universidad) && $filter->universidad!='') $this->db->where(array("c.UNIVP_Codigo"=>$filter->universidad));  
+        if(isset($filter->sector) && $filter->sector!='') $this->db->where(array("c.SECTORP_Codigo"=>$filter->sector));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){
@@ -51,12 +47,12 @@ class Experiencia_model extends CI_Model{
     }
 	
     public function modificar($id,$filter){
-        $this->db->where("EXPERP_Codigo",$id);
+        $this->db->where("SECTORP_Codigo",$id);
         $this->db->update($this->table,(array)$filter);
     }
 	
     public function eliminar($codigo){
-        $this->db->delete($this->table,array('EXPERP_Codigo' => $codigo));
+        $this->db->delete($this->table,array('SECTORP_Codigo' => $codigo));
     }
 }
 ?>

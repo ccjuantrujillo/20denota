@@ -1,6 +1,6 @@
 <?php header("Content-type: text/html; charset=utf-8"); 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Idiomas extends CI_Controller
+class Trabajo extends CI_Controller
 {
     public $configuracion;
     public $codigo;
@@ -8,75 +8,66 @@ class Idiomas extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('ventas/estudios_model');
-        $this->load->model('seguridad/permiso_model');
+        $this->load->model('ventas/trabajo_model');
+        $this->load->model('seguridad/permiso_model');  
+        $this->load->model(maestros.'sector_model');          
+        $this->load->model(maestros.'empresa_model');   
         $this->load->helper('menu');
-        $this->load->model(maestros.'idiomas_model');        
-        $this->load->model(maestros.'grado_model');             
-        $this->load->model(ventas.'estudiosidiomas_model');   
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
-    
     public function listar($codigo){
-        $filter = new stdClass();
-        $lista = new stdClass();
-        $filter->profesor = $codigo;
-        $lista->estudiosidiomas = $this->estudiosidiomas_model->listar($filter);    
-        $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
-        $data['arrNivel']   = $arrNivel;
-        $data['lista']          = $lista;
-        $this->load->view("ventas/idiomas_index",$data);
+         $lista = new stdClass();
+         $filter = new stdClass();
+         $filter->profesor = $codigo;
+         $lista->trabajos  = $this->trabajo_model->listar($filter);     
+         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno[0]="Año";
+         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
+         $data['arrmes']     = $arrMes;         
+         $data['lista']      = $lista;
+         $this->load->view("ventas/trabajo_index",$data);
     }
     
      public function editar($accion,$codigo=""){
          $lista = new stdClass();
-         $data  = array();
          if($accion == "e"){
-             $filter            = new stdClass();
-             $filter->profesor  = $codigo;
-             $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
              $filter->profesor = $codigo;
-             $lista->estudiosidiomas = $this->estudiosidiomas_model->listar($filter);              
+             $lista->trabajos = $this->trabajo_model->listar($filter);              
          }
          elseif($accion == "n"){
-             $lista->estudiosidiomas   = array();  
-         }      
+             $lista->trabajos   = array();  
+         }         
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
-         $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
-         $data['arrNivel']   = $arrNivel;
          $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
          $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
          $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
          $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");   
-         $data['selidiomas'] = form_dropdown('idioma',$this->idiomas_model->seleccionar('0'),0,"id='idioma' class='comboGrande'");
-         $data['selnivel']   = form_dropdown('nivel',$arrNivel,0,"id='nivel' class='comboMedio'");   
-         $data['lista']      = $lista;
-         $data['oculto_det'] = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
-         $this->load->view("ventas/idiomas_nuevo",$data);
+         $data['selempresa'] = form_dropdown('empresa',$this->empresa_model->seleccionar('0'),0,"id='empresa' class='comboGrande'");        
+         $data['selsector'] = form_dropdown('sector',$this->sector_model->seleccionar('0'),0,"id='sector' class='comboGrande'"); 
+         $data['lista']          = $lista;
+         $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
+         $this->load->view("ventas/trabajo_nuevo",$data);
     }
      
     public function grabar(){
-        $accion = $this->input->get_post('accion_det');
-        $codigo = $this->input->get_post('codigo_det');
+        $accion      = $this->input->get_post('accion_det');
+        $codigo      = $this->input->get_post('codigo_det');
         $data   = array(
-                        "PROP_Codigo"           => $this->input->post('profesor'),
-                        "IDIOMP_Codigo"         => $this->input->post('idioma'),
-                        "ESTIDIOMC_Descripcion" => $this->input->post('descripcion'),
-                        "ESTIDIOMC_Nivel"       => $this->input->post('nivel'),
-                        "ESTIDIOMC_FechaInicio" => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
-                        "ESTIDIOMC_FechaFin"    => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
+                        "PROP_Codigo"          => $this->input->post('profesor'),
+                        "EMPRP_Codigo"         => $this->input->post('empresa'),
+                        "TRABAJC_Descripcion"  => $this->input->post('cargo_trabajo'),
+                        "TRABAJC_FechaInicio"   => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
+                        "TRABAJC_FechaFin"      => $this->input->post('anof')."-".$this->input->post('mesf')."-00"
                        );
-        print_r($data);
-        echo $accion;
         if($accion == "n"){
-            $this->codigo = $this->estudiosidiomas_model->insertar($data);
+            $this->codigo = $this->trabajo_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->estudiosidiomas_model->modificar($codigo,$data);
+            $this->trabajo_model->modificar($codigo,$data);
         }
     }
     

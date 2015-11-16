@@ -10,47 +10,21 @@ class Conferencia extends CI_Controller
         parent::__construct();
         $this->load->model('ventas/estudios_model');
         $this->load->model('seguridad/permiso_model');
-        $this->load->helper('menu');
-        $this->load->model(maestros.'universidad_model');        
-        $this->load->model(maestros.'grado_model');           
+        $this->load->model('ventas/conferencia_model');
+        $this->load->helper('menu');        
         $this->somevar['compania'] = $this->session->userdata('compania');
     }
-    public function listar($j=0){
-        $filter           = new stdClass();
-        $filter->rol      = $this->session->userdata('rolusu');		
-        $filter->order_by = array("m.MENU_Orden"=>"asc");
-        $menu       = get_menu($filter);  
-        $filter     = new stdClass();
-        $filter_not = new stdClass();
-        $filter_not->persona = "0";
-        $registros = count($this->estudios_model->listar($filter,$filter_not));
-        $personas  = $this->estudios_model->listar($filter,$filter_not,$this->configuracion['per_page'],$j);
-        $item      = 1;
-        $lista     = array();
-        if(count($personas)>0){
-            foreach($personas as $indice => $value){
-                $lista[$indice]         = new stdClass();
-                $lista[$indice]->codigo = $value->CICLOP_Codigo;
-                $lista[$indice]->nombre = $value->COMPC_Nombre;
-                $lista[$indice]->fecha_inicio = date_sql(substr($value->CICC_FECHA_INICIO,0,10));
-                $lista[$indice]->fecha_fin    = date_sql(substr($value->CICC_FECHA_FIN,0,10));
-                $lista[$indice]->descripcion  = $value->CICC_DESCRIPCION;
-                $lista[$indice]->tipociclo    = $value->TIPOCICLOC_Descripcion;
-                $lista[$indice]->estado       = $value->COMPC_FlagEstado;
-            }
-        }
-        $configuracion = $this->configuracion;
-        $configuracion['base_url']    = base_url()."index.php/ventas/estudios/listar";
-        $configuracion['total_rows']  = $registros;
-        $this->pagination->initialize($configuracion);
-        /*Enviamos los datos a la vista*/
-        $data['lista']           = $lista;
-        $data['menu']            = $menu;
-        $data['header']          = get_header();
-        $data['j']               = $j;
-        $data['registros']       = $registros;
-        $data['paginacion']      = $this->pagination->create_links();
-        $this->load->view("ventas/estudios_index",$data);
+    public function listar($codigo){
+         $lista = new stdClass();
+         $filter = new stdClass();
+         $filter->profesor = $codigo;
+         $lista->conferencias = $this->conferencia_model->listar($filter);      
+         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrAno[0]="Año";
+         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
+         $data['arrmes']     = $arrMes;         
+         $data['lista']      = $lista;
+         $this->load->view("ventas/conferencias_index",$data);       
     }
     
      public function editar($accion,$codigo=""){
@@ -67,39 +41,25 @@ class Conferencia extends CI_Controller
          elseif($accion == "n"){
              $lista->conferencias   = array();  
          }    
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
-         $arrAno[0]="Año";
-         for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
-         $data['arrmes']     = $arrMes;
-         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
-         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
-         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
-         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");   
-         $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),0,"id='universidad' class='comboGrande'");
-         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");  
          $data['lista']          = $lista;
+         $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
          $this->load->view("ventas/conferencias_nuevo",$data);
     }
      
     public function grabar(){
-        $accion      = $this->input->get_post('accion');
-        $codigo      = $this->input->get_post('codigo');
+        $accion      = $this->input->get_post('accion_det');
+        $codigo      = $this->input->get_post('codigo_det');
         $data   = array(
-                        "PROP_Codigo"          => ($this->input->post('profesor')),
-                        "UNIVP_Codigo"         => ($this->input->post('unversidad')),
-                        "GRADOP_Codigo"        => ($this->input->post('grado')),
-                        "ESTUDIOC_Descripcion" => ($this->input->post('descripcion')),
-                        "ESTUDIOC_Estado"      => ($this->input->post('estado')),
-                        "ESTUDIOC_MesInicio"   => ($this->input->post('mesi')),
-                        "ESTUDIOC_MesFin"      => ($this->input->post('mesf')),
-                        "ESTUDIOC_AnoInicio"   => ($this->input->post('anoi')),
-                        "ESTUDIOC_AnoFin"      => ($this->input->post('anof'))
+                        "PROP_Codigo"          => $this->input->post('profesor'),
+                        "CONFERC_Fecha"        => date_sql_ret($this->input->post('fconferencia')),
+                        "CONFERC_Nombre"       => $this->input->post('nom_conferencia'),
+                        "CONFERC_Descripcion"  => $this->input->post('des_conferencia')
                        );
         if($accion == "n"){
-            $this->codigo = $this->estudios_model->insertar($data);
+            $this->codigo = $this->conferencia_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->estudios_model->modificar($codigo,$data);
+            $this->conferencia_model->modificar($codigo,$data);
         }
     }
     

@@ -9,6 +9,14 @@
         <td class="formss"><?php echo $selnivel;?></td>
     </tr>   
     <tr>
+         <td class="formss" bgcolor="#d5e2f2">Estado</td>
+         <td class="formss">
+           <input type="radio" id="estado" name="estado" value="1" checked="checked">Culminado
+           <input type="radio" id="estado" name="estado" value="2">Cursando
+           <input type="radio" id="estado" name="estado" value="3">Abandonado/Aplazado
+         </td>
+     </tr>      
+    <tr>
         <td class="formss" bgcolor="#d5e2f2">Periodo</td>
         <td class="formss">
             <span><?php echo $selmesi;?></span>

@@ -2,7 +2,7 @@
     <table style="width: 100%;background-color: #f4f7ff">
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Institucion</td>
-            <td class="formss"><input type="text" id="empresa" name="empresa" class="cajaGrande" maxlength="100"></td>
+            <td class="formss"><?php echo $seluniversidad;?></td>
         </tr>
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Cargo desempeñado</td>

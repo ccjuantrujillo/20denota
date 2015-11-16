@@ -68,8 +68,8 @@ class Vigilanciadetalle_model extends CI_Model{
     }
 	
     public function eliminar($filter){
-        if(isset($filter->vigilancia) && $filter->vigilancia!='')               $this->db->where(array("VIGILAP_Codigo"=>$filter->tarea));
-        if(isset($filter->vigilanciadetalle) && $filter->vigilanciadetalle!='') $this->db->where(array("VIGILADETP_Codigo"=>$filter->tareadetalle));
+        if(isset($filter->vigilancia) && $filter->vigilancia!='')               $this->db->where(array("VIGILAP_Codigo"=>$filter->vigilancia));
+        if(isset($filter->vigilanciadetalle) && $filter->vigilanciadetalle!='') $this->db->where(array("VIGILADETP_Codigo"=>$filter->vigilanciadetalle));
         $this->db->delete($this->table);        
     }
 }

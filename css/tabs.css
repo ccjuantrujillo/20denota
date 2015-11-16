@@ -1,14 +1,3 @@
-/** {
- font-family: Arial, sans;
- margin: 0;
- padding: 0;
- box-sizing: border-box;
- -moz-box-sizing: border-box;
-}*/
-/*h1 {
- margin: 1em 0;
- text-align: center;
-}*/
 #container {
  margin: 0 auto;
  width: 100%; /* Ancho del contenedor */
@@ -39,7 +28,6 @@
  background: #d5e2f2; /* Fondo de las pestañas al presionar */
  color: #444; /* Color de las pestañas al presionar */
  position: relative;
- z-index: 6;
 }
 #content {
  background: #f4f7ff; /* Fondo del contenido */
@@ -57,6 +45,7 @@
  width: 95%;
  opacity: 0;
  position: absolute; 
+ z-index: 1;
 }
 
 #content-2{
@@ -74,25 +63,24 @@
     font-size: 11pt;
     text-align:left;
     float:left;
-    width: 50%;
+    width: 65%;
     color:#0000FF;
     margin-top: 5px;
 }
 
 #content-2 span.btn_agregar{
     float: right;
-    width: 50%;
+    width: 35%;
     margin-top: 5px;
 }
 
-#content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedad,span.tab_experiencia,span.tab_conferencia{
-    float: clear;
+#content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedad,span.tab_experiencia,span.tab_conferencias{
     float: left;
     display: none;
     align:left;
 }
 
-#content-2 .lst_estudios{
+#content-2 span.lst_estudios,span.lst_conferencias{
     align:left;
     height: auto;
 }
@@ -141,4 +129,5 @@
 #container input#tab-2:checked ~ #content #content-2,
 #container input#tab-3:checked ~ #content #content-3 {
  opacity: 1;
+ z-index: 1;
 }

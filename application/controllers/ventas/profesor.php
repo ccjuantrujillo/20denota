@@ -90,6 +90,7 @@ class Profesor extends Persona
              $lista->materno    = $profesores->PERSC_ApellidoMaterno;
              $lista->nombres    = $profesores->PERSC_Nombre;
              $lista->codigo     = $codigo;
+             $lista->codigo_padre = $profesores->PERSP_Codigo;
              $lista->estado     = $profesores->PROC_FlagEstado;
              $lista->curso      = $profesores->PROD_Codigo;
              $lista->tipodoc    = $profesores->TIPDOCP_Codigo; 
@@ -111,6 +112,7 @@ class Profesor extends Persona
              $lista->nombres    = "";
              $lista->sexo       = 0;
              $lista->codigo     = "";
+             $lista->codigo_padre = "";
              $lista->estado     = 1;
              $lista->curso      = 1;
              $lista->tipodoc    = 1;  
@@ -131,7 +133,7 @@ class Profesor extends Persona
          $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar("00"),$lista->curso,"id='curso' class='comboMedio'");
          $data['selcoord']   = form_dropdown('coordinador',$arrCoord,$lista->coordinador,"id='coordinador' class='comboMedio'");
          $data['seltipodoc'] = form_dropdown('tipodoc',$this->tipodocumento_model->seleccionar(),$lista->tipodoc,"id='tipodoc' class='comboMedio'"); ;
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo));
+         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$lista->codigo,"codigo_padre"=>$lista->codigo_padre));
          $data['experiencia'] = listar_experiencia($codigo);
          $data['estudios']    = listar_estudios($codigo);
          $data['idiomas']     = listar_idiomas($codigo);
@@ -155,6 +157,7 @@ class Profesor extends Persona
         parent::grabar();
         $accion       = $this->input->get_post('accion');
         $codigo_padre = $this->input->get_post('codigo_padre');
+        $codigo       = $this->input->get_post('codigo');
         $data         = array(
                         "PERSP_Codigo"           => $this->codigo,
                         "PROC_FechaModificacion" => date('Y-m-d H:i:s',time()),
@@ -166,7 +169,7 @@ class Profesor extends Persona
             $persona = $this->profesor_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->profesor_model->modificar($codigo_padre,$data);
+            $this->profesor_model->modificar($codigo,$data);
         }
     }
 

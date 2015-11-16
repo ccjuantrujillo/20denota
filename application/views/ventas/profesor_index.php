@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo css;?>tabs.css" type="text/css" />
     <link href="<?php echo css;?>jquery-ui.css" rel="stylesheet" type="text/css" />    
     <script type="text/javascript" src="<?php echo js;?>jquery.js"></script>
-    <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>
+    <script type="text/javascript" src="<?php echo js;?>jquery-ui.dev.js"></script>
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>ventas/profesor.js"></script>

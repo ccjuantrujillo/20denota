@@ -159,7 +159,7 @@ class Persona extends CI_Controller{
     
     public function grabar(){  
         $accion      = $this->input->get_post('accion');
-        $codigo      = $this->input->get_post('codigo');
+        $codigo      = $this->input->get_post('codigo_padre');
         $nacimiento  = $this->input->get_post('distrito');
         $domicilio   = $this->input->get_post('distrito');
         $nacion      = $this->input->get_post('nacionalidad');
@@ -174,6 +174,7 @@ class Persona extends CI_Controller{
                         "PERSC_NumeroDocIdentidad" => $this->input->post('numero'),
                         "PERSC_Direccion"          => ($this->input->post('direccion')),
                         "PERSC_Telefono"           => $this->input->post('telefono'),
+                        "TIPDOCP_Codigo"           => $this->input->post('tipodoc'),
                         "PERSC_Movil"              => $this->input->post('movil'),
                         "PERSC_Email"              => strtolower($this->input->post('email')),
                         "PERSC_Domicilio"          => ($this->input->post('direccion')),
@@ -183,6 +184,8 @@ class Persona extends CI_Controller{
                         "PERSC_Sexo"               => $this->input->post('sexo'),
                         "PERSC_FechaNacimiento"    => ($fnacimiento!=""?$fnacimiento:"")
                        );
+        print_r($data);
+        echo "$accion  $codigo";
         if($accion == "n"){
             $this->codigo = $codigo==""?$this->persona_model->insertar($data):$codigo;            
         }
