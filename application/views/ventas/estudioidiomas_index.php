@@ -14,9 +14,11 @@
             $mesf   = $arrfechaf[1];
             $aniof  = $arrfechaf[0];               
             ?>
-           <h2>&bull;<?php echo $value->IDIOMC_Descripcion;?></h2>
-           <h3><?php echo $arrNivel[$value->ESTIDIOMC_Nivel];?></h3>
-           <h3><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></h3>
+            <ul>
+                <li><span>&bull;<?php echo $value->IDIOMC_Descripcion;?></span></li>
+                <li><span><?php echo $arrNivel[$value->ESTIDIOMC_Nivel];?></span></li>
+                <li><span><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></span></li>
+            </ul>
             <?php
         }
     }

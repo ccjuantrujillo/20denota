@@ -168,3 +168,6 @@ p#bot{padding-bottom: 5px;}
 #simplemodal-container a {color:#F00;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:800; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 /*#simplemodal-container h3 {color:#84b8d9;}*/
+
+/*.lst_esperiencia ul{background-color:#fff;}*/
+.lst_esperiencia span,.lst_idiomas span {font-size:13px; font-family: Arial, Helvetica, sans-serif;color:#333; margin: 0;padding: 0; font-weight:normal;}

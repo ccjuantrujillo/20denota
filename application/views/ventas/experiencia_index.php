@@ -12,9 +12,11 @@
             $mesf   = $arrfechaf[1];
             $aniof  = $arrfechaf[0];            
             ?>
-           <h2>&bull;<?php echo $value->EXPERPC_Cargo;?>, <?php echo $value->EXPERPC_Curso;?></h2>
-           <h3><?php echo $value->UNIVC_Nombre;?></h3>
-           <h3><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></h3>
+            <ul style="width: 100%;">
+                <li><span>&bull;<span><?php echo $value->EXPERPC_Cargo;?>, <?php echo $value->EXPERPC_Curso;?></span></li>
+                <li><span><?php echo $value->UNIVC_Nombre;?></span></li>
+                <li><span><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></span></li>
+            </ul>
             <?php
         }
     }

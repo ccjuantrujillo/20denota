@@ -79,6 +79,14 @@ jQuery(document).ready(function(){
         location.href = url;
     });
 
+    $("body").on('mouseenter ',".lst_esperiencia ul,.lst_idiomas ul",function(){
+        $(this).children().children().attr("style","background:#DCDCDC;");
+    }); 
+    
+    $("body").on('mouseleave ',".lst_esperiencia ul,.lst_idiomas ul",function(){
+        $(this).children().children().attr("style","background:#f4f7ff;");
+    });    
+    
     /*Grabaciones*/
     $("body").on('click',"#grabar",function(){
         url = base_url+"index.php/ventas/profesor/grabar";
