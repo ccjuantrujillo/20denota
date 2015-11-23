@@ -36,15 +36,27 @@ class Estudioidiomas extends CI_Controller
          $lista = new stdClass();
          $data  = array();
          if($accion == "e"){
-             $filter            = new stdClass();
-             $filter->profesor  = $codigo;
-             $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
-             $filter->profesor = $codigo;
-             $lista->estudiosidiomas = $this->estudiosidiomas_model->listar($filter);              
+             $filter->estudioidioma = $codigo;
+             $estudioidiomas = $this->estudiosidiomas_model->obtener($filter); 
+             $lista->idioma  = $estudioidiomas->IDIOMP_Codigo;
+             $lista->nivel   = $estudioidiomas->ESTIDIOMC_Nivel;
+             $lista->estado  = $estudioidiomas->ESTIDIOMC_Estado;
+             $arrFechai      = explode("-",$estudioidiomas->ESTIDIOMC_FechaInicio);
+             $arrFechaf      = explode("-",$estudioidiomas->ESTIDIOMC_FechaFin);
+             $lista->mesi    = $arrFechai[1];
+             $lista->anoi    = $arrFechai[0];
+             $lista->mesf    = $arrFechaf[1];
+             $lista->anof    = $arrFechaf[0];             
          }
          elseif($accion == "n"){
-             $lista->estudiosidiomas   = array();  
+             $lista->idioma  = 0;  
+             $lista->nivel   = 0;  
+             $lista->estado  = 1;  
+             $lista->mesi    = "";
+             $lista->anoi    = "";
+             $lista->mesf    = "";
+             $lista->anof    = "";           
          }      
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
@@ -52,12 +64,12 @@ class Estudioidiomas extends CI_Controller
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
          $data['arrNivel']   = $arrNivel;
-         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
-         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
-         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
-         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");   
-         $data['selidiomas'] = form_dropdown('idioma',$this->idiomas_model->seleccionar('0'),0,"id='idioma' class='comboGrande'");
-         $data['selnivel']   = form_dropdown('nivel',$arrNivel,0,"id='nivel' class='comboMedio'");   
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,$lista->mesi,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,$lista->mesf,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,$lista->anoi,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,$lista->anof,"id='anof' class='comboMedio'");   
+         $data['selidiomas'] = form_dropdown('idioma',$this->idiomas_model->seleccionar('0'),$lista->idioma,"id='idioma' class='comboGrande'");
+         $data['selnivel']   = form_dropdown('nivel',$arrNivel,$lista->nivel,"id='nivel' class='comboMedio'");   
          $data['lista']      = $lista;
          $data['oculto_det'] = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
          $this->load->view("ventas/estudioidiomas_nuevo",$data);
@@ -73,21 +85,28 @@ class Estudioidiomas extends CI_Controller
                         "ESTIDIOMC_Descripcion" => $this->input->post('descripcion'),
                         "ESTIDIOMC_Nivel"       => $this->input->post('nivel'),
                         "ESTIDIOMC_FechaInicio" => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
-                        "ESTIDIOMC_FechaFin"    => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
+                        "ESTIDIOMC_FechaFin"    => $this->input->post('anof')."-".$this->input->post('mesf')."-00",
                        );
+        $resultado = false;
         if($accion == "n"){
+            $resultado = true;  
             $this->codigo = $this->estudiosidiomas_model->insertar($data);
         }
         elseif($accion == "e"){
+            $resultado = true;  
             $this->estudiosidiomas_model->modificar($codigo,$data);
         }
+        echo json_encode($resultado);
     }
     
-    public function eliminar()
-    {
-        $codigo  = $this->input->post('codigo');
-        $this->ciclo_model->eliminar($codigo);
+    public function eliminar(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->estudiosidiomas_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);
     }
+    
     public function ver($codigo)
     {
 

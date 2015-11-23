@@ -8,6 +8,7 @@ class Inicio extends CI_Controller {
         $this->load->model(personal.'persona_model');    
         $this->load->model(seguridad.'permiso_model');  
         $this->load->model(seguridad.'menu_model');
+        $this->load->model(seguridad.'acceso_model');
         $this->load->model(maestros.'ciclo_model');
         $this->load->model(ventas.'profesor_model');
         $this->load->helper('menu');
@@ -17,6 +18,7 @@ class Inicio extends CI_Controller {
         $data['form_open']  = form_open(base_url().'index.php/inicio/ingresar',array("name"=>"frmInicio","id"=>"frmInicio"));
         $data['form_close'] = form_close(); 
         $data['onload']     = "onload=\"$('#txtUsuario').focus();\"";   
+        $data['header']     = get_header();
         $this->load->view("inicio",$data);
     }
     
@@ -49,6 +51,9 @@ class Inicio extends CI_Controller {
                     $data["codcurso"]    = $objProfesor->PROD_Codigo;
                 }
                 $this->session->set_userdata($data);
+                /*Graba acceso*/
+                $data = array("PERSP_Codigo" => $usuarios->PERSP_Codigo);
+                $this->acceso_model->insertar($data);
                 redirect("inicio/principal");                
             }
             else{
@@ -76,11 +81,12 @@ class Inicio extends CI_Controller {
         $filter->rol      = $rolusu; 
         $filter->order_by = array("m.MENU_Orden"=>"asc");
         $menu             = get_menu($filter);
-        $total = 0;
-        $data['fecha']  = $fecha;
-        $data['menu']   = $menu;
-        $data['header'] = get_header();
-        $data['oculto'] = form_hidden(array("serie"=>"","numero"=>"","codot"=>""));
+        /*Accesos*/
+        $data['fecha']   = $fecha;
+        $data['menu']    = $menu;
+        $data['accesos'] = $this->acceso_model->listar(new stdClass());
+        $data['header']  = get_header();
+        $data['oculto']  = form_hidden(array("serie"=>"","numero"=>"","codot"=>""));
         $this->load->view("seguridad/principal",$data);    
     }
     

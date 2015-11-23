@@ -15,70 +15,31 @@
 <div class="contenido" > 
     <div class="header"><?php echo $header;?></div>
     <div class="menu"><ul id="nav"><?php echo $menu;?></ul></div>
-<!--    <div class="zonebody">-->
-        <ul class="body_section">
-            <li>                 
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>libros.jpg"/>
-                    <span class="cajatitle">
-                        <h2>  LECCIONES</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/producto/listar">Ingresar</a> 
-                    </span>
-                 </span>
-            </li>
-            <li>                 
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>archivo.jpg"/>
-                    <span class="cajatitle">
-                        <h2>ARCHIVOS</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/producto/listar">Ingresar</a> 
-                    </span>
-                 </span>
-            </li>  
-            <li>                 
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>video.jpg"/>
-                    <span class="cajatitle">
-                        <h2>VIDEOS</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/productoatributo/listar">Ingresar</a> 
-                    </span>
-                 </span>
-            </li>   
-            <li>                 
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>pregunta.jpg"/>
-                    <span class="cajatitle">
-                        <h2>PREGUNTAS</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/productoatributodetalle/listar">Ingresar</a> 
-                    </span>
-                 </span>
-            </li>             
-            <li>                 
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>mundo.jpg"/>
-                    <span class="cajatitle">
-                        <h2>ENLACES</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/producto/listar">Ingresar</a> 
-                    </span>
-                 </span>
-            </li>
-            <li>
-                <span class="caja_contenidos">
-                 <img src="<?php echo img;?>mundo.jpg"/>
-                    <span class="cajatitle">
-                        <h2>CURSO</h2>
-                        <h3>quí se podrán subir las imágenes tipo preview para el menú que contenga un e</h3>
-                        <a href="<?php echo base_url();?>index.php/almacen/curso/listar">Ingresar</a>
-                    </span>
-                 </span>
-            </li>
-        </ul>
-<!--    </div>-->
+    <div class="tabla"  style="width:90%;height: 600px;">
+        <div id="tab-acceso">
+            <table>
+                <tr>
+                    <td width="130px;">HORA</td>
+                    <td>PERSONA</td>
+                </tr>
+                <?php
+                if(count($accesos)>0){
+                    foreach($accesos as $item => $value){
+                        $arrFecha = explode(" ",$value->ACCESOC_Fecha);
+                        $fecha = $arrFecha[0];
+                        $hora  = $arrFecha[1];
+                        ?>
+                        <tr>
+                            <td><?php echo $fecha."&nbsp;&nbsp;".$hora;?></td>
+                            <td><?php echo $value->PERSC_Nombre." ".$value->PERSC_ApellidoPaterno;?></td>
+                        </tr>
+                        <?php
+                    }
+                }
+                ?>
+            </table>
+        </div>
+    </div>
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
 </body>

@@ -1,7 +1,7 @@
 var base_url  = "http://localhost/20denota/";
 jQuery(document).ready(function(){
    $("#cerrar").click(function(){
-       url = base_url+"index.php/inicio/index";
+       url = base_url+"index.php/inicio/salir";
        location.href = url;
    });   
     

@@ -34,6 +34,9 @@ blockquote:before, blockquote:after,q:before, q:after{content: "";}
 blockquote, q {quotes: "" "";}
 
 .contenido{width: 98%;margin:0 auto;border:0px solid #000;height: 545px;}
+.contenido #tab-acceso{float: right;margin-top: 50px;}
+.contenido #tab-acceso table{border:1px solid #000;width: 250px;text-align: center;}
+.contenido #tab-acceso table tr,td{border:1px solid #000;}
 .header{float:left;width: 100%;}
 .header a:hover{font-weight: bold;}
 .header #logo{padding: 15px 0;float: left;}

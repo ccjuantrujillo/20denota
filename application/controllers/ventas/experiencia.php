@@ -40,23 +40,37 @@ class Experiencia extends CI_Controller {
          if($accion == "e"){
              $filter = new stdClass();
              $filter->experiencia = $codigo;
-             $lista->experiencia  = $this->experiencia_model->listar($filter);              
+             $experienciaprofesor = $this->experiencia_model->obtener($filter); 
+             $lista->universidad  = $experienciaprofesor->UNIVP_Codigo;
+             $lista->cargo        = $experienciaprofesor->EXPERPC_Cargo;
+             $lista->curso        = $experienciaprofesor->EXPERPC_Curso;
+             $arrFechai           = explode("-",$experienciaprofesor->EXPERPC_FechaInicio);
+             $arrFechaf           = explode("-",$experienciaprofesor->EXPERPC_FechaFin);
+             $lista->mesi         = $arrFechai[1];
+             $lista->anoi         = $arrFechai[0];
+             $lista->mesf         = $arrFechaf[1];
+             $lista->anof         = $arrFechaf[0];             
          }
          elseif($accion == "n"){
-             $lista->experiencia   = array();  
+             $lista->universidad  = 0;  
+             $lista->cargo        = ""; 
+             $lista->curso        = ""; 
+             $lista->mesi         = ""; 
+             $lista->anoi         = ""; 
+             $lista->mesf         = ""; 
+             $lista->anof         = ""; 
          }
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
-         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
-         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
-         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
-         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");         
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,$lista->mesi,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,$lista->mesf,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,$lista->anoi,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,$lista->anof,"id='anof' class='comboMedio'");         
          $data['lista']      = $lista;
          $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
-         $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),0,"id='universidad' class='comboGrande'");
-         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");         
+         $data['seluniversidad'] = form_dropdown('universidad',$this->universidad_model->seleccionar('0'),$lista->universidad,"id='universidad' class='comboGrande'");
          $this->load->view("ventas/experiencia_nuevo",$data);
     }
 
@@ -70,7 +84,7 @@ class Experiencia extends CI_Controller {
                         "EXPERPC_Empresa"     => $this->input->post('empresa'),
                         "EXPERPC_Curso"       => $this->input->post('curso'),
                         "EXPERPC_FechaInicio" => $this->input->post('anoi')."-".$this->input->post('mesi')."-00",
-                        "EXPERPC_FechaFin"    => $this->input->post('anoi')."-".$this->input->post('mesi')."-00"
+                        "EXPERPC_FechaFin"    => $this->input->post('anof')."-".$this->input->post('mesf')."-00"
                        );
         $resultado = false;
         if($accion == "n"){
@@ -85,8 +99,9 @@ class Experiencia extends CI_Controller {
     }
 	
     public function eliminar(){
-        $codigo = $this->input->post('codigo');
-        $this->experiencia_model->eliminar($codigo);
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->experiencia_model->eliminar($filter);
         $resultado = true;
         echo json_encode($resultado);
     }

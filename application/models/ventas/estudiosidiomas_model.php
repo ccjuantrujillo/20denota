@@ -54,8 +54,9 @@ class Estudiosidiomas_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('ESTIDIOMP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->estudioidioma) && $filter->estudioidioma!='')  $this->db->where(array("ESTIDIOMP_Codigo"=>$filter->estudioidioma));        
+        $this->db->delete($this->table);
     }
 }
 ?>

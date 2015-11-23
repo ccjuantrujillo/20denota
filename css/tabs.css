@@ -77,12 +77,16 @@
 #content-2 span.tab_estudios,span.tab_empresa,span.tab_idiomas,span.tab_sociedad,span.tab_experiencia,span.tab_conferencias{
     float: left;
     display: none;
-    align:left;
+    width: 100%;
 }
 
-#content-2 span.lst_estudios,span.lst_conferencias{
-    align:left;
+#content-2 span.lst_estudios,span.lst_conferencias,span.lst_esperiencia,span.lst_idiomas{
     height: auto;
+    float: left;
+    width: 100%;
+}
+#content-2 span.editar_experiencia,span.eliminar_experiencia,span.editar_idioma,span.eliminar_idioma{
+    cursor:pointer;
 }
 
 #content-2 span h2{

@@ -55,8 +55,9 @@ class Experiencia_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('EXPERP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->experiencia) && $filter->experiencia!='')  $this->db->where(array("EXPERP_Codigo"=>$filter->experiencia));
+        $this->db->delete($this->table); 
     }
 }
 ?>

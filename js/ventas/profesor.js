@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+    /*Nuevo*/
     $("#nuevo").click(function(){
         dataString = "";
         url = base_url+"index.php/ventas/profesor/editar/n";
@@ -8,6 +9,33 @@ jQuery(document).ready(function(){
         });
 
     });
+
+   $("body").on("click","#nueva_experiencia",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/experiencia/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_experiencia').show();
+            $('.tab_experiencia').html(data);
+        }); 
+    });     
+    
+    $("body").on('click',"#nuevo_idioma",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/estudioidiomas/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_idiomas').show();
+            $('.tab_idiomas').html(data);
+        });
+    });  
+    
+    $("body").on('click',"#nuevo_estudio",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/estudio/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_estudios').show();
+            $('.tab_estudios').html(data);
+        });
+    });     
 
     /*Ediciones*/
    $("body").on("click",".editar",function(){
@@ -20,32 +48,27 @@ jQuery(document).ready(function(){
         });  
     });       
     
-    $("body").on('click',"#editar_experiencia",function(){
-        dataString = "";
-        url = base_url+"index.php/ventas/experiencia/editar/n/1/2";
+    $("body").on('click',".editar_experiencia",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "";    
+        url = base_url+"index.php/ventas/experiencia/editar/e/"+codigo;
         $.post(url,dataString,function(data){
             $('.tab_experiencia').show();
-            $('.tab_experiencia').html(data);
+            $('.tab_experiencia').html(data); 
         });
     });
     
-    $("body").on('click',"#editar_estudios",function(){
-        dataString = "";
-        url = base_url+"index.php/ventas/estudio/editar/n/1/2";
+    $("body").on('click',".editar_idioma",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "";    
+        url = base_url+"index.php/ventas/estudioidiomas/editar/e/"+codigo;
         $.post(url,dataString,function(data){
-            $('.tab_estudios').show();
-            $('.tab_estudios').html(data);
+            $('.tab_idiomas').show();
+            $('.tab_idiomas').html(data); 
         });
     });    
     
-    $("body").on('click',"#editar_idiomas",function(){
-        dataString = "";
-        url = base_url+"index.php/ventas/estudioidiomas/editar/n/1/2";
-        $.post(url,dataString,function(data){
-            $('.tab_idiomas').show();
-            $('.tab_idiomas').html(data);
-        });
-    });       
+      
     
     $("body").on('click',"#editar_conferencia",function(){
         dataString = "";
@@ -85,6 +108,7 @@ jQuery(document).ready(function(){
     
     $("body").on('mouseleave ',".lst_esperiencia ul,.lst_idiomas ul",function(){
         $(this).children().children().attr("style","background:#f4f7ff;");
+        
     });    
     
     /*Grabaciones*/
@@ -198,7 +222,42 @@ jQuery(document).ready(function(){
     //            }
             });         
        }        
-    });   
+    }); 
+    
+    $("body").on('click',".eliminar_experiencia",function(){
+        if(confirm('Esta seguro desea eliminar esta experiencia?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/experiencia/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.experiencia = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/experiencia/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#experiencia').html(data2); 
+                });
+            });            
+        }
+    });    
+
+    $("body").on('click',".eliminar_idioma",function(){
+        if(confirm('Esta seguro desea eliminar este idioma?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/estudioidiomas/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.estudioidioma = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/estudioidiomas/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#idiomas').html(data2); 
+                });
+            });            
+        }
+    });    
+
 
     $("body").on("click","#logo",function(){
         url = base_url+"index.php/inicio/principal";
@@ -211,7 +270,6 @@ jQuery(document).ready(function(){
           changeYear: true,
           yearRange: "1945:2025"
          });
-             
     });   
     
     $("body").on('focus',"#fconferencia",function(){

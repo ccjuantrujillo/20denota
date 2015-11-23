@@ -48,10 +48,11 @@ function get_menu($filter)
 }
 
 function get_header(){
+    $nombre = isset($_SESSION["nomper"])?$_SESSION["nomper"]:"";
     $filaheader  = "";
-    $filaheader .= "<a href='#' id='logo'><img src='".img."logopuertosaber.jpg' /></a>";
-    $filaheader .= "<h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2016</h2>";
-    $filaheader .= "<span><img src='".img."unknown.jpg' id='icono'><a href='#'>".$_SESSION["nomper"]."</a>&#x25BC;&nbsp;&nbsp;<a href='#' id='cerrar'>Salir</a></span>";
+    $filaheader .= "<a href='#' id='logo'><img src='".img."uni.gif' /></a>";
+    $filaheader .= "<h2>Sistema Administrativo<br>Cepre-UNI<br>2016</h2>";
+    $filaheader .= "<span><img src='".img."unknown.jpg' id='icono'><a href='#'>".$nombre."</a>&#x25BC;&nbsp;&nbsp;<a href='#' id='cerrar'>Salir</a></span>";
     return $filaheader;        
 }
 ?>

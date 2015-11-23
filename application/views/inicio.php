@@ -13,10 +13,7 @@
     <body <?php echo $onload;?>>
 <div class="contenido" > 
     <div align='center' class='error' id='divMayus' style='display: none'>Recuerde Colocar Usuario y Clave en MAYUSCULAS .</div>
-    <div class="header">
-        <a href="#" id="logo"><img src="<?php echo img;?>/logopuertosaber.jpg"></a>
-        <h2>Administrador del sistema de cursos online<br>Puerto Saber S.A.C.<br>2016</h2>
-    </div>
+    <div class="header"><?php echo $header;?></div>
     <div class="zonelogin">
         <?php echo $form_open;?>
         <div class="frmlogin">

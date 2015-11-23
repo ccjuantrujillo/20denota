@@ -1,5 +1,5 @@
 <span class="subtitulo">Idiomas</span>
-<span class="btn_agregar"><input type="button" id="editar_idiomas" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
+<span class="btn_agregar"><input type="button" id="nuevo_idioma" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
 <span class="tab_idiomas">&nbsp;</span>                   
 <span class="lst_idiomas">
     <?php
@@ -14,8 +14,8 @@
             $mesf   = $arrfechaf[1];
             $aniof  = $arrfechaf[0];               
             ?>
-            <ul>
-                <li><span>&bull;<?php echo $value->IDIOMC_Descripcion;?></span></li>
+            <ul id="<?php echo $value->ESTIDIOMP_Codigo;?>">
+                <li><span>&bull;<?php echo $value->IDIOMC_Descripcion;?></span>&nbsp;<span class="editar_idioma"><img src="<?php echo img;?>/orar.gif"></span>&nbsp;<span class="eliminar_idioma"><img src="<?php echo img;?>/eliminar.gif"></span></li>
                 <li><span><?php echo $arrNivel[$value->ESTIDIOMC_Nivel];?></span></li>
                 <li><span><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></span></li>
             </ul>

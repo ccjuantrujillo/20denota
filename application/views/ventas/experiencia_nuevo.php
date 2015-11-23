@@ -6,11 +6,11 @@
         </tr>
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Cargo desempeñado</td>
-            <td class="formss"><input type="text" id="cargo" name="cargo" class="cajaGrande" maxlength="100"></td>
+            <td class="formss"><input type="text" id="cargo" name="cargo" class="cajaGrande" maxlength="100" value="<?php echo $lista->cargo;?>"></td>
         </tr>  
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Curso</td>
-            <td class="formss"><input type="text" id="curso" name="curso" class="cajaGrande" maxlength="100"></td>
+            <td class="formss"><input type="text" id="curso" name="curso" class="cajaGrande" maxlength="100" value="<?php echo $lista->curso;?>"></td>
         </tr>   
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Periodo</td>
