@@ -22,7 +22,8 @@ class Conferencia_model extends CI_Model{
     public function listar($filter="",$filter_not='',$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
-        if(isset($filter->profesor) && $filter->profesor!='')       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->profesor))       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->conferencia))    $this->db->where(array("c.CONFERP_Codigo"=>$filter->conferencia));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){

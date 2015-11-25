@@ -12,8 +12,9 @@ function listar_experiencia($codigo)
     $lista = new stdClass();
     $filter = new stdClass();
     $filter->profesor = $codigo;
-    $lista->experiencia  = $experiencia->listar($filter);     
-    $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+    $lista->experiencia  = $experiencia->listar($filter); 
+    $lista->profesor  = $codigo;
+    $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
     $arrAno[0]="Año";
     for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
     $data['arrmes']     = $arrMes;         
@@ -28,6 +29,7 @@ function listar_estudios($codigo){
     $filter = new stdClass();
     $filter->profesor = $codigo;
     $lista->estudios  = $estudios->listar($filter);    
+    $lista->profesor  = $codigo;
     $data['lista']    = $lista;
     return $CI->load->view("ventas/estudios_index",$data,true);
 } 
@@ -38,7 +40,8 @@ function listar_idiomas($codigo){
     $filter = new stdClass();
     $lista = new stdClass();
     $filter->profesor = $codigo;
-    $lista->estudiosidiomas = $idiomas->listar($filter);     
+    $lista->estudiosidiomas = $idiomas->listar($filter);   
+    $lista->profesor  = $codigo;
     $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
     $data['arrNivel']   = $arrNivel;
     $data['lista']          = $lista;
@@ -51,7 +54,8 @@ function listar_conferencias($codigo){
     $lista = new stdClass();
     $filter = new stdClass();
     $filter->profesor = $codigo;
-    $lista->conferencias = $conferencias->listar($filter);  
+    $lista->conferencias = $conferencias->listar($filter); 
+    $lista->profesor  = $codigo;
     $data['lista']          = $lista;
     return $CI->load->view("ventas/conferencias_index",$data,true);
 }  
@@ -62,7 +66,8 @@ function listar_sociedades($codigo){
     $lista = new stdClass();
     $filter = new stdClass();
     $filter->profesor = $codigo;
-    $lista->sociedades = $sociedades->listar($filter);                 
+    $lista->sociedades = $sociedades->listar($filter);      
+    $lista->profesor  = $codigo;
     $data['lista']          = $lista;
     return $CI->load->view("ventas/sociedad_index",$data,true);
 }     
@@ -73,7 +78,8 @@ function listar_empresa($codigo){
     $lista = new stdClass();
     $filter = new stdClass();
     $filter->profesor = $codigo;
-    $lista->trabajos = $trabajos->listar($filter);       
+    $lista->trabajos = $trabajos->listar($filter); 
+    $lista->profesor  = $codigo;
     $data['lista']          = $lista;
     return $CI->load->view("ventas/trabajo_index",$data,true);
 }  

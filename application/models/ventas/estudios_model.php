@@ -26,14 +26,15 @@ class Estudios_model extends CI_Model{
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_uni.' as d','d.UNIVP_Codigo=c.UNIVP_Codigo','inner');
         $this->db->join($this->table_grado.' as e','e.GRADOP_Codigo=c.GRADOP_Codigo','inner');
-        if(isset($filter->estudio) && $filter->estudio!='')         $this->db->where(array("c.ESTUDIOP_Codigo"=>$filter->estudio));  
-        if(isset($filter->profesor) && $filter->profesor!='')       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->estudio))        $this->db->where(array("c.ESTUDIOP_Codigo"=>$filter->estudio));  
+        if(isset($filter->profesor))       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
         if(isset($filter->grado) && $filter->grado!='')             $this->db->where(array("c.GRADOP_Codigo"=>$filter->grado));  
         if(isset($filter->universidad) && $filter->universidad!='') $this->db->where(array("c.UNIVP_Codigo"=>$filter->universidad));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){
             $resultado = $query->result();
+            
         }
         return $resultado;
     }
@@ -57,8 +58,9 @@ class Estudios_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('ESTUDIOP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->estudio) && $filter->estudio!='')  $this->db->where(array("ESTUDIOP_Codigo"=>$filter->estudio));
+        $this->db->delete($this->table);         
     }
 }
 ?>

@@ -52,7 +52,7 @@ class Inicio extends CI_Controller {
                 }
                 $this->session->set_userdata($data);
                 /*Graba acceso*/
-                $data = array("PERSP_Codigo" => $usuarios->PERSP_Codigo);
+                $data = array("PERSP_Codigo" => $usuarios->PERSP_Codigo,"ACCESOC_Fecha"=>date("Y-m-d h:i:s",time()));
                 $this->acceso_model->insertar($data);
                 redirect("inicio/principal");                
             }

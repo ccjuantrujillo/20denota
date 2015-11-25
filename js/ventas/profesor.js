@@ -58,6 +58,16 @@ jQuery(document).ready(function(){
         });
     });
     
+     $("body").on('click',".editar_estudio",function(){
+        codigo = $(this).parent().parent().attr("id");
+        dataString = "";
+        url = base_url+"index.php/ventas/estudio/editar/e/"+codigo;
+        $.post(url,dataString,function(data){
+            $('.tab_estudios').show();
+            $('.tab_estudios').html(data);
+        });
+    });       
+    
     $("body").on('click',".editar_idioma",function(){
         codigo = $(this).parent().parent().attr("id");
         dataString = "";    
@@ -67,8 +77,6 @@ jQuery(document).ready(function(){
             $('.tab_idiomas').html(data); 
         });
     });    
-    
-      
     
     $("body").on('click',"#editar_conferencia",function(){
         dataString = "";
@@ -123,44 +131,100 @@ jQuery(document).ready(function(){
 
     $("body").on('click',"#grabar_experiencia",function(){
         url = base_url+"index.php/ventas/experiencia/grabar";
-        profesor = $("#codigo").val();
+        profesor    = $("#codigo").val();
+        universidad = $("#universidad").val();
+        mesi        = $("#mesi").val();
+        anoi        = $("#anoi").val();
+        mesf        = $("#mesf").val();
+        anof        = $("#anof").val();        
         dataString  = $('#frm_experiencia').serialize();
         dataString  = dataString+"&profesor="+profesor;
-        $.post(url,dataString,function(data){
-            //alert('Operacion realizada con exito');
-            url2 = base_url+"index.php/ventas/experiencia/listar/"+profesor;
-            $.post(url2,"",function(data2){
-                $('#experiencia').html(data2); 
-            });
-        });
+        if(universidad=0){
+            alert("Debe seleccionar una institucion");
+        }
+        else if(mesi=="00" || mesf=="00"){
+            alert("Debe seleccionar un mes");
+        }        
+        else if(anoi==0 || anof==0){
+            alert("Debe seleccionar un año");
+        }
+        else{
+            $.post(url,dataString,function(data){
+                //alert('Operacion realizada con exito');
+                url2 = base_url+"index.php/ventas/experiencia/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#experiencia').html(data2); 
+                });
+            }); 
+        }
     });
 
     $("body").on('click',"#grabar_estudio",function(){
         url = base_url+"index.php/ventas/estudio/grabar";
         profesor = $("#codigo").val();
+        universidad = $("#universidadestudio").val();
+        grado       = $("#grado").val();
+        mesi        = $("#mesi").val();
+        anoi        = $("#anoi").val();
+        mesf        = $("#mesf").val();
+        anof        = $("#anof").val();         
         dataString  = $('#frm_formacion').serialize();
         dataString  = dataString+"&profesor="+profesor;
-        $.post(url,dataString,function(data){
-            //alert('Operacion realizada con exito');
-            url2 = base_url+"index.php/ventas/estudio/listar/"+profesor;
-            $.post(url2,"",function(data2){
-                $('#estudios').html(data2); 
-            });
-        });
+        if(universidad==0){
+            alert("Debe seleccionar una universidad");
+        }
+        else if(grado==0){
+            alert("Debe seleccionar un nivel de estudios");
+        }        
+        else if(mesi=="00" || mesf=="00"){
+            alert("Debe seleccionar un mes");
+        }        
+        else if(anoi==0 || anof==0){
+            alert("Debe seleccionar un año");
+        }        
+        else{
+            $.post(url,dataString,function(data){
+                //alert('Operacion realizada con exito');
+                url2 = base_url+"index.php/ventas/estudio/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#estudios').html(data2); 
+                });
+            });   
+        }
     });
 
     $("body").on('click',"#grabar_idioma",function(){
         url = base_url+"index.php/ventas/estudioidiomas/grabar";
-        profesor = $("#codigo").val();
+        profesor    = $("#codigo").val();
+        idioma      = $("#idioma").val();
+        nivel       = $("#nivel").val();
+        mesi        = $("#mesi").val();
+        anoi        = $("#anoi").val();
+        mesf        = $("#mesf").val();
+        anof        = $("#anof").val();         
         dataString  = $('#frm_idioma').serialize();
         dataString  = dataString+"&profesor="+profesor;
-        $.post(url,dataString,function(data){
-            //alert('Operacion realizada con exito');
-            url2 = base_url+"index.php/ventas/estudioidiomas/listar/"+profesor;
-            $.post(url2,"",function(data2){
-                $('#idiomas').html(data2); 
-            });
-        });
+        if(idioma==0){
+            alert("Debe seleccionar un idioma");
+        }
+        else if(nivel==0){
+            alert("Debe seleccionar un nivel");
+        }        
+        else if(mesi=="00" || mesf=="00"){
+            alert("Debe seleccionar un mes");
+        }        
+        else if(anoi==0 || anof==0){
+            alert("Debe seleccionar un año");
+        }           
+        else{
+            $.post(url,dataString,function(data){
+                //alert('Operacion realizada con exito');
+                url2 = base_url+"index.php/ventas/estudioidiomas/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#idiomas').html(data2); 
+                });
+            });            
+        }
     });
 
     $("body").on('click',"#grabar_conferencia",function(){
@@ -240,6 +304,23 @@ jQuery(document).ready(function(){
             });            
         }
     });    
+    
+    $("body").on('click',".eliminar_estudio",function(){
+        if(confirm('Esta seguro desea eliminar este estudio?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/estudio/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.estudio = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/estudio/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#estudios').html(data2); 
+                });
+            });            
+        }
+    });      
 
     $("body").on('click',".eliminar_idioma",function(){
         if(confirm('Esta seguro desea eliminar este idioma?')){
@@ -257,7 +338,6 @@ jQuery(document).ready(function(){
             });            
         }
     });    
-
 
     $("body").on("click","#logo",function(){
         url = base_url+"index.php/inicio/principal";
@@ -287,6 +367,15 @@ jQuery(document).ready(function(){
           yearRange: "1945:2025"
          });
     });       
+    
+    $("body").on('click',"#tab-2",function(){
+        codigo = $("#codigo").val();
+        if(codigo==""){
+            $("#content-2").css("opacity",0);
+            $("#content-1").css("opacity",1);            
+            alert('Primero debe grabar los datos principales');   
+        }
+    });     
 });
 
 function abrir_formulario_ubigeo(){

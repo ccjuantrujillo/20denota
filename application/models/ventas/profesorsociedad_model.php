@@ -24,8 +24,8 @@ class Profesorsociedad_model extends CI_Model{
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_soc.' as d','d.SOCIEDP_Codigo=c.SOCIEDP_Codigo','inner');
-        if(isset($filter->profesor) && $filter->profesor!='')                 $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
-        if(isset($filter->sociedad) && $filter->sociedad!='')                 $this->db->where(array("c.SOCIEDP_Codigo"=>$filter->sociedad)); 
+        if(isset($filter->profesor))   $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->sociedad))   $this->db->where(array("c.SOCIEDP_Codigo"=>$filter->sociedad)); 
         if(isset($filter->profesorsociedad) && $filter->profesorsociedad!='') $this->db->where(array("c.PROFSOCP_Codigo"=>$filter->profesorsociedad)); 
         $query = $this->db->get();
         $resultado = array();

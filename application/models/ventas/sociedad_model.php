@@ -22,7 +22,8 @@ class Sociedad_model extends CI_Model{
     public function listar($filter="",$filter_not='',$number_items='',$offset=''){
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
-        if(isset($filter->profesor) && $filter->profesor!='')       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->sociedad))       $this->db->where(array("c.SOCIEDP_Codigo"=>$filter->sociedad));  
+        if(isset($filter->profesor))       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){

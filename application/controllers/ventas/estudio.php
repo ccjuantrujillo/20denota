@@ -20,7 +20,8 @@ class Estudio extends CI_Controller
         $filter = new stdClass();
         $filter->profesor = $codigo;
         $lista->estudios = $this->estudios_model->listar($filter);    
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+        $lista->profesor  = $codigo;
+         $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;  
@@ -32,28 +33,41 @@ class Estudio extends CI_Controller
          $lista  = new stdClass();
          $data   = array();
          if($accion == "e"){
-             $filter            = new stdClass();
-             $filter->profesor  = $codigo;
-             $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
-             $filter->profesor = $codigo;
-             $lista->estudios = $this->estudios_model->listar($filter);              
+             $filter->estudio = $codigo;
+             $estudios = $this->estudios_model->obtener($filter);   
+             $lista->universidadestudio = $estudios->UNIVP_Codigo;
+             $lista->grado              = $estudios->GRADOP_Codigo;
+             $lista->descripcion        = $estudios->ESTUDIOC_Descripcion;
+             $lista->estado             = $estudios->UNIVP_Codigo;
+             $arrFechai           = explode("-",$estudios->ESTUDIOC_FechaInicio);
+             $arrFechaf           = explode("-",$estudios->ESTUDIOC_FechaFin);
+             $lista->mesi         = $arrFechai[1];
+             $lista->anoi         = $arrFechai[0];
+             $lista->mesf         = $arrFechaf[1];
+             $lista->anof         = $arrFechaf[0];   
          }
          elseif($accion == "n"){
-             $lista->estudios   = array();  
+             $lista->universidadestudio  = 0;  
+             $lista->grado        = 0; 
+             $lista->descripcion  = ""; 
+             $lista->mesi         = ""; 
+             $lista->anoi         = 0; 
+             $lista->mesf         = ""; 
+             $lista->anof         = 0;  
          } 
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
-         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
-         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
-         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
-         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");            
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,$lista->mesi,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,$lista->mesf,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,$lista->anoi,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,$lista->anof,"id='anof' class='comboMedio'");            
          $data['lista']          = $lista;
          $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
-         $data['seluniversidad'] = form_dropdown('universidadestudio',$this->universidad_model->seleccionar('0'),0,"id='universidadestudio' class='comboGrande'");
-         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");    
+         $data['seluniversidad'] = form_dropdown('universidadestudio',$this->universidad_model->seleccionar('0'),$lista->universidadestudio,"id='universidadestudio' class='comboGrande'");
+         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),$lista->grado,"id='grado' class='comboMedio'");    
          $this->load->view("ventas/estudios_nuevo",$data);
     }
      
@@ -79,10 +93,12 @@ class Estudio extends CI_Controller
         echo json_encode($resultado);
     }
     
-    public function eliminar()
-    {
-        $codigo  = $this->input->post('codigo');
-        $this->ciclo_model->eliminar($codigo);
+    public function eliminar(){
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->estudios_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);        
     }
     public function ver($codigo)
     {

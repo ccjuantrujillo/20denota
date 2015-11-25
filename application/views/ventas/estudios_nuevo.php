@@ -10,7 +10,7 @@
         </tr>  
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Descripcion</td>
-            <td class="formss"><input type="text" id="descripcion" name="descripcion" class="cajaSuperGrande" maxlength="100"></td>
+            <td class="formss"><input type="text" id="descripcion" name="descripcion" class="cajaSuperGrande" maxlength="100" value="<?php echo $lista->descripcion;?>"></td>
         </tr>   
        <tr>
             <td class="formss" bgcolor="#d5e2f2">Estado</td>

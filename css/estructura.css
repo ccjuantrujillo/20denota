@@ -36,7 +36,7 @@ blockquote, q {quotes: "" "";}
 .contenido{width: 98%;margin:0 auto;border:0px solid #000;height: 545px;}
 .contenido #tab-acceso{float: right;margin-top: 50px;}
 .contenido #tab-acceso table{border:1px solid #000;width: 250px;text-align: center;}
-.contenido #tab-acceso table tr,td{border:1px solid #000;}
+/*.contenido #tab-acceso table tr,td{border:1px solid #000;}*/
 .header{float:left;width: 100%;}
 .header a:hover{font-weight: bold;}
 .header #logo{padding: 15px 0;float: left;}
@@ -171,6 +171,3 @@ p#bot{padding-bottom: 5px;}
 #simplemodal-container a {color:#F00;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:800; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 /*#simplemodal-container h3 {color:#84b8d9;}*/
-
-/*.lst_esperiencia ul{background-color:#fff;}*/
-.lst_esperiencia span,.lst_idiomas span {font-size:13px; font-family: Arial, Helvetica, sans-serif;color:#333; margin: 0;padding: 0; font-weight:normal;}

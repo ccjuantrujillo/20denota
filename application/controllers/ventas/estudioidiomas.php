@@ -22,7 +22,8 @@ class Estudioidiomas extends CI_Controller
         $lista = new stdClass();
         $filter->profesor = $codigo;
         $lista->estudiosidiomas = $this->estudiosidiomas_model->listar($filter);    
-        $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
+        $lista->profesor  = $codigo;
+        $arrNivel           = array("00"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
         $data['arrNivel']   = $arrNivel;
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
@@ -58,7 +59,7 @@ class Estudioidiomas extends CI_Controller
              $lista->mesf    = "";
              $lista->anof    = "";           
          }      
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          $arrNivel           = array("0"=>"::Seleccione::","1"=>"Basico","2"=>"Intermedio","3"=>"Avanzado");
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;

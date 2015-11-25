@@ -1,5 +1,13 @@
 <span class="subtitulo">Experiencia:</span>
-<span class="btn_agregar"><input type="button" id="nueva_experiencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
+<span class="btn_agregar">
+    <?php 
+    if($lista->profesor!=""){
+        ?>
+        <input type="button" id="nueva_experiencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">      
+        <?php
+    }
+    ?>
+</span>                
 <span class="tab_experiencia">&nbsp;</span>  
 <span class="lst_esperiencia">
     <?php

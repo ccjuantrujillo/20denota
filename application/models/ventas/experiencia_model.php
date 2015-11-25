@@ -24,9 +24,9 @@ class Experiencia_model extends CI_Model{
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset); 
         $this->db->join($this->table_uni.' as d','d.UNIVP_Codigo=c.UNIVP_Codigo','inner');
-        if(isset($filter->experiencia) && $filter->experiencia!='') $this->db->where(array("c.EXPERP_Codigo"=>$filter->experiencia));  
-        if(isset($filter->profesor) && $filter->profesor!='')       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
-        if(isset($filter->universidad) && $filter->universidad!='') $this->db->where(array("c.UNIVP_Codigo"=>$filter->universidad));  
+        if(isset($filter->experiencia)) $this->db->where(array("c.EXPERP_Codigo"=>$filter->experiencia));  
+        if(isset($filter->profesor))    $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->universidad)) $this->db->where(array("c.UNIVP_Codigo"=>$filter->universidad));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){

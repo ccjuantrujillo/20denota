@@ -1,5 +1,13 @@
 <span class="subtitulo">Idiomas</span>
-<span class="btn_agregar"><input type="button" id="nuevo_idioma" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir"></span>                
+<span class="btn_agregar">
+     <?php 
+    if($lista->profesor!=""){
+        ?>
+        <input type="button" id="nuevo_idioma" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
+        <?php
+    }
+    ?>        
+</span>                
 <span class="tab_idiomas">&nbsp;</span>                   
 <span class="lst_idiomas">
     <?php

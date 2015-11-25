@@ -24,8 +24,8 @@ class Estudiosidiomas_model extends CI_Model{
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_idioma.' as d','d.IDIOMP_Codigo=c.IDIOMP_Codigo','inner');
-        if(isset($filter->estudioidioma) && $filter->estudioidioma!='')  $this->db->where(array("c.ESTIDIOMP_Codigo"=>$filter->estudioidioma));  
-        if(isset($filter->profesor) && $filter->profesor!='')            $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->estudioidioma))  $this->db->where(array("c.ESTIDIOMP_Codigo"=>$filter->estudioidioma));  
+        if(isset($filter->profesor))       $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
         if(isset($filter->idioma) && $filter->idioma!='')                $this->db->where(array("c.IDIOMP_Codigo"=>$filter->idioma));  
         $query = $this->db->get();
         $resultado = array();

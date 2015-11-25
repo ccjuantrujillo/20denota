@@ -24,9 +24,9 @@ class Trabajo_model extends CI_Model{
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_emp.' as d','d.EMPRP_Codigo=c.EMPRP_Codigo','inner');
-        if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
-        if(isset($filter->trabajo) && $filter->trabajo!='')   $this->db->where(array("c.TRABAJP_Codigo"=>$filter->trabajo));  
-        if(isset($filter->empresa) && $filter->empresa!='')   $this->db->where(array("c.EMPRP_Codigo"=>$filter->empresa));  
+        if(isset($filter->profesor))  $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));  
+        if(isset($filter->trabajo))   $this->db->where(array("c.TRABAJP_Codigo"=>$filter->trabajo));  
+        if(isset($filter->empresa))   $this->db->where(array("c.EMPRP_Codigo"=>$filter->empresa));  
         $query = $this->db->get();
         $resultado = array();
         if($query->num_rows>0){
