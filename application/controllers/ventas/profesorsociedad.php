@@ -20,7 +20,8 @@ class Profesorsociedad extends CI_Controller
          $lista = new stdClass();
          $filter = new stdClass();
          $filter->profesor = $codigo;
-         $lista->sociedades = $this->profesorsociedad_model->listar($filter);              
+         $lista->sociedades = $this->profesorsociedad_model->listar($filter);       
+         $lista->profesor = $codigo;
          $data['lista']      = $lista;
          $this->load->view("ventas/sociedad_index",$data);           
     }
@@ -30,11 +31,15 @@ class Profesorsociedad extends CI_Controller
          $data  = array();
          if($accion == "e"){
              $filter = new stdClass();
-             $filter->profesor = $codigo;
-             $lista->sociedades = $this->profesorsociedad_model->listar($filter);              
+             $filter->profesorsociedad = $codigo;
+             $sociedades = $this->profesorsociedad_model->obtener($filter);  
+             $lista->sociedad   = $sociedades->SOCIEDP_Codigo;
+             $arrAfiliacion     = explode("-",$sociedades->PROFSOCC_FechaSuscripcion);
+             $lista->afiliacion = $arrAfiliacion[2]."/".$arrAfiliacion[1]."/".$arrAfiliacion[0];
          }
          elseif($accion == "n"){
-             $lista->sociedades   = array();  
+             $lista->sociedad   = 0;  
+             $lista->afiliacion = "__/__/__";  
          }     
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
@@ -44,8 +49,7 @@ class Profesorsociedad extends CI_Controller
          $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
          $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
          $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");   
-         $data['selsociedad'] = form_dropdown('sociedad',$this->sociedad_model->seleccionar('0'),0,"id='sociedad' class='comboGrande'");
-         $data['selgrado']       = form_dropdown('grado',$this->grado_model->seleccionar('0'),0,"id='grado' class='comboMedio'");           
+         $data['selsociedad'] = form_dropdown('sociedad',$this->sociedad_model->seleccionar('0'),$lista->sociedad,"id='sociedad' class='comboGrande'");         
          $data['lista']          = $lista;
          $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
          $this->load->view("ventas/sociedad_nuevo",$data);
@@ -69,8 +73,11 @@ class Profesorsociedad extends CI_Controller
     
     public function eliminar()
     {
-        $codigo  = $this->input->post('codigo');
-        $this->ciclo_model->eliminar($codigo);
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->profesorsociedad_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);        
     }
     public function ver($codigo)
     {

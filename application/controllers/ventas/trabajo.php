@@ -19,8 +19,9 @@ class Trabajo extends CI_Controller
          $lista = new stdClass();
          $filter = new stdClass();
          $filter->profesor = $codigo;
-         $lista->trabajos  = $this->trabajo_model->listar($filter);     
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $lista->trabajos  = $this->trabajo_model->listar($filter);  
+         $lista->profesor  = $codigo;
+         $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;         
@@ -32,22 +33,37 @@ class Trabajo extends CI_Controller
          $lista = new stdClass();
          if($accion == "e"){
              $filter = new stdClass();
-             $filter->profesor = $codigo;
-             $lista->trabajos = $this->trabajo_model->listar($filter);              
+             $filter->trabajo = $codigo;
+             $trabajos = $this->trabajo_model->obtener($filter);              
+             $lista->empresa = $trabajos->EMPRP_Codigo;
+             $lista->sector  = $trabajos->SECTORP_Codigo;
+             $lista->cargo   = $trabajos->TRABAJC_Descripcion; 
+             $arrFechai           = explode("-",$trabajos->TRABAJC_FechaInicio);
+             $arrFechaf           = explode("-",$trabajos->TRABAJC_FechaFin);
+             $lista->mesi         = $arrFechai[1];
+             $lista->anoi         = $arrFechai[0];
+             $lista->mesf         = $arrFechaf[1];
+             $lista->anof         = $arrFechaf[0];               
          }
          elseif($accion == "n"){
-             $lista->trabajos   = array();  
+             $lista->empresa = 0;
+             $lista->sector  = 0;
+             $lista->cargo   = ""; 
+             $lista->mesi    = ""; 
+             $lista->anoi    = 0; 
+             $lista->mesf    = ""; 
+             $lista->anof    = 0;               
          }         
-         $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
+         $arrMes             = array("00"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
          $data['arrmes']     = $arrMes;
-         $data['selmesi']    = form_dropdown('mesi',$arrMes,0,"id='mesi' class='comboMedio'");
-         $data['selmesf']    = form_dropdown('mesf',$arrMes,0,"id='mesf' class='comboMedio'");
-         $data['selanoi']    = form_dropdown('anoi',$arrAno,0,"id='anoi' class='comboMedio'");
-         $data['selanof']    = form_dropdown('anof',$arrAno,0,"id='anof' class='comboMedio'");   
-         $data['selempresa'] = form_dropdown('empresa',$this->empresa_model->seleccionar('0'),0,"id='empresa' class='comboGrande'");        
-         $data['selsector'] = form_dropdown('sector',$this->sector_model->seleccionar('0'),0,"id='sector' class='comboGrande'"); 
+         $data['selmesi']    = form_dropdown('mesi',$arrMes,$lista->mesi,"id='mesi' class='comboMedio'");
+         $data['selmesf']    = form_dropdown('mesf',$arrMes,$lista->mesf,"id='mesf' class='comboMedio'");
+         $data['selanoi']    = form_dropdown('anoi',$arrAno,$lista->anoi,"id='anoi' class='comboMedio'");
+         $data['selanof']    = form_dropdown('anof',$arrAno,$lista->anof,"id='anof' class='comboMedio'");   
+         $data['selempresa'] = form_dropdown('empresa',$this->empresa_model->seleccionar('0'),$lista->empresa,"id='empresa' class='comboGrande'");        
+         $data['selsector'] = form_dropdown('sector',$this->sector_model->seleccionar('0'),$lista->sector,"id='sector' class='comboGrande'"); 
          $data['lista']          = $lista;
          $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
          $this->load->view("ventas/trabajo_nuevo",$data);
@@ -73,8 +89,11 @@ class Trabajo extends CI_Controller
     
     public function eliminar()
     {
-        $codigo  = $this->input->post('codigo');
-        $this->ciclo_model->eliminar($codigo);
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->trabajo_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);
     }
     public function ver($codigo)
     {

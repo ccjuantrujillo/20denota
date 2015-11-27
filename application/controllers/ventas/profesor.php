@@ -34,6 +34,7 @@ class Profesor extends Persona
         $menu       = get_menu($filter); 
         $filter     = new stdClass();
         if(isset($_SESSION["codcurso"]) && $_SESSION["codcurso"]!=0)  $filter->curso = $_SESSION["codcurso"];
+        $filter->borrado = 1;
         $filter_not = new stdClass();
         $filter_not->profesor = "0";
         $filter->order_by    = array("d.PERSC_ApellidoPaterno"=>"asc","d.PERSC_ApellidoMaterno"=>"asc","d.PERSC_Nombre"=>"asc");
@@ -120,7 +121,7 @@ class Profesor extends Persona
          }
          $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-         $arrCoord           = array("0"=>"::Seleccione::","1"=>"Coordinador","2"=>"Profesor");
+         $arrCoord           = array("0"=>"::Seleccione::","1"=>"Coordinador de plana","2"=>"Profesor");
          $arrMes             = array("0"=>"Mes","1"=>"Enero","2"=>"Febrero","3"=>"Marzo","4"=>"Abril","5"=>"Mayo","6"=>"Junio","7"=>"Julio","8"=>"Agosto","9"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
@@ -175,21 +176,22 @@ class Profesor extends Persona
 
     public function eliminar(){
         $codigo  = $this->input->post('codigo');
-        /*Verifico si el cliente esta matriculado en algun curso*/
-        $filter  = new stdClass();
-        $filter->cliente = $codigo;
-        $ordenes = $this->matricula_model->listar($filter);
-        $resultado = false;
-        if(count($ordenes) == 0){
-            $resultado = true;
-            $filter = new stdClass();
-            $filter->profesor = $codigo;
-            $profesor = $this->profesor_model->obtener($filter);
-            $persona = $profesor->PERSP_Codigo;
-            $this->profesor_model->eliminar($codigo);
-            $this->persona_model->eliminar($persona);
-        }
+        $resultado = true;
+        $filter = new stdClass();
+        $filter->profesor = $codigo;
+        $profesor = $this->profesor_model->obtener($filter);
+        $persona = $profesor->PERSP_Codigo;
+        $this->profesor_model->eliminar($codigo);
+        $this->persona_model->eliminar($persona);
         echo json_encode($resultado);
+    }
+    
+    public function borrar(){
+        $codigo    = $this->input->post('codigo');
+        $resultado = true;
+        $data      = array("PROC_FlagBorrado" => 0);
+        $this->profesor_model->modificar($codigo,$data);   
+         echo json_encode($resultado);
     }
 
     public function buscar($j=0){

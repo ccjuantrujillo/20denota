@@ -7,7 +7,9 @@ class Tareadetalle_model extends CI_Model{
         parent::__construct();
         $this->usuario     = $this->session->userdata('codusu');
         $this->table       = "tareadetalle";
+        $this->table_tarea = "tarea";
         $this->table_profe = "profesor";
+        $this->table_curs  = "curso";
         $this->table_pers  = "persona";
         $this->table_tema  = "tema";
         $this->table_semana = "semana";
@@ -28,7 +30,9 @@ class Tareadetalle_model extends CI_Model{
     public function listar($filter,$filter_not="",$number_items='',$offset=''){
         $this->db->select("*,DATE_FORMAT( d.TAREADETC_FechaEntrega,'%d/%m/%Y' ) AS fentrega",FALSE);
         $this->db->from($this->table." as d");
+        $this->db->join($this->table_tarea.' as z','z.TAREAP_Codigo=d.TAREAP_Codigo','inner');
         $this->db->join($this->table_profe.' as e','e.PROP_Codigo=d.PROP_Codigo','inner');
+        $this->db->join($this->table_curs.' as y','y.PROD_Codigo=e.PROD_Codigo','inner');
         $this->db->join($this->table_pers.' as f','f.PERSP_Codigo=e.PERSP_Codigo','inner');
         $this->db->join($this->table_tema.' as g','g.PRODATRIBDET_Codigo=d.PRODATRIBDET_Codigo','left');
         $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','left');
@@ -37,7 +41,7 @@ class Tareadetalle_model extends CI_Model{
         if(isset($filter->tarea) && $filter->tarea!='')       $this->db->where(array("d.TAREAP_Codigo"=>$filter->tarea));
         if(isset($filter->tareadetalle) && $filter->tareadetalle!='')       $this->db->where(array("d.TAREADETP_Codigo"=>$filter->tareadetalle));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("d.PROP_Codigo"=>$filter->profesor));
-        if(isset($filter->ciclo) && $filter->ciclo!='')       $this->db->where(array("h.CICLOP_Codigo"=>$filter->ciclo));
+        if(isset($filter->curso) && $filter->curso!='')       $this->db->where(array("y.PROD_Codigo"=>$filter->curso));
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);

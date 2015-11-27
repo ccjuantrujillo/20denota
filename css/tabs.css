@@ -80,17 +80,17 @@
     width: 100%;
 }
 
-#content-2 span.lst_estudios,span.lst_conferencias,span.lst_esperiencia,span.lst_idiomas{
+#content-2 span.lst_estudios,span.lst_conferencias,span.lst_esperiencia,span.lst_idiomas,span.lst_sociedades,span.lst_empresa{
     height: auto;
     float: left;
     width: 100%;
 }
-#content-2 span.editar_experiencia,span.eliminar_experiencia,span.editar_idioma,span.eliminar_idioma,span.editar_estudio,span.eliminar_estudio{
+#content-2 span.editar_experiencia,span.eliminar_experiencia,span.editar_idioma,span.eliminar_idioma,span.editar_estudio,span.eliminar_estudio,span.editar_conferencia,span.eliminar_conferencia,span.editar_sociedad,span.eliminar_sociedad,span.editar_trabajo,span.eliminar_trabajo{
     cursor:pointer;
 }
 
 /*.lst_esperiencia ul{background-color:#fff;}*/
-.lst_esperiencia span,.lst_idiomas span,.lst_estudios span{font-size:13px; font-family: Arial, Helvetica, sans-serif;color:#333; margin: 0;padding: 0; font-weight:normal;}
+.lst_esperiencia span,.lst_idiomas span,.lst_estudios span,.lst_conferencias span,.lst_sociedades span,.lst_empresa span{font-size:13px; font-family: Arial, Helvetica, sans-serif;color:#333; margin: 0;padding: 0; font-weight:normal;}
 
 #content-2 span h2{
     font-family: Arial, Helvetica, sans-serif;

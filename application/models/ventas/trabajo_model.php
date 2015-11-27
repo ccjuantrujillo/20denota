@@ -54,8 +54,9 @@ class Trabajo_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('TRABAJP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->trabajo) && $filter->trabajo!='')  $this->db->where(array("TRABAJP_Codigo"=>$filter->trabajo));        
+        $this->db->delete($this->table); 
     }
 }
 ?>

@@ -3,6 +3,13 @@ jQuery(document).ready(function(){
         $("#form_busqueda").submit();
     });
     
+   $("body").on("click","#pdf",function(){
+        url = base_url+"index.php/ventas/tarea/export_pdf/rpt_seguimiento_tareas";
+        $("#frmReporte").attr("action",url);
+        $("#frmReporte").attr("target","framereporte");
+        $("#frmReporte").submit();
+    });    
+    
     $("body").on("click","#nuevo",function(){
         dataString = "";
         url = base_url+"index.php/ventas/tarea/editar/n";
@@ -176,6 +183,22 @@ jQuery(document).ready(function(){
   });
 
   $("body").on('focus',"#fechaentrega",function(){
+       $(this).datepicker({
+        dateFormat: "dd/mm/yy",
+        changeYear: true,
+        yearRange: "1945:2025"
+       });
+  });  
+  
+    $("body").on('focus',"#desde",function(){
+       $(this).datepicker({
+        dateFormat: "dd/mm/yy",
+        changeYear: true,
+        yearRange: "1945:2025"
+       });
+    });
+    
+  $("body").on('focus',"#hasta",function(){
        $(this).datepicker({
         dateFormat: "dd/mm/yy",
         changeYear: true,

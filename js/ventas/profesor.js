@@ -7,7 +7,6 @@ jQuery(document).ready(function(){
             $('#basic-modal-content').modal();
             $('#mensaje').html(data);
         });
-
     });
 
    $("body").on("click","#nueva_experiencia",function(){
@@ -35,7 +34,34 @@ jQuery(document).ready(function(){
             $('.tab_estudios').show();
             $('.tab_estudios').html(data);
         });
-    });     
+    });  
+    
+    $("body").on('click',"#nueva_conferencia",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/conferencia/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_conferencias').show();
+            $('.tab_conferencias').html(data);
+        });
+    });      
+
+    $("body").on('click',"#nueva_sociedad",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/profesorsociedad/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_sociedad').show();
+            $('.tab_sociedad').html(data);
+        });
+    });    
+
+    $("body").on('click',"#nuevo_trabajo",function(){
+        dataString = "";
+        url = base_url+"index.php/ventas/trabajo/editar/n/1/2";
+        $.post(url,dataString,function(data){
+            $('.tab_empresa').show();
+            $('.tab_empresa').html(data);
+        });
+    });   
 
     /*Ediciones*/
    $("body").on("click",".editar",function(){
@@ -78,27 +104,30 @@ jQuery(document).ready(function(){
         });
     });    
     
-    $("body").on('click',"#editar_conferencia",function(){
+    $("body").on('click',".editar_conferencia",function(){
+        codigo = $(this).parent().parent().attr("id");
         dataString = "";
-        url = base_url+"index.php/ventas/conferencia/editar/n/1/2";
+        url = base_url+"index.php/ventas/conferencia/editar/e/"+codigo;
         $.post(url,dataString,function(data){
             $('.tab_conferencias').show();
             $('.tab_conferencias').html(data);
         });
     });    
     
-    $("body").on('click',"#editar_sociedad",function(){
+    $("body").on('click',".editar_sociedad",function(){
+        codigo = $(this).parent().parent().attr("id");
         dataString = "";
-        url = base_url+"index.php/ventas/profesorsociedad/editar/n/1/2";
+        url = base_url+"index.php/ventas/profesorsociedad/editar/e/"+codigo;
         $.post(url,dataString,function(data){
             $('.tab_sociedad').show();
             $('.tab_sociedad').html(data);
         });
     });      
     
-    $("body").on('click',"#editar_empresa",function(){
+    $("body").on('click',".editar_trabajo",function(){
+        codigo = $(this).parent().parent().attr("id");
         dataString = "";
-        url = base_url+"index.php/ventas/trabajo/editar/n/1/2";
+        url = base_url+"index.php/ventas/trabajo/editar/e/"+codigo;
         $.post(url,dataString,function(data){
             $('.tab_empresa').show();
             $('.tab_empresa').html(data);
@@ -258,23 +287,36 @@ jQuery(document).ready(function(){
     $("body").on('click',"#grabar_trabajo",function(){
         url = base_url+"index.php/ventas/trabajo/grabar";
         profesor = $("#codigo").val();
-        dataString  = $('#frm_empresa').serialize();
-        dataString  = dataString+"&profesor="+profesor;
-        $.post(url,dataString,function(data){
-            //alert('Operacion realizada con exito');
-            url2 = base_url+"index.php/ventas/trabajo/listar/"+profesor;
-            $.post(url2,"",function(data2){
-                $('#empresa').html(data2); 
-            });
-        });
+        empresa  = $("#empresa").val();
+        mesi     = $("#mesi").val();
+        anoi     = $("#anoi").val();
+        mesf     = $("#mesf").val();
+        anof     = $("#anof").val();          
+        dataString = $('#frm_empresa').serialize();
+        dataString = dataString+"&profesor="+profesor;    
+        if(mesi=="00" || mesf=="00"){
+            alert("Debe seleccionar un mes");
+        }        
+        else if(anoi=="00" || anof=="00"){
+            alert("Debe seleccionar un año");
+        }   
+        else{
+            $.post(url,dataString,function(data){
+                //alert('Operacion realizada con exito');
+                url2 = base_url+"index.php/ventas/trabajo/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#empresa').html(data2); 
+                });
+            });            
+        }
     });
 
     /*Eliminar*/
     $("body").on("click",".eliminar",function(){
-       if(confirm('Esta seguro desea eliminar este profesor?')){
+       if(confirm('Esta seguro desea eliminar este profesor?, todos los registros asociados al profesor seran borrados.')){
             coddetalle = $(this).parent().parent().attr("id");
             dataString = "codigo="+coddetalle;
-            url = base_url+"index.php/ventas/profesor/eliminar";
+            url = base_url+"index.php/ventas/profesor/borrar";
             $.post(url,dataString,function(data){
     //            if(data=="true"){
                     alert("El profesor se borro correctamente");
@@ -338,6 +380,57 @@ jQuery(document).ready(function(){
             });            
         }
     });    
+    
+    $("body").on('click',".eliminar_conferencia",function(){
+        if(confirm('Esta seguro desea eliminar esta conferencia?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/conferencia/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.conferencia = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/conferencia/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#conferencias').html(data2); 
+                });
+            });            
+        }
+    });       
+
+    $("body").on('click',".eliminar_sociedad",function(){
+        if(confirm('Esta seguro desea eliminar esta sociedad?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/profesorsociedad/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.profesorsociedad = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/profesorsociedad/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#sociedades').html(data2); 
+                });
+            });            
+        }
+    });  
+    
+    $("body").on('click',".eliminar_trabajo",function(){
+        if(confirm('Esta seguro desea eliminar esta empresa?')){
+            codigo = $(this).parent().parent().attr("id");  
+            url = base_url+"index.php/ventas/trabajo/eliminar/";
+            profesor = $("#codigo").val();
+            objRes = new Object();
+            objRes.trabajo = codigo;
+            dataString   = {objeto: JSON.stringify(objRes)};             
+            $.post(url,dataString,function(data){
+                url2 = base_url+"index.php/ventas/trabajo/listar/"+profesor;
+                $.post(url2,"",function(data2){
+                    $('#empresa').html(data2); 
+                });
+            });            
+        }
+    });     
 
     $("body").on("click","#logo",function(){
         url = base_url+"index.php/inicio/principal";

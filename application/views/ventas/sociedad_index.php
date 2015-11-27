@@ -3,7 +3,7 @@
      <?php 
     if($lista->profesor!=""){
         ?>
-        <input type="button" id="editar_sociedad" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
+        <input type="button" id="nueva_sociedad" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
         <?php
     }
     ?>       
@@ -14,8 +14,10 @@
     if(count($lista->sociedades)>0){
         foreach($lista->sociedades as $indice=>$value){
             ?>
-           <h2>&bull;<?php echo $value->SOCIEDC_Descripcion;?>(<?php echo $value->SOCIEDC_Nombre;?>)</h2>
-           <h3><?php echo date_sql($value->PROFSOCC_FechaSuscripcion);?></h3>
+            <ul id="<?php echo $value->PROFSOCP_Codigo;?>">
+                <li><span>&bull;<?php echo $value->SOCIEDC_Descripcion;?>(<?php echo $value->SOCIEDC_Nombre;?>)</span>&nbsp;<span class="editar_sociedad"><img src="<?php echo img;?>/orar.gif"></span>&nbsp;<span class="eliminar_sociedad"><img src="<?php echo img;?>/eliminar.gif"></span></li>
+                <li><span><?php echo date_sql($value->PROFSOCC_FechaSuscripcion);?></span></li>                
+            </ul>
             <?php
         }
     }

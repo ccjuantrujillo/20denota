@@ -189,9 +189,9 @@ class Tarea extends CI_Controller {
         $codigo = $this->input->post('codigo');
         $resultado = false;
         $filter = new stdClass();
-        $filter->acta = $codigo;
-        $this->actadetalle_model->eliminar($filter);
-        $this->acta_model->eliminar($codigo);
+        $filter->tarea = $codigo;
+        $this->tareadetalle_model->eliminar($filter);
+        $this->tarea_model->eliminar($codigo);
         $resultado = true;
         echo json_encode($resultado);
     }
@@ -319,5 +319,68 @@ class Tarea extends CI_Controller {
                 No hay datos para exportar
                 </div>";
         }
+    }
+    
+    public function export_pdf($type){     
+        switch ($type) {
+            case 'rpt_seguimiento_tareas':
+                $curso    = $this->input->get_post('curso');
+                $profesor = $this->input->get_post('profesor');
+                $desde    = $this->input->get_post('desde');
+                $hasta    = $this->input->get_post('hasta');                
+                $filter = new stdClass();
+                if($curso!=0) $filter->curso = $curso;
+                if($profesor!=0) $filter->profesor = $profesor;
+                $filter->order_by= array("e.PROD_Codigo"=>"asc","d.PROP_Codigo"=>"asc");
+                $tareas = $this->tareadetalle_model->listar($filter);
+                $this->load->library("fpdf/pdf");
+                $CI = & get_instance();
+                $CI->pdf->FPDF('P');
+                $CI->pdf->AliasNbPages();
+                $CI->pdf->AddPage();
+                $CI->pdf->SetTextColor(0,0,0);
+                $CI->pdf->SetFillColor(216,216,216);
+                $CI->pdf->SetFont('Arial','B',11);
+                $CI->pdf->Image('img/uni.gif',10,8,10);
+                $CI->pdf->Cell(0,13,"SEGUIMIENTO DE TAREAS",0,1,"C",0);
+                $CI->pdf->SetFont('Arial','B',7);   
+                $profe_ant = 0;
+                $curso_ant = 0;
+                foreach($tareas as $item=>$value){
+                    if($value->PROD_Codigo!=$curso_ant) $CI->pdf->Cell(120,5,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
+                    //if($value->PROP_Codigo!=$profe_ant) $CI->pdf->Cell(120,5,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);                    
+                    $CI->pdf->Cell(90,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,0,"L",0);
+                    $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
+                    $CI->pdf->Cell(90,5,$value->TAREAC_Nombre,1,1,"L",0);
+                    $CI->pdf->Cell(90,1, "" ,0,1,"L",0);  
+                    $profe_ant = $value->PROP_Codigo;
+                    $curso_ant = $value->PROD_Codigo;
+                }   
+                $CI->pdf->Output();
+                break;
+        }
+    }
+    
+    public function rpt_seguimiento_tareas(){
+        $curso    = $this->input->get_post('curso');
+        $profesor = $this->input->get_post('profesor');
+        $desde    = $this->input->get_post('desde');
+        $hasta    = $this->input->get_post('hasta');         
+        $filter           = new stdClass();
+        $filter->rol      = $this->session->userdata('rolusu');		
+        $filter->order_by = array("m.MENU_Orden"=>"asc");
+        $menu       = get_menu($filter);           
+        $filter       = new stdClass();
+        $data['selprofesor'] = form_dropdown('profesor',$this->profesor_model->seleccionar('0',$filter),0,"id='profesor' class='comboGrande'");      
+        $data['selcurso']    = form_dropdown('curso',$this->curso_model->seleccionar('0',$filter),0,"id='curso' class='comboGrande'");      
+        $data["desde"] = $desde;
+        $data["hasta"] = $hasta;
+        $data["menu"]  = $menu;
+        $data["form_open"] = form_open("",array("name"=>"frmReporte","id"=>"frmReporte","method"=>"post"));
+        $data["form_close"] = form_close();
+        $data["fila"]  = "";
+        $data['header']  = get_header();
+        $data["titulo"]  = "Reporte de seguimiento de tareas por profesor";        
+        $this->load->view(ventas."rpt_seguimiento_tareas",$data);
     }
 }

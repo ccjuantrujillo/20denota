@@ -51,8 +51,9 @@ class Conferencia_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('CONFERP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->conferencia) && $filter->conferencia!='')  $this->db->where(array("CONFERP_Codigo"=>$filter->conferencia));        
+        $this->db->delete($this->table);
     }
 }
 ?>

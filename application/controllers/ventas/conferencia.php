@@ -18,7 +18,8 @@ class Conferencia extends CI_Controller
          $lista = new stdClass();
          $filter = new stdClass();
          $filter->profesor = $codigo;
-         $lista->conferencias = $this->conferencia_model->listar($filter);      
+         $lista->conferencias = $this->conferencia_model->listar($filter);   
+         $lista->profesor  = $codigo;
          $arrMes             = array("0"=>"Mes","01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Setiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
          $arrAno[0]="Año";
          for($i=1950;$i<=2020;$i++)  $arrAno[$i]=$i;
@@ -31,15 +32,18 @@ class Conferencia extends CI_Controller
          $lista = new stdClass();
          $data  = array();
          if($accion == "e"){
-             $filter            = new stdClass();
-             $filter->profesor  = $codigo;
-             $profesores        = $this->profesor_model->obtener($filter);
              $filter = new stdClass();
-             $filter->profesor = $codigo;
-             $lista->conferencias = $this->conferencia_model->listar($filter);              
+             $filter->conferencia = $codigo;
+             $conferencia = $this->conferencia_model->obtener($filter);              
+             $arrFecha    = explode("-",$conferencia->CONFERC_Fecha);
+             $lista->fecha      =  $arrFecha[2]."/".$arrFecha[1]."/".$arrFecha[0];
+             $lista->nombre     = $conferencia->CONFERC_Nombre;
+             $lista->descripcion = $conferencia->CONFERC_Descripcion;
          }
          elseif($accion == "n"){
-             $lista->conferencias   = array();  
+             $lista->fecha      = "__/__/__";  
+             $lista->nombre     = "";  
+             $lista->descripcion = "";  
          }    
          $data['lista']          = $lista;
          $data['oculto_det']     = form_hidden(array("accion_det"=>$accion,"codigo_det"=>$codigo));
@@ -65,8 +69,11 @@ class Conferencia extends CI_Controller
     
     public function eliminar()
     {
-        $codigo  = $this->input->post('codigo');
-        $this->ciclo_model->eliminar($codigo);
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->conferencia_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);
     }
     public function ver($codigo)
     {

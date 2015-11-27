@@ -24,6 +24,7 @@ class Ciclo_model extends CI_Model{
         $this->db->select('*');
         $this->db->from($this->table." as c",$number_items,$offset);  
         $this->db->join($this->table_tipociclo.' as d','d.TIPOCICLOP_Codigo=c.TIPOCICLOP_Codigo','inner');
+        $this->db->where(array("c.COMPC_FlagEstado"=>1)); 
         if(isset($filter->ciclo) && $filter->ciclo!='')    $this->db->where(array("c.CICLOP_Codigo"=>$filter->ciclo));  
         if(isset($filter->estado) && $filter->estado!='')  $this->db->where(array("c.COMPC_FlagEstado"=>$filter->estado));  
         $query = $this->db->get();

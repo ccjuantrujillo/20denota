@@ -54,8 +54,9 @@ class Profesorsociedad_model extends CI_Model{
         $this->db->update($this->table,(array)$filter);
     }
 	
-    public function eliminar($codigo){
-        $this->db->delete($this->table,array('PROFSOCP_Codigo' => $codigo));
+    public function eliminar($filter){
+        if(isset($filter->profesorsociedad) && $filter->profesorsociedad!='')  $this->db->where(array("PROFSOCP_Codigo"=>$filter->profesorsociedad));        
+        $this->db->delete($this->table);        
     }
 }
 ?>

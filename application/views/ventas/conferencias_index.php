@@ -3,7 +3,7 @@
      <?php 
     if($lista->profesor!=""){
         ?>
-        <input type="button" id="editar_conferencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
+        <input type="button" id="nueva_conferencia" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
         <?php
     }
     ?>     
@@ -14,9 +14,11 @@
     if(count($lista->conferencias)>0){
         foreach($lista->conferencias as $indice=>$value){
             ?>
-           <h2>&bull;<?php echo $value->CONFERC_Nombre;?></h2>
-           <h3><?php echo $value->CONFERC_Descripcion;?></h3>
-           <h3><?php echo date_sql($value->CONFERC_Fecha);?></h3>
+            <ul id="<?php echo $value->CONFERP_Codigo;?>">
+                <li><span>&bull;<?php echo $value->CONFERC_Nombre;?></span>&nbsp;<span class="editar_conferencia"><img src="<?php echo img;?>/orar.gif"></span>&nbsp;<span class="eliminar_conferencia"><img src="<?php echo img;?>/eliminar.gif"></span></li>
+                <li><span><?php echo $value->CONFERC_Descripcion;?></span></li>
+                <li><span><?php echo date_sql($value->CONFERC_Fecha);?></span></li>
+            </ul>
             <?php
         }
     }

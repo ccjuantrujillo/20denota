@@ -10,7 +10,7 @@
         </tr>  
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Cargo</td>
-            <td class="formss"><input type="text" id="cargo_trabajo" name="cargo_trabajo" class="cajaSuperGrande" maxlength="100"></td>
+            <td class="formss"><input type="text" id="cargo_trabajo" name="cargo_trabajo" class="cajaSuperGrande" maxlength="100" value="<?php echo $lista->cargo;?>"></td>
         </tr>   
         <tr>
             <td class="formss" bgcolor="#d5e2f2">Periodo</td>

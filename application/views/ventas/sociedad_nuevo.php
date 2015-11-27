@@ -6,7 +6,7 @@
         </tr>
         <tr>
             <td class="formss" bgcolor="#d5e2f2">F.Afiliación</td>
-            <td class="formss"><input name="fafiliacion" id="fafiliacion" type="text"  value="" class="cajaMinima" maxlength="10" readonly="readonly"></td>
+            <td class="formss"><input name="fafiliacion" id="fafiliacion" type="text"  value="<?php echo $lista->afiliacion;?>" class="cajaMinima" maxlength="10" readonly="readonly"></td>
         </tr>   
       <tr>
         <td>

@@ -3,7 +3,7 @@
      <?php 
     if($lista->profesor!=""){
         ?>
-        <input type="button" id="editar_empresa" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
+        <input type="button" id="nuevo_trabajo" class="aceptarlog3" value="+&nbsp;&nbsp;Añadir">
         <?php
     }
     ?>        
@@ -20,9 +20,11 @@
             $mesf   = $arrfechaf[1];
             $aniof  = $arrfechaf[0];             
             ?>
-           <h2><?php echo $value->TRABAJC_Descripcion;?></h2>
-           <h3><?php echo $value->EMPRC_RazonSocial;?></h3>
-           <h3><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></h3>
+            <ul id="<?php echo $value->TRABAJP_Codigo;?>">
+                <li><span>&bull;<?php echo $value->TRABAJC_Descripcion;?></span>&nbsp;<span class="editar_trabajo"><img src="<?php echo img;?>/orar.gif"></span>&nbsp;<span class="eliminar_trabajo"><img src="<?php echo img;?>/eliminar.gif"></span></li>
+                <li><span><?php echo $value->EMPRC_RazonSocial;?></span></li>
+                <li><span><?php echo $arrmes[$mesi];?>-<?php echo $anioi;?>&nbsp;-&nbsp;<?php echo $arrmes[$mesf];?>-<?php echo $aniof;?></span></li>                
+            </ul>
             <?php
         }
     }

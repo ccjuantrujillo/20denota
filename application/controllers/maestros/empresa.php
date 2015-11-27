@@ -9,9 +9,9 @@ class Empresa extends CI_Controller
     {
         parent::__construct();
         $this->load->model('maestros/empresa_model');
+        $this->load->model('maestros/sector_model');
         $this->load->model('seguridad/permiso_model');
         $this->load->helper('menu');
-        $this->somevar['compania'] = $this->session->userdata('compania');
     }
     public function listar($j=0){
         $filter           = new stdClass();
@@ -58,50 +58,64 @@ class Empresa extends CI_Controller
          $lista = new stdClass();
          if($accion == "e"){
              $filter             = new stdClass();
-             $filter->local      = $codigo;
-             $locales            = $this->local_model->obtener($filter);
-             $lista->codigo      = $locales->LOCP_Codigo;
-             $lista->nombre      = $locales->LOCC_Nombre;
-             $lista->direccion   = $locales->LOCC_Direccion;
-             $lista->telefono    = $locales->LOCC_Telefono;
+             $filter->empresa    = $codigo;
+             $empresas           = $this->empresa_model->obtener($filter);
+             $lista->codigo      = $empresas->EMPRP_Codigo;
+             $lista->sector      = $empresas->SECTORP_Codigo;
+             $lista->ruc         = $empresas->EMPRC_Ruc;
+             $lista->rsocial     = $empresas->EMPRC_RazonSocial;
+             $lista->telefono    = $empresas->EMPRC_Telefono;
+             $lista->movil       = $empresas->EMPRC_Movil;
+             $lista->fax         = $empresas->EMPRC_Fax;
+             $lista->web         = $empresas->EMPRC_Web;
+             $lista->email       = $empresas->EMPRC_Email;
+             $lista->direccion   = $empresas->EMPRC_Direccion;
+             $lista->estado      = $empresas->EMPRC_FlagEstado;
          }
          elseif($accion == "n"){
              $lista->codigo  = "";
-             $lista->nombre  = "";
-             $lista->direccion = "";
+             $lista->sector    = "";
+             $lista->ruc       = "";
+             $lista->rsocial   = "";
              $lista->telefono  = "";
-             
+             $lista->movil     = "";
+             $lista->fax       = "";
+             $lista->web       = "";
+             $lista->email     = "";
+             $lista->direccion = "";
+             $lista->estado    = "";
          }
-         $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-         $data['titulo']     = $accion=="e"?"Editar Local":"Crear Local";
-         $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
+         $data['titulo']     = $accion=="e"?"Editar Empresa":"Crear Empresa";
+         $data['form_open']  = form_open('',array("name"=>"frmEmpresa","id"=>"frmEmpresa","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
-//         $data['selsexo']    = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
-//         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-//         $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar(),$lista->curso,"id='curso' class='comboMedio'");
-//         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar(),$lista->rol,"id='rol' class='comboMedio'");
+         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
+         $data['selsector']  = form_dropdown('sector',$this->sector_model->seleccionar('0'),$lista->sector,"id='sector' class='comboMedio'");
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
-         $this->load->view("maestros/local_nuevo",$data);
+         $this->load->view("maestros/empresa_nueva",$data);
      }
 
     public function grabar(){
-        $accion       = $this->input->get_post('accion');
-        $codigo       = $this->input->get_post('codigo');
-        $nombre       = $this->input->get_post('nombre');
-        $direccion    = $this->input->get_post('direccion');
-        $telefono     = $this->input->get_post('telefono');
+        $accion = $this->input->get_post('accion');
+        $codigo = $this->input->get_post('codigo');
         $data   = array(
-                        "LOCC_Nombre"    => ($this->input->post('nombre')),
-                        "LOCC_Direccion" => ($this->input->post('direccion')),
-                        "LOCC_Telefono"  => ($this->input->post('telefono'))
+                        "EMPRC_Ruc"         => $this->input->post('ruc'),
+                        "EMPRC_RazonSocial" => $this->input->post('rsocial'),
+                        "SECTORP_Codigo"    => $this->input->post('sector'),
+                        "EMPRC_Telefono"    => $this->input->post('telefono'),
+                        "EMPRC_Movil"       => $this->input->post('movil'),
+                        "EMPRC_Fax"         => $this->input->post('fax'),
+                        "EMPRC_Web"         => $this->input->post('web'),
+                        "EMPRC_Email"       => $this->input->post('email'),
+                        "EMPRC_Direccion"   => $this->input->post('direccion'),
+                        "EMPRC_FlagEstado"  => $this->input->post('estado')
                        );
         if($accion == "n"){
-            $this->codigo = $this->local_model->insertar($data);
+            $this->codigo = $this->empresa_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->local_model->modificar($codigo,$data);
+            $this->empresa_model->modificar($codigo,$data);
         }
     }     
      
@@ -115,8 +129,11 @@ class Empresa extends CI_Controller
 
     public function eliminar()
     {
-        $codigo  = $this->input->post('codigo');
-        $this->local_model->eliminar($codigo);
+        $obj    = $this->input->post('objeto');
+        $filter = json_decode($obj);        
+        $this->empresa_model->eliminar($filter);
+        $resultado = true;
+        echo json_encode($resultado);  
     }
     public function ver($codigo)
     {

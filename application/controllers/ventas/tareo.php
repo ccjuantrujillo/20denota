@@ -121,7 +121,6 @@ class Tareo extends CI_Controller {
         $data['form_close'] = form_close();         
         $filter = new stdClass();
         $filter->local = $lista->local;        
-//        $data['selciclo']   = form_dropdown('ciclo',$this->ciclo_model->seleccionar(),$lista->ciclo,"id='ciclo' class='comboMedio' onchange='submit();'");         
         $data['sellocal']   = form_dropdown('local',$this->local_model->seleccionar('0'),$lista->local,"id='local' class='comboMedio' onchange=\"$('#aula').val('0');submit();\"");  
         $data['selaula']    = form_dropdown('aula',$this->aula_model->seleccionar('0',$filter),$lista->aula,"id='aula' class='comboMedio' onchange=\"submit();\"");          
         $this->load->view("ventas/tareo_nuevo",$data);

@@ -41,16 +41,16 @@
                  $estado = $flgestado==1?"Activo":"Inactivo";
                  $clase = ($item%2)==0?"list_a":"list_b";
                 ?>
-               <tr class="<?php echo $clase;?>">
+               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                  <td><?php echo ++$item;?></td>
                  <td align="center"><?php echo $value->codigo;?></td>
                  <td align="left"><?php echo $value->ruc;?></td>
                  <td align="center"><?php echo $value->rsocial;?></td>
                  <td align="center"><?php echo $value->sector;?></td>
                  <td align="center"><?php echo $value->telefono."".$value->telefono;?></td>
-                 <td align="center"><img src="<?php echo img;?>check.jpg"/><?php echo $estado;?></td>
-                 <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
-                 <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
+                 <td align="center"><img src="<?php echo img.($flgestado==1?"check.jpg":"uncheck.jpg");?>" height="20px" width="20px"/><?php echo $estado;?></td>
+                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
+                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                </tr>  
                 <?php 
              }
@@ -66,5 +66,6 @@
     <div class="mensaje"><?php echo $paginacion;?></div>
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
+<div id="basic-modal-content"><div id="mensaje">&nbsp;</div></div>
 </body>
 </html>
