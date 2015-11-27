@@ -25,6 +25,7 @@
         <table>
           <tr class="list1">
             <td width="30">No</td>
+            <td width="50">Codigo</td>
             <td width="60">Fecha</td>
             <td width="90">Ciclo</td>
             <td width="60">Tipo estudio</td>
@@ -42,6 +43,7 @@
                ?>
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$j;?></td>
+                <td><?php echo $value->codigo;?></td>
                 <td><?php echo $value->fecha;?></td>
                 <td><?php echo $value->ciclo;?></td>
                 <td><?php echo $value->tipoestudio;?></td>               
@@ -57,7 +59,7 @@
           }
           else{
               ?>
-            <tr class="list_a"><td colspan='9'>::NO EXISTEN REGISTROS::</td></tr>
+            <tr class="list_a"><td colspan='10'>::NO EXISTEN REGISTROS::</td></tr>
               <?php
           }
           ?>

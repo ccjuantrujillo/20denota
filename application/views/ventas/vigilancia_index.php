@@ -25,8 +25,8 @@
         <table>
           <tr class="list1">
             <td width="30">Item</td>
+            <td width="50">Codigo</td>
             <td width="60">Fecha</td>
-            <td width="60">Codigo</td>
             <td width="160">Elaborado por</td>
             <td width="50">Nombre</td>
             <td width="90">Descripcion</td>
@@ -41,8 +41,8 @@
                ?>
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$j;?></td>
-                <td><?php echo $value->fecha;?></td>
                 <td><?php echo $value->codigo;?></td>
+                <td><?php echo $value->fecha;?></td>
                 <td><?php echo $value->coordinador;?></td>
                 <td><?php echo $value->nombre;?></td>                
                 <td><?php echo $value->descripcion;?></td>

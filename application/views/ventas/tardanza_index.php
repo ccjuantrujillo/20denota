@@ -26,6 +26,7 @@
         <table>
           <tr class="list1">
             <td width="43">No</td>
+            <td width="100">Codigo</td>
             <td width="100">Fecha</td>
             <td width="100">Aula</td>
             <td width="100">Tipo</td>            
@@ -44,6 +45,7 @@
                ?>
               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                 <td><?php echo ++$item;?></td>
+                <td align="center"><?php echo $value->codigo;?></td>
                 <td align="center"><?php echo date_sql($value->fecha);?></td>
                 <td align="center"><?php echo $value->aula;?></td>
                 <td align="center"><?php echo $value->tipo;?></td>   
@@ -61,7 +63,7 @@
           }
           else{
               ?>
-            <tr class="list_a"><td colspan='6'>::NO EXISTEN REGISTROS::</td></tr>
+            <tr class="list_a"><td colspan='7'>::NO EXISTEN REGISTROS::</td></tr>
               <?php
           }
           ?>

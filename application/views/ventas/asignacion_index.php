@@ -25,6 +25,7 @@
         <table>
            <tr class="list1">
              <td width="43">No</td>
+             <td width="50">Codigo</td>
              <td width="193">Ciclo</td>
              <td width="100">Plana</td>
              <td width="193">Apellidos y Nombres</td>
@@ -43,6 +44,7 @@
                 ?>
                <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                  <td><?php echo ++$j;?></td>
+                 <td><?php echo $value->codigo;?></td>
                  <td><?php echo $value->ciclo;?></td>
                  <td><?php echo $value->curso;?></td>
                  <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
@@ -57,7 +59,7 @@
            }
            else{
                ?>
-             <tr class="list_a"><td colspan='8'>::NO EXISTEN REGISTROS::</td></tr>
+             <tr class="list_a"><td colspan='9'>::NO EXISTEN REGISTROS::</td></tr>
                <?php
            }
            ?>

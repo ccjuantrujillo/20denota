@@ -25,10 +25,11 @@
         <table  border="1"  cellspacing="0" cellpadding="0">
            <tr class="list1">
              <td width="43">No</td>
-             <td width="193">RUC<</td>
-             <td width="86">Razon Social</td>
-             <td width="86">Sector</td>
-             <td width="86">Telefonos</td>
+             <td width="50">Codigo</td>
+             <td width="70">RUC</td>
+             <td width="150">Razon Social</td>
+             <td width="100">Sector</td>
+             <td width="70">Telefonos</td>
              <td width="63">Estado</td>
              <td width="62">Editar</td>
              <td width="77">Eliminar</td>
@@ -42,6 +43,7 @@
                 ?>
                <tr class="<?php echo $clase;?>">
                  <td><?php echo ++$item;?></td>
+                 <td align="center"><?php echo $value->codigo;?></td>
                  <td align="left"><?php echo $value->ruc;?></td>
                  <td align="center"><?php echo $value->rsocial;?></td>
                  <td align="center"><?php echo $value->sector;?></td>
@@ -55,7 +57,7 @@
            }
            else{
                ?>
-                 <tr class="list_a" colspan='5'>::NO EXISTEN REGISTROS::</tr>
+                 <tr class="list_a" colspan='6'>::NO EXISTEN REGISTROS::</tr>
                <?php
            }
            ?>
