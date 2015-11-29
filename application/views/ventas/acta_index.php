@@ -50,7 +50,7 @@
                 <td><?php echo $value->curso;?></td>
                 <td><?php echo $value->paterno." ".$value->materno." ".$value->nombres;?></td>
                 <td><?php echo $value->titulo;?></td>
-                <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
+                <td><a href="#" class="ver" target="_blank"><img src="<?php echo img;?>pdf.gif"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
               </tr>  

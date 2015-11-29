@@ -6,6 +6,7 @@ class Acta extends CI_Controller {
         parent::__construct(); 
         if(!isset($_SESSION['login'])) die("Sesion terminada. <a href='".  base_url()."'>Registrarse e ingresar.</a> ");           
         $this->load->model(ventas.'acta_model');
+        $this->load->model(ventas.'actaprofesor_model');
         $this->load->model(ventas.'actadetalle_model');
         $this->load->model(ventas.'alumno_model');
         $this->load->model(ventas.'actividad_model');
@@ -216,16 +217,15 @@ class Acta extends CI_Controller {
 
     public function ver($codigo){
         $filter           = new stdClass();
-        $filter->orden    = $codigo;
-        $ordenes          = $this->acta_model->obtener($filter);
-        $codproducto      = $ordenes->PROD_Codigo;
-        $codcliente       = $ordenes->CLIP_Codigo;
+        $filter->acta     = $codigo;
+        $actas            = $this->acta_model->obtener($filter);
+        $actasdetalle     = $this->actadetalle_model->listar($filter);
+        $asistencia       = $this->actaprofesor_model->listar($filter);
+        $codigo           = $actas->ACTAP_Codigo;
+        $codcurso         = $actas->PROD_Codigo;
         $filter           = new stdClass();
-        $filter->cliente  = $codcliente; 
-        $clientes         = $this->alumno_model->obtener($filter);
-        $filter           = new stdClass();
-        $filter->curso = $codproducto; 
-        $productos        = $this->curso_model->obtener($filter);        
+        $filter->curso    = $codcurso; 
+        $cursos           = $this->curso_model->obtener($filter);      
         $this->load->library("fpdf/pdf");
         $CI = & get_instance();
         $CI->pdf->FPDF('P');
@@ -234,34 +234,34 @@ class Acta extends CI_Controller {
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(216,216,216);
         $CI->pdf->SetFont('Arial','B',11);
-        $CI->pdf->Image('img/puertosaber.jpg',10,8,10);
-        $CI->pdf->Cell(0,13,"MATRICULA Nro ".$ordenes->ORDENC_Numero,0,1,"C",0);
+        $CI->pdf->Image('img/uni.gif',10,8,10);
+        $CI->pdf->Cell(0,7,"Reunion de plana Nro: ".$codigo,0,1,"C",0);
+        $CI->pdf->Cell(0,7,"Curso: ".$cursos->PROD_Nombre,0,1,"C",0);
+        $CI->pdf->Cell(0,7,"Tipo de estudio: ".$actas->TIPC_Nombre,0,1,"C",0);
          $CI->pdf->SetFont('Arial','B',7);
-        $CI->pdf->Cell(120,10, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CURSO : " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$productos->PROD_Nombre,1,1,"L",0);
-        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "APELLIDOS Y NOMBRES: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$clientes->PERSC_ApellidoPaterno." ".$clientes->PERSC_ApellidoMaterno.", ".$clientes->PERSC_Nombre,1,1,"L",0); 
-        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "USUARIO: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$ordenes->ORDENC_Usuario ,1,1,"L",0);
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CLAVE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1,$ordenes->ORDENC_Password,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);
+        $CI->pdf->Cell(120,5, "" ,0,1,"L",0);
+        $CI->pdf->Cell(0,5, "ACUERDOS:",0,1,"L",0);
+        foreach($actasdetalle as $item => $value){
+            $CI->pdf->Cell(4,5, ($item+1).")" ,0,0,"L",0);
+            $CI->pdf->Cell(50,5, $value->ACTADETC_Nombre."," ,0,0,"L",0);
+            $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
+            $CI->pdf->Cell(140,5,$value->ACTADETC_Observacion,0,1,"L",0);             
+        }
+        $CI->pdf->Cell(0,5, "ASISTENCIA: " ,0,1,"L",0);
+        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);  
+        $CI->pdf->Cell(60,5, "Profesor" ,1,0,"L",0);
+        $CI->pdf->Cell(60,5, "Hora Ingreso" ,1,0,"L",0);
+        $CI->pdf->Cell(60,5, "Hora Salida" ,1,1,"L",0);  
+        foreach($asistencia as $item => $value){
+            if(trim($value->ACTAPROFC_Hingreso!="00:00:00") || trim($value->ACTAPROFC_Hingreso)!="00:00:00"){
+                $CI->pdf->Cell(60,5, $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.",".$value->PERSC_Nombre ,1,0,"L",0);
+                $CI->pdf->Cell(60,5, $value->ACTAPROFC_Hingreso,1,0,"L",0);
+                $CI->pdf->Cell(60,5, $value->ACTAPROFC_Hsalida ,1,1,"L",0);    
+            }        
+        }
          $CI->pdf->Cell(90,1, "" ,0,1,"L",0);         
-        $CI->pdf->Cell(90,5, "RESPONSABLE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);   
+        $CI->pdf->Cell(0,5, "EXPOSICION: " ,0,1,"L",0); 
          $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->SetTextColor(0,0,0);
-        $CI->pdf->SetFillColor(255,255,255);
-        $CI->pdf->Cell(181,5, "OBSERVACION : " ,0,1,"L",1);
-        $CI->pdf->Cell(181,5,$ordenes->ORDENC_Observacion,1,1,"L",1);
         $CI->pdf->Output();
     }
     

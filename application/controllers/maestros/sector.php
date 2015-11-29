@@ -51,32 +51,22 @@ class Sector extends CI_Controller
          $lista = new stdClass();
          if($accion == "e"){
              $filter             = new stdClass();
-             $filter->local      = $codigo;
-             $locales            = $this->local_model->obtener($filter);
-             $lista->codigo      = $locales->LOCP_Codigo;
-             $lista->nombre      = $locales->LOCC_Nombre;
-             $lista->direccion   = $locales->LOCC_Direccion;
-             $lista->telefono    = $locales->LOCC_Telefono;
+             $filter->sector     = $codigo;
+             $sectores           = $this->sector_model->obtener($filter);
+             $lista->codigo      = $sectores->SECTORP_Codigo;
+             $lista->descripcion = $sectores->SECTORC_Descripcion;
          }
          elseif($accion == "n"){
              $lista->codigo  = "";
-             $lista->nombre  = "";
-             $lista->direccion = "";
-             $lista->telefono  = "";
-             
+             $lista->descripcion  = "";             
          }
-         $arrSexo            = array("0"=>"::Seleccione::","1"=>"MASCULINO","2"=>"FEMENINO");
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
          $data['titulo']     = $accion=="e"?"Editar Local":"Crear Local";
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
-//         $data['selsexo']    = form_dropdown('sexo',$arrSexo,$lista->sexo,"id='sexo' class='comboMedio'");
-//         $data['selestado']  = form_dropdown('estado',$arrEstado,$lista->estado,"id='estado' class='comboMedio'");
-//         $data['selcurso']   = form_dropdown('curso',$this->curso_model->seleccionar(),$lista->curso,"id='curso' class='comboMedio'");
-//         $data['selrol']     = form_dropdown('rol',$this->rol_model->seleccionar(),$lista->rol,"id='rol' class='comboMedio'");
          $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
-         $this->load->view("maestros/local_nuevo",$data);
+         $this->load->view("maestros/sector_nuevo",$data);
      }
 
     public function grabar(){

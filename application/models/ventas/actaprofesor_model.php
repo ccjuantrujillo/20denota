@@ -39,7 +39,7 @@ class Actaprofesor_model extends CI_Model{
         $this->db->join($this->table_curso.' as g','g.PROD_Codigo=c.PROD_Codigo','inner');
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("c.PROP_Codigo"=>$filter->profesor));
         if(isset($filter->curso))                             $this->db->where(array("g.PROD_Codigo"=>$filter->curso));
-        //if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));        
+        if(isset($filter->acta))                              $this->db->where(array("e.ACTAP_Codigo"=>$filter->acta));        
         if(isset($filter->order_by) && count($filter->order_by)>0){
             foreach($filter->order_by as $indice=>$value){
                 $this->db->order_by($indice,$value);

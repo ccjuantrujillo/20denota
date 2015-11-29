@@ -10,7 +10,7 @@
     <script type="text/javascript" src="<?php echo js;?>jquery-ui.min.js"></script>    
     <script type="text/javascript" src="<?php echo js;?>jquery.simplemodal.js"></script>     
     <script type="text/javascript" src="<?php echo js;?>constants.js"></script>     
-    <script type="text/javascript" src="<?php echo js;?>maestros/empresa.js"></script>	 
+    <script type="text/javascript" src="<?php echo js;?>maestros/sector.js"></script>	 
 </head>
 <body>
 <div class="contenido" > 
@@ -35,12 +35,12 @@
              foreach($lista as $item => $value){
                  $clase = ($item%2)==0?"list_a":"list_b";
                 ?>
-               <tr class="<?php echo $clase;?>">
+               <tr class="<?php echo $clase;?>" id="<?php echo $value->codigo;?>">
                  <td><?php echo ++$item;?></td>
                  <td align="left"><?php echo $value->codigo;?></td>
                  <td align="center"><?php echo $value->descripcion;?></td>
-                 <td><a href="#" onclick='editar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>editar.jpg"/></a></td>
-                 <td><a href="#" onclick='eliminar("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>eliminar.jpg"/></a></td>
+                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
+                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
                </tr>  
                 <?php 
              }
