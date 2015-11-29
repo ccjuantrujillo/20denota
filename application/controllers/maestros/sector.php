@@ -61,30 +61,23 @@ class Sector extends CI_Controller
              $lista->descripcion  = "";             
          }
          $arrEstado          = array("0"=>"::Seleccione::","1"=>"ACTIVO","2"=>"INACTIVO");
-         $data['titulo']     = $accion=="e"?"Editar Local":"Crear Local";
+         $data['titulo']     = $accion=="e"?"Editar Sector":"Crear Sector";
          $data['form_open']  = form_open('',array("name"=>"frmPersona","id"=>"frmPersona","onsubmit"=>"return valida_guiain();"));
          $data['form_close'] = form_close();
          $data['lista']	     = $lista;
-         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo_padre"=>$codigo,"codigo"=>$lista->codigo));
+         $data['oculto']     = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
          $this->load->view("maestros/sector_nuevo",$data);
      }
 
     public function grabar(){
         $accion       = $this->input->get_post('accion');
         $codigo       = $this->input->get_post('codigo');
-        $nombre       = $this->input->get_post('nombre');
-        $direccion    = $this->input->get_post('direccion');
-        $telefono     = $this->input->get_post('telefono');
-        $data   = array(
-                        "LOCC_Nombre"    => ($this->input->post('nombre')),
-                        "LOCC_Direccion" => ($this->input->post('direccion')),
-                        "LOCC_Telefono"  => ($this->input->post('telefono'))
-                       );
+        $data   = array("SECTORC_Descripcion" => $this->input->post('descripcion'));
         if($accion == "n"){
-            $this->codigo = $this->local_model->insertar($data);
+            $this->codigo = $this->sector_model->insertar($data);
         }
         elseif($accion == "e"){
-            $this->local_model->modificar($codigo,$data);
+            $this->sector_model->modificar($codigo,$data);
         }
     }     
      

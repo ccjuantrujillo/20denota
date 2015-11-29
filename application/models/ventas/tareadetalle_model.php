@@ -15,6 +15,7 @@ class Tareadetalle_model extends CI_Model{
         $this->table_semana = "semana";
         $this->table_tipoestudiociclo = "tipoestudiociclo";
         $this->table_tipoestudio = "tipoestudio";
+        $this->table_tipotarea   = "tipotarea";
     }
 	
 //    public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -38,6 +39,7 @@ class Tareadetalle_model extends CI_Model{
         $this->db->join($this->table_semana.' as h','h.PRODATRIB_Codigo=g.PRODATRIB_Codigo','left');
         $this->db->join($this->table_tipoestudiociclo.' as i','i.TIPCICLOP_Codigo=d.TIPCICLOP_Codigo','inner');
         $this->db->join($this->table_tipoestudio.' as j','j.TIPP_Codigo=i.TIPP_Codigo','inner');
+        $this->db->join($this->table_tipotarea.' as k','k.TIPOTAREAP_Codigo=z.TIPOTAREAP_Codigo','inner');
         if(isset($filter->tarea) && $filter->tarea!='')       $this->db->where(array("d.TAREAP_Codigo"=>$filter->tarea));
         if(isset($filter->tareadetalle) && $filter->tareadetalle!='')       $this->db->where(array("d.TAREADETP_Codigo"=>$filter->tareadetalle));
         if(isset($filter->profesor) && $filter->profesor!='') $this->db->where(array("d.PROP_Codigo"=>$filter->profesor));

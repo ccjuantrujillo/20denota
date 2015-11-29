@@ -23,16 +23,6 @@ jQuery(document).ready(function(){
         $("#tabla_detalle").append(fila);
         selectCurso(n);            
     });       
-    
-   $("body").on('change',"#ciclo",function(){
-       accion      = $("#accion").val();
-       codigo      = $("#codigo").val();
-       dataString  = $('#frmPersona').serialize();
-       url = base_url+"index.php/ventas/vigilancia/editar/"+accion+"/"+codigo;
-       $.post(url,dataString,function(data){
-           $('#mensaje').html(data);
-       });             
-   });     
    
      $("body").on('change',"#curso",function(){
         url    = base_url+"index.php/ventas/profesor/obtener/";
@@ -65,6 +55,7 @@ jQuery(document).ready(function(){
         url        = base_url+"index.php/ventas/vigilancia/grabar";
         clave      = $("#clave").val();
         $('#responsable').removeAttr('disabled');
+        $('#tipoestudiociclo').removeAttr('disabled');
         dataString = $('#frmPersona').serialize();
         if(clave != ""){
             $.post(url,dataString,function(data){

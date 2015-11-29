@@ -15,15 +15,24 @@
         <table  style="background-color: #f4f7ff">
             <tr>
                 <td  width='18%' align="right">Codigo:</td>
-                <td width='20%' colspan="3" class="formss"><input type='text' name="codigo" id="codigo" value="<?php echo $lista->vigilancia;?>" class="cajaReducida" onkeydown="return numbersonly(this,event,'.');" readonly="readonly"/></td>
+                <td width='40%' colspan="3" class="formss"><input type='text' name="codigo" id="codigo" value="<?php echo $lista->vigilancia;?>" class="cajaReducida" onkeydown="return numbersonly(this,event,'.');" readonly="readonly"/></td>
                 <td align="right">Fecha&nbsp;</td>
                 <td width='29%' class="formss"><input type="text" name="fecha" id="fecha" style="width:60px" readonly value="<?php echo $lista->fecha;?>" class="cajaMinima" maxlength="10"></td>
-            </tr>          
+            </tr>   
+            <tr>
+                <td align="right">Ciclo:</td>
+                <td colspan="3" class="formss"><?php echo $selciclo;?></td>
+                <td align="right">Tipo Estudio</td>
+                <td class="formss"><?php echo $seltipoestudio;?></td>
+            </tr>              
             <tr>
                 <td align="right">Nombre: </td>
-                <td align="left" class="formss" colspan="3"><input type='text' name="nombre" id="nombre" value="<?php echo $lista->nombre;?>" class="cajaSuperGrande"></td>
+                <td align="left" class="formss" colspan="3">
+                    <input type='text' name="nombre" id="nombre" value="<?php echo $lista->nombre;?>" class="cajaGrande">
+                        &nbsp;&nbsp;Numero: <input type='text' name="numero" id="numero" value="<?php echo $lista->numero;?>" class="cajaMinima">                        
+                </td>
                 <td align="right">Elaborado por:</td>
-                <td width='29%' class="formss"><?php echo $selresponsable;?></td>                
+                <td class="formss"><?php echo $selresponsable;?></td>                
             </tr>  
             <tr>
                 <td valign="top" align="right">Descripcion: </td>

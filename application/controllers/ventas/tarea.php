@@ -216,16 +216,11 @@ class Tarea extends CI_Controller {
     
     public function ver($codigo){
         $filter           = new stdClass();
-        $filter->orden    = $codigo;
-        $ordenes          = $this->acta_model->obtener($filter);
-        $codproducto      = $ordenes->PROD_Codigo;
-        $codcliente       = $ordenes->CLIP_Codigo;
-        $filter           = new stdClass();
-        $filter->cliente  = $codcliente; 
-        $clientes         = $this->alumno_model->obtener($filter);
-        $filter           = new stdClass();
-        $filter->curso = $codproducto; 
-        $productos        = $this->curso_model->obtener($filter);        
+        $filter->tarea    = $codigo;
+        $tareas           = $this->tarea_model->obtener($filter);
+        $tareadetalle     = $this->tareadetalle_model->listar($filter);
+        $tipotarea        = $tareas->TIPOTAREAC_Nombre;
+        $numero           = $tareas->TAREAC_Numero;      
         $this->load->library("fpdf/pdf");
         $CI = & get_instance();
         $CI->pdf->FPDF('P');
@@ -234,34 +229,32 @@ class Tarea extends CI_Controller {
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(216,216,216);
         $CI->pdf->SetFont('Arial','B',11);
-        $CI->pdf->Image('img/puertosaber.jpg',10,8,10);
-        $CI->pdf->Cell(0,13,"MATRICULA Nro ".$ordenes->ORDENC_Numero,0,1,"C",0);
+        $CI->pdf->Image('img/uni.gif',10,8,10);
+        $CI->pdf->Cell(0,10,$tareas->TIPOTAREAC_Nombre." No: ".$tareas->TAREAC_Numero,0,1,"C",0);
+        $CI->pdf->Cell(0,5,"Curso: ".$tareas->PROD_Nombre,0,1,"C",0);
          $CI->pdf->SetFont('Arial','B',7);
-        $CI->pdf->Cell(120,10, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CURSO : " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$productos->PROD_Nombre,1,1,"L",0);
-        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "APELLIDOS Y NOMBRES: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$clientes->PERSC_ApellidoPaterno." ".$clientes->PERSC_ApellidoMaterno.", ".$clientes->PERSC_Nombre,1,1,"L",0); 
-        $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "USUARIO: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5,$ordenes->ORDENC_Usuario ,1,1,"L",0);
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
-        $CI->pdf->Cell(90,5, "CLAVE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1,$ordenes->ORDENC_Password,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);         
-        $CI->pdf->Cell(90,5, "RESPONSABLE: " ,1,0,"L",0);
-        $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-        $CI->pdf->Cell(90,5, "" ,1,1,"L",0);   
-         $CI->pdf->Cell(90,1, "" ,0,1,"L",0);
+        $CI->pdf->Cell(0,5, "" ,0,1,"L",0);
+        $CI->pdf->Cell(0,5, "GENERALES:" ,0,1,"L",0);
+        $CI->pdf->Cell(90,5, "Fecha : ".$tareas->TAREAC_Fecha,0,0,"L",0);
+        $CI->pdf->Cell(90,5,"Fecha Compromiso:".$tareas->TAREAC_FechaEntrega,0,1,"L",0);
+        $CI->pdf->Cell(90,5, "Nombre : ".$tareas->TAREAC_Nombre ,0,0,"L",0);
+        $CI->pdf->Cell(90,5,"Elaborado por:".$tareas->PERSC_ApellidoPaterno." ".$tareas->PERSC_ApellidoMaterno.", ".$tareas->PERSC_Nombre,0,1,"L",0);
+        $CI->pdf->Cell(180,5, "Descripcion: ".$tareas->TAREAC_Descripcion ,0,1,"L",0);
+        $CI->pdf->Cell(0,5, "DETALLE:" ,0,1,"L",0);
+        $CI->pdf->Cell(20,5,"T.ESTUDIO",1,0,"C",0);
+        $CI->pdf->Cell(30,5,"TEMA",1,0,"L",0); 
+        $CI->pdf->Cell(40,5,"APELLIDOS Y NOMBRES",1,0,"L",0); 
+        $CI->pdf->Cell(0,5,"CANTIDAD",1,1,"L",0);         
+        foreach($tareadetalle as $item => $value){
+            $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);
+            $CI->pdf->Cell(30,5,$value->TEMAC_Descripcion,1,0,"L",0); 
+            $CI->pdf->Cell(40,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,0,"L",0); 
+            $CI->pdf->Cell(0,5,$value->TAREADETC_Cantidad,1,1,"L",0); 
+        }
         $CI->pdf->SetTextColor(0,0,0);
         $CI->pdf->SetFillColor(255,255,255);
         $CI->pdf->Cell(181,5, "OBSERVACION : " ,0,1,"L",1);
-        $CI->pdf->Cell(181,5,$ordenes->ORDENC_Observacion,1,1,"L",1);
+        $CI->pdf->Cell(181,5,0,1,1,"L",1);
         $CI->pdf->Output();
     }
     
@@ -328,11 +321,17 @@ class Tarea extends CI_Controller {
                 $profesor = $this->input->get_post('profesor');
                 $desde    = $this->input->get_post('desde');
                 $hasta    = $this->input->get_post('hasta');                
+                $ciclo    = $this->input->get_post('ciclo'); 
+                $ciclo   = 1;
                 $filter = new stdClass();
                 if($curso!=0) $filter->curso = $curso;
                 if($profesor!=0) $filter->profesor = $profesor;
                 $filter->order_by= array("e.PROD_Codigo"=>"asc","d.PROP_Codigo"=>"asc");
                 $tareas = $this->tareadetalle_model->listar($filter);
+                $filter = new stdClass();
+                $ciclo = 1;
+                $filter->ciclo = $ciclo;
+                $ciclos = $this->ciclo_model->obtener($filter);
                 $this->load->library("fpdf/pdf");
                 $CI = & get_instance();
                 $CI->pdf->FPDF('P');
@@ -342,17 +341,49 @@ class Tarea extends CI_Controller {
                 $CI->pdf->SetFillColor(216,216,216);
                 $CI->pdf->SetFont('Arial','B',11);
                 $CI->pdf->Image('img/uni.gif',10,8,10);
-                $CI->pdf->Cell(0,13,"SEGUIMIENTO DE TAREAS",0,1,"C",0);
+                $CI->pdf->Cell(0,13,"SEGUIMIENTO DE TAREAS ASIGNADAS",0,1,"C",0);
+                $CI->pdf->Cell(0,1,"CICLO: ".$ciclos->COMPC_Nombre,0,1,"C",0);
                 $CI->pdf->SetFont('Arial','B',7);   
                 $profe_ant = 0;
                 $curso_ant = 0;
                 foreach($tareas as $item=>$value){
-                    if($value->PROD_Codigo!=$curso_ant) $CI->pdf->Cell(120,5,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
-                    //if($value->PROP_Codigo!=$profe_ant) $CI->pdf->Cell(120,5,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);                    
-                    $CI->pdf->Cell(90,5,$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,1,0,"L",0);
-                    $CI->pdf->Cell(1,1, "" ,0,0,"L",0);
-                    $CI->pdf->Cell(90,5,$value->TAREAC_Nombre,1,1,"L",0);
-                    $CI->pdf->Cell(90,1, "" ,0,1,"L",0);  
+                    //if($value->PROD_Codigo!=$curso_ant) $CI->pdf->Cell(120,5,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
+                    if($value->PROP_Codigo!=$profe_ant){
+                        $CI->pdf->Cell(0,3,"",0,1,"L",0);
+                        $CI->pdf->Cell(120,3,"Curso: ".$value->PROD_Nombre,0,1,"L",0);
+                        $CI->pdf->Cell(120,4,"Profesor: ".$value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno.", ".$value->PERSC_Nombre,0,1,"L",0);   
+                        $CI->pdf->Cell(20,5,"T.Estudio",1,0,"C",0);  
+                        $CI->pdf->Cell(30,5,"Tipo Tarea",1,0,"C",0);
+                        $CI->pdf->Cell(12,5,"Numero",1,0,"C",0);                    
+                        $CI->pdf->Cell(14,5,"Cantidad",1,0,"C",0);  
+                        $CI->pdf->Cell(60,5,"Tema",1,0,"C",0); 
+                        $CI->pdf->Cell(20,5,"F.Compromiso",1,0,"C",0); 
+                        $CI->pdf->Cell(18,5,"F.Entrega",1,0,"C",0); 
+                        $CI->pdf->Cell(20,5,"Situacion",1,1,"C",0); 
+                    }
+                    $CI->pdf->Cell(20,5,$value->TIPC_Nombre,1,0,"L",0);  
+                    $CI->pdf->Cell(30,5,$value->TIPOTAREAC_Nombre,1,0,"L",0);
+                    $CI->pdf->Cell(12,5,$value->TAREAC_Numero,1,0,"R",0);                    
+                    $CI->pdf->Cell(14,5,$value->TAREADETC_Cantidad,1,0,"R",0);  
+                    $CI->pdf->Cell(60,5,$value->TEMAC_Descripcion,1,0,"L",0); 
+                    $CI->pdf->Cell(20,5,$value->TAREAC_FechaEntrega,1,0,"C",0); 
+                    $CI->pdf->Cell(18,5,$value->TAREADETC_FechaEntrega,1,0,"C",0); 
+                    switch ($value->TAREADETC_Situacion){
+                        case 1:
+                            $msgsituacion = "Pendiente";
+                            $CI->pdf->SetTextColor(216,0,0);
+                            break;
+                        case 2:
+                            $CI->pdf->SetTextColor(216,216,0);
+                            $msgsituacion = "En Proceso";
+                            break;                     
+                        case 3:
+                            $CI->pdf->SetTextColor(0,216,0);
+                            $msgsituacion = "Terminado";
+                            break;                                             
+                    }
+                    $CI->pdf->Cell(20,5,$msgsituacion,1,1,"C",0); 
+                    $CI->pdf->SetTextColor(0,0,0);
                     $profe_ant = $value->PROP_Codigo;
                     $curso_ant = $value->PROD_Codigo;
                 }   

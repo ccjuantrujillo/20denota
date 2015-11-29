@@ -9,6 +9,7 @@ class Vigilancia_model extends CI_Model{
         $this->table       = "vigilancia";
         $this->table_profe = "profesor";
         $this->table_persona = "persona";
+        $this->table_tipoestudioc = "tipoestudiociclo";
     }
 	
     public function seleccionar($default='',$filter='',$filter_not='',$number_items='',$offset=''){
@@ -26,6 +27,7 @@ class Vigilancia_model extends CI_Model{
         $this->db->from($this->table." as p");
         $this->db->join($this->table_profe.' as d','d.PROP_Codigo=p.PROP_Codigo','inner');
         $this->db->join($this->table_persona.' as e','e.PERSP_Codigo=d.PERSP_Codigo','inner');
+        $this->db->join($this->table_tipoestudioc.' as f','f.TIPCICLOP_Codigo=p.TIPCICLOP_Codigo','inner');
         if(isset($filter->vigilancia) && $filter->vigilancia!='') $this->db->where(array("p.VIGILAP_Codigo"=>$filter->vigilancia));
         if(isset($filter->profesor) && $filter->profesor!='')     $this->db->where(array("p.PROP_Codigo"=>$filter->profesor));        
         if(isset($filter->order_by) && count($filter->order_by)>0){

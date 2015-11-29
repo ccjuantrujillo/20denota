@@ -56,5 +56,6 @@
     <div class="mensaje"><?php echo $paginacion;?></div>
     <div class="footer"><h4><?php echo pie;?></h4></div>
 </div>
+<div id="basic-modal-content"><div id="mensaje">&nbsp;</div></div>
 </body>
 </html>

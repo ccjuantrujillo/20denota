@@ -28,8 +28,8 @@
             <td width="50">Codigo</td>
             <td width="60">Fecha</td>
             <td width="160">Elaborado por</td>
-            <td width="50">Nombre</td>
-            <td width="90">Descripcion</td>
+            <td width="90">Nombre</td>
+            <td width="50">Numero</td>
             <td width="50">Ver</td>
             <td width="50">Editar</td>
             <td width="50">Eliminar</td>
@@ -45,7 +45,7 @@
                 <td><?php echo $value->fecha;?></td>
                 <td><?php echo $value->coordinador;?></td>
                 <td><?php echo $value->nombre;?></td>                
-                <td><?php echo $value->descripcion;?></td>
+                <td><?php echo $value->numero;?></td>
                 <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>

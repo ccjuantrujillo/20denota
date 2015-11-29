@@ -8,6 +8,8 @@ class Vigilancia extends CI_Controller {
         $this->load->model(ventas.'vigilancia_model');
         $this->load->model(ventas.'vigilanciadetalle_model');
         $this->load->model(ventas.'profesor_model');
+        $this->load->model(maestros.'ciclo_model');
+        $this->load->model(maestros.'tipoestudiociclo_model');
         $this->load->helper('menu');
         $this->configuracion = $this->config->item('conf_pagina');
         $this->login   = $this->session->userdata('login');
@@ -37,6 +39,7 @@ class Vigilancia extends CI_Controller {
                 $lista[$indice]->codigo   = $value->VIGILAP_Codigo;
                 $lista[$indice]->fecha    = date_sql($value->VIGILAC_Fecha);
                 $lista[$indice]->nombre   = $value->VIGILAC_Nombre;
+                $lista[$indice]->numero   = $value->VIGILAC_Numero;
                 $lista[$indice]->descripcion = $value->VIGILAC_Descripcion;
                 $lista[$indice]->coordinador = $value->PERSC_ApellidoPaterno." ".$value->PERSC_ApellidoMaterno." ".$value->PERSC_Nombre;
             }
@@ -67,10 +70,13 @@ class Vigilancia extends CI_Controller {
             $lista->nombre      = $vigilancia->VIGILAC_Nombre;
             $lista->descripcion = $vigilancia->VIGILAC_Descripcion;
             $lista->responsable = $vigilancia->PROP_Codigo;
+            $lista->numero      = $vigilancia->VIGILAC_Numero;
+            $lista->tipoestudiociclo = $vigilancia->TIPCICLOP_Codigo;
+            $lista->ciclo       = $vigilancia->CICLOP_Codigo;
             $filter             = new stdClass();
             $filter->vigilancia = $codigo;
             $filter->order_by   = array("d.VIGILAP_Codigo"=>"asc");
-            $lista->vigilanciadetalle = $this->vigilanciadetalle_model->listar($filter);            
+            $lista->vigilanciadetalle = $this->vigilanciadetalle_model->listar($filter);      
         }
         elseif($accion == "n"){ 
             $lista->vigilancia  = "";  
@@ -78,6 +84,9 @@ class Vigilancia extends CI_Controller {
             $lista->nombre      = ""; 
             $lista->descripcion = "";
             $lista->responsable = "";
+            $lista->numero      = "";
+            $lista->tipoestudiociclo = 0;
+            $lista->ciclo       = 0;
             $lista->vigilanciadetalle = array();
         } 
         $data['titulo']        = $accion=="e"?"Editar Vigilancia":"Nueva Vigilancia"; 
@@ -85,9 +94,11 @@ class Vigilancia extends CI_Controller {
         $data['form_close']    = form_close(); 
         $filter = new stdClass();
         $filter->flgcoordinador = 1;
-        $data['selresponsable']  = form_dropdown('responsable',$this->profesor_model->seleccionar('0',$filter),$lista->responsable,"id='responsable' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
-        $data['lista']	       = $lista;   
-        $data['oculto']       = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
+        $data['selresponsable'] = form_dropdown('responsable',$this->profesor_model->seleccionar('0',$filter),$lista->responsable,"id='responsable' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
+        $data['selciclo']       = form_dropdown('ciclo',$this->ciclo_model->seleccionar('0',$filter),$lista->ciclo,"id='ciclo' class='comboMedio' ".($accion=="e"?"disabled":"")."");      
+        $data['seltipoestudio'] = form_dropdown('tipoestudiociclo',$this->tipoestudiociclo_model->seleccionar('0',$filter),$lista->tipoestudiociclo,"id='tipoestudiociclo' class='comboGrande' ".($accion=="e"?"disabled":"")."");      
+        $data['lista']	        = $lista;   
+        $data['oculto']         = form_hidden(array("accion"=>$accion,"codigo"=>$codigo));
         $this->load->view("ventas/vigilancia_nuevo",$data);
     }
 
@@ -98,7 +109,9 @@ class Vigilancia extends CI_Controller {
         $data   = array(
                         "PROP_Codigo"         => $this->input->post('responsable'),          
                         "VIGILAC_Nombre"      => $this->input->post('nombre'),
+                        "VIGILAC_Numero"      => $this->input->post('numero'),
                         "VIGILAC_Descripcion" => $this->input->post('descripcion'),
+                        "TIPCICLOP_Codigo"    => $this->input->post('tipoestudiociclo'),
 			"VIGILAC_Fecha"       => date_sql_ret($this->input->post('fecha'))
                        );
         $resultado = false;

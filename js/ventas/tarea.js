@@ -38,17 +38,7 @@ jQuery(document).ready(function(){
         else{
             alert("Primero debe seleccinar un curso");
         }
-    });       
-    
-//   $("body").on('change',"#ciclo",function(){
-//       accion      = $("#accion").val();
-//       codigo      = $("#codigo").val();
-//       dataString  = $('#frmPersona').serialize();
-//       url = base_url+"index.php/ventas/tarea/editar/"+accion+"/"+codigo;
-//       $.post(url,dataString,function(data){
-//           $('#mensaje').html(data);
-//       });             
-//   });     
+    });           
    
      $("body").on('change',"#curso",function(){
         url    = base_url+"index.php/ventas/profesor/obtener/";
@@ -72,6 +62,12 @@ jQuery(document).ready(function(){
         url = base_url+"index.php/ventas/tarea/ver/"+codigo;
         window.open(url, this.target, 'width=800,height=400,top=150,left=200');
     });    
+    
+    $("body").on('click',".ver",function(){
+        codigo = $(this).parent().parent().attr("id");
+        url = base_url+"index.php/ventas/tarea/ver/"+codigo;
+        window.open(url, this.target, 'width=800,height=400,top=150,left=200');
+    });        
     
     $("body").on('click',"#cancelar",function(){
         url = base_url+"index.php/ventas/tarea/listar";

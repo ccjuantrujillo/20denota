@@ -50,7 +50,7 @@
                 <td><?php echo $value->tipo;?></td>
                 <td><?php echo $value->nombre;?></td>                    
                 <td><?php echo ($value->fechaentrega);?></td>
-                <td><a href="#" onclick='ver("<?php echo $value->codigo;?>")'><img src="<?php echo img;?>ver.png"/></a></td>
+                <td><a href="#" class="ver"><img src="<?php echo img;?>pdf.gif"/></a></td>
                 <td><a href="#" class="editar"><img src="<?php echo img;?>editar.jpg"/></a></td>
                 <td><a href="#" class="eliminar"><img src="<?php echo img;?>eliminar.jpg"/></a></td>
               </tr>  
